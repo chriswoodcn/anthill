@@ -8,6 +8,7 @@ plugins {
 }
 
 val jvmTargetValue: String by project
+val docversion: String by project
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
@@ -16,12 +17,15 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation(project(":anthill-infrastructure:anthill-infrastructure-core"))
-    implementation("org.springframework.boot:spring-boot")
-    implementation("org.springframework:spring-context-support")
-    implementation("org.springframework:spring-web")
+    api(project(":anthill-infrastructure:anthill-infrastructure-core"))
+    api(project(":anthill-infrastructure:anthill-infrastructure-json"))
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:${docversion}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${docversion}")
+//    implementation("org.springframework.boot:spring-boot")
+//    implementation("org.springframework:spring-context-support")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
-//    implementation(project(mapOf("path" to ":anthill-core")))
     compileOnly("jakarta.servlet:jakarta.servlet-api")
     implementation("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))

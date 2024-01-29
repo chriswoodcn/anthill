@@ -14,6 +14,7 @@ object StringUtil {
     const val SEPARATOR = ","
     const val EMPTY = StringUtils.EMPTY
     val join: (List<String>, Char) -> String = StringUtils::join
+    val split: (String, Char) -> Array<String> = StringUtils::split
     val isNotBlank: (String?) -> Boolean = StringUtils::isNotBlank
     val endsWithAny: (file: String?, ends: Array<String?>) -> Boolean = StringUtils::endsWithAny
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault

@@ -8,7 +8,6 @@ plugins {
 }
 val jvmTargetValue: String by project
 val hutoolVersion: String by project
-val lang3Version: String by project
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
@@ -17,7 +16,7 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.apache.commons:commons-lang3:${lang3Version}")
+    implementation("org.apache.commons:commons-lang3")
     api("cn.hutool:hutool-all:${hutoolVersion}")
     testImplementation(kotlin("test"))
 }

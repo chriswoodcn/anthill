@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.framework.exception
 
-import cn.chriswood.anthill.framework.utils.MessageUtil
+import cn.chriswood.anthill.framework.utils.I18nMessageUtil
 
 enum class SystemExceptionEnum(
     private val code: Int
@@ -11,7 +11,7 @@ enum class SystemExceptionEnum(
     SEVER_FUNC_ERROR(50000);
 
     fun getMessage(vararg args: Any?): String {
-        return MessageUtil.message(code, args) ?: SystemException.DEFAULT_MESSAGE
+        return I18nMessageUtil.message(code, args) ?: SystemException.DEFAULT_MESSAGE
     }
 
     fun custom(message: String) {

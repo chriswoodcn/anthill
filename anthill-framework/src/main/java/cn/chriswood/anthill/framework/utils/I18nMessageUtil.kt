@@ -7,7 +7,7 @@ import org.springframework.context.MessageSource
 import org.springframework.context.NoSuchMessageException
 import java.util.*
 
-object MessageUtil {
+object I18nMessageUtil {
     fun message(code: Int, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {

@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.framework.exception
 
-import cn.chriswood.anthill.framework.utils.MessageUtil
+import cn.chriswood.anthill.framework.utils.I18nMessageUtil
 
 
 open class BaseException(
@@ -16,7 +16,7 @@ open class BaseException(
 
     constructor(code: Int, vararg args: Any) :
         this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, args) {
-        val i18nMessage = MessageUtil.message(code, args)
+        val i18nMessage = I18nMessageUtil.message(code, args)
         if (!i18nMessage.isNullOrEmpty()) {
             this.message = i18nMessage
         }
