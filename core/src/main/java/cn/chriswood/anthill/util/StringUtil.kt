@@ -15,6 +15,7 @@ import kotlin.math.max
 object StringUtil {
     const val SEPARATOR = ","
     const val EMPTY = StringUtils.EMPTY
+    val join: (List<String>, Char) -> String = StringUtils::join
     val isNotBlank: (String?) -> Boolean = StringUtils::isNotBlank
     val endsWithAny: (file: String?, ends: Array<String?>) -> Boolean = StringUtils::endsWithAny
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault

@@ -24,6 +24,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
     implementation("org.apache.commons:commons-lang3:${lang3Version}")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
     api("cn.hutool:hutool-all:${hutoolVersion}")
     testImplementation(kotlin("test"))
 }
