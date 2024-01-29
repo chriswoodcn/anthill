@@ -16,11 +16,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.springframework:spring-context-support")
     implementation("org.springframework:spring-web")
-    implementation("org.springframework.boot:spring-boot-configuration-processor")
-//    implementation(project(mapOf("path" to ":anthill-core")))
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

@@ -17,6 +17,7 @@ tasks.withType<KotlinCompile> {
 }
 dependencies {
     implementation(project(":anthill-infrastructure:anthill-infrastructure-core"))
+    implementation("org.springframework.boot:spring-boot")
     implementation("org.springframework:spring-context-support")
     implementation("org.springframework:spring-web")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
