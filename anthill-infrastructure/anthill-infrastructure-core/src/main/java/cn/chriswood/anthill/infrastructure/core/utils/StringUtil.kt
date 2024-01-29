@@ -3,9 +3,9 @@ package cn.chriswood.anthill.infrastructure.core.utils
 import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.convert.Convert
 import cn.hutool.core.lang.Validator
+import cn.hutool.core.text.AntPathMatcher
 import cn.hutool.core.util.StrUtil
 import org.apache.commons.lang3.StringUtils
-import org.springframework.util.AntPathMatcher
 import java.util.*
 import java.util.function.Function
 import java.util.stream.Collectors
