@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.util
+package cn.chriswood.anthill.core.util
 
 import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.convert.Convert

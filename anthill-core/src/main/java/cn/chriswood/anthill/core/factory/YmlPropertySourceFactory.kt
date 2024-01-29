@@ -1,6 +1,6 @@
-package cn.chriswood.anthill.factory
+package cn.chriswood.anthill.core.factory
 
-import cn.chriswood.anthill.util.StringUtil
+import cn.chriswood.anthill.core.util.StringUtil
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean
 import org.springframework.core.env.PropertiesPropertySource
 import org.springframework.core.env.PropertySource

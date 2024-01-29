@@ -1,16 +1,17 @@
-package cn.chriswood.anthill.exception
+package cn.chriswood.anthill.core.exception
 
-import cn.chriswood.anthill.util.MessageUtil
+import cn.chriswood.anthill.core.util.MessageUtil
 
-class SystemException(
+
+open class BaseException(
     override var message: String,
-    override var code: Int,
-    override var module: String,
+    open var code: Int,
+    open var module: String,
     vararg args: Any
-) : BaseException(message, code, module, args) {
+) : RuntimeException() {
     companion object {
-        const val DEFAULT_MESSAGE = "SystemException error"
-        const val DEFAULT_MODULE = "System"
+        const val DEFAULT_MESSAGE = "BaseException error"
+        const val DEFAULT_MODULE = "Base"
     }
 
     constructor(code: Int, vararg args: Any) :
@@ -22,5 +23,5 @@ class SystemException(
     }
 
     constructor(message: String, code: Int, vararg args: Any) :
-            this(message, code, DEFAULT_MODULE, args)
+            this(message, code, SystemException.DEFAULT_MODULE, args)
 }

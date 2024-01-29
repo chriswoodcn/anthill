@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.exception
+package cn.chriswood.anthill.core.exception
 
 import cn.hutool.core.util.ObjectUtil
 

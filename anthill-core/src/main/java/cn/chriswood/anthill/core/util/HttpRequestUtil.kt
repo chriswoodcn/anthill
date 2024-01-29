@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.util
+package cn.chriswood.anthill.core.util
 
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder

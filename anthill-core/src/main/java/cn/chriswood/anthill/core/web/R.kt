@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.web
+package cn.chriswood.anthill.core.web
 
 class R<T>(
     var code: Int,
