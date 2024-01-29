@@ -25,6 +25,7 @@ rootDir.listFiles()?.filter {
             (File(it, "build.gradle.kts").exists()
                     || File(it, "build.gradle").exists())
 }?.forEach {
+    println(it.name)
     include(it.name)
 }
 

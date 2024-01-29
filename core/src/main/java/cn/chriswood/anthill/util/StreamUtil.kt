@@ -6,6 +6,9 @@ import java.util.*
 import java.util.function.*
 import java.util.function.Function
 import java.util.stream.Collectors
+import kotlin.CharSequence
+import kotlin.Comparator
+import kotlin.String
 
 object StreamUtil {
     /**
@@ -81,7 +84,7 @@ object StreamUtil {
         } else collection.stream().filter { obj: V? -> Objects.nonNull(obj) }
             .collect(
                 Collectors.toMap(key, Function.identity(),
-                    BinaryOperator { l: V?, r: V? -> l })
+                    BinaryOperator { l: V?, _: V? -> l })
             )
     }
 
@@ -103,7 +106,7 @@ object StreamUtil {
         } else collection.stream().filter { obj: E? -> Objects.nonNull(obj) }
             .collect(
                 Collectors.toMap(key, value,
-                    BinaryOperator { l: V, r: V -> l })
+                    BinaryOperator { l: V, _: V -> l })
             )
     }
 
@@ -117,19 +120,21 @@ object StreamUtil {
      * @param <K>        map中的key类型
      * @return 分类后的map
     </K></E> */
-//    fun <E, K> groupByKey(collection: Collection<E?>, key: Function<E?, K>?): Map<K, List<E>> {
-//        return if (CollUtil.isEmpty(collection)) {
-//            MapUtil.newHashMap()
-//        } else collection
-//            .stream().filter { obj: E? -> Objects.nonNull(obj) }
-//            .collect(
-//                Collectors.groupingBy<E?, K, List<E?>, Any, LinkedHashMap<K, List<E>>>(
-//                    key,
-//                    Supplier { LinkedHashMap() },
-//                    Collectors.toList()
-//                )
-//            )
-//    }
+    fun <E, K> groupByKey(collection: Collection<E?>, key: Function<E?, K>?): Map<K, List<E>> {
+        return if (CollUtil.isEmpty(collection)) {
+            MapUtil.newHashMap()
+        } else {
+            collection
+                .stream().filter { obj: E? -> Objects.nonNull(obj) }
+                .collect(
+                    Collectors.groupingBy(
+                        key,
+                        Supplier { LinkedHashMap() },
+                        Collectors.toList()
+                    )
+                )
+        }
+    }
 
     /**
      * 将collection按照两个规则(比如有相同的年级id,班级id)分类成双层map<br></br>
@@ -143,26 +148,27 @@ object StreamUtil {
      * @param <U>        第二个map中的key类型
      * @return 分类后的map
     </U></K></E> */
-//    fun <E, K, U> groupBy2Key(
-//        collection: Collection<E?>,
-//        key1: Function<E?, K>?,
-//        key2: Function<E?, U>?
-//    ): Map<K, Map<U, List<E>>> {
-//        return if (CollUtil.isEmpty(collection)) {
-//            MapUtil.newHashMap()
-//        } else collection
-//            .stream().filter { obj: E? -> Objects.nonNull(obj) }
-//            .collect(
-//                Collectors.groupingBy<E?, K, Map<U, List<E>>, Any, LinkedHashMap<K, Map<U, List<E>>>>(
-//                    key1,
-//                    Supplier { LinkedHashMap() },
-//                    Collectors.groupingBy<E?, U, List<E?>, Any, Map<U, List<E>>>(
-//                        key2,
-//                        Supplier { LinkedHashMap() }, Collectors.toList()
-//                    )
-//                )
-//            )
-//    }
+    fun <E, K, U> groupBy2Key(
+        collection: Collection<E?>,
+        key1: Function<E?, K>?,
+        key2: Function<E?, U>?
+    ): Map<K, Map<U, List<E>>> {
+        return if (CollUtil.isEmpty(collection)) {
+            MapUtil.newHashMap()
+        } else collection
+            .stream().filter { obj: E? -> Objects.nonNull(obj) }
+            .collect(
+                Collectors.groupingBy(
+                    key1,
+                    Supplier { LinkedHashMap() },
+                    Collectors.groupingBy(
+                        key2,
+                        Supplier { LinkedHashMap() },
+                        Collectors.toList()
+                    )
+                )
+            )
+    }
 
     /**
      * 将collection按照两个规则(比如有相同的年级id,班级id)分类成双层map<br></br>
@@ -176,23 +182,24 @@ object StreamUtil {
      * @param <E>        collection中的泛型
      * @return 分类后的map
     </E></U></T> */
-//    fun <E, T, U> group2Map(
-//        collection: Collection<E?>,
-//        key1: Function<E?, T>?,
-//        key2: Function<E?, U>?
-//    ): Map<T, Map<U, E>> {
-//        return if (CollUtil.isEmpty(collection) || key1 == null || key2 == null) {
-//            MapUtil.newHashMap()
-//        } else collection
-//            .stream().filter { obj: E? -> Objects.nonNull(obj) }
-//            .collect(
-//                Collectors.groupingBy<E?, T, Map<U, E?>, Any, LinkedHashMap<T, Map<U, E>>>(
-//                    key1,
-//                    Supplier { LinkedHashMap() }, Collectors.toMap(key2, Function.identity(),
-//                        BinaryOperator { l: E?, r: E? -> l })
-//                )
-//            )
-//    }
+    fun <E, T, U> group2Map(
+        collection: Collection<E?>,
+        key1: Function<E?, T>?,
+        key2: Function<E?, U>?
+    ): Map<T, Map<U, E>> {
+        return if (CollUtil.isEmpty(collection) || key1 == null || key2 == null) {
+            MapUtil.newHashMap()
+        } else collection
+            .stream().filter { obj: E? -> Objects.nonNull(obj) }
+            .collect(
+                Collectors.groupingBy(
+                    key1,
+                    Supplier { LinkedHashMap() },
+                    Collectors.toMap(key2, Function.identity(),
+                        BinaryOperator { l: E?, r: E? -> l })
+                )
+            )
+    }
 
     /**
      * 将collection转化为List集合，但是两者的泛型不同<br></br>
@@ -248,22 +255,22 @@ object StreamUtil {
      * @return 合并后的map
     </V></Y></X></K> */
     fun <K, X, Y, V> merge(map1: Map<K?, X?>, map2: Map<K?, Y?>, merge: BiFunction<X?, Y?, V>): Map<K?, V> {
-        var map1 = map1
-        var map2 = map2
-        if (MapUtil.isEmpty(map1) && MapUtil.isEmpty(map2)) {
+        var _map1 = map1
+        var _map2 = map2
+        if (MapUtil.isEmpty(_map1) && MapUtil.isEmpty(_map2)) {
             return MapUtil.newHashMap()
-        } else if (MapUtil.isEmpty(map1)) {
-            map1 = MapUtil.newHashMap()
-        } else if (MapUtil.isEmpty(map2)) {
-            map2 = MapUtil.newHashMap()
+        } else if (MapUtil.isEmpty(_map1)) {
+            _map1 = MapUtil.newHashMap()
+        } else if (MapUtil.isEmpty(_map2)) {
+            _map2 = MapUtil.newHashMap()
         }
         val key: MutableSet<K?> = HashSet()
-        key.addAll(map1.keys)
-        key.addAll(map2.keys)
+        key.addAll(_map1.keys)
+        key.addAll(_map2.keys)
         val map: MutableMap<K?, V> = HashMap()
         for (t in key) {
-            val x = map1[t]
-            val y = map2[t]
+            val x = _map1[t]
+            val y = _map2[t]
             val z: V? = merge.apply(x, y)
             if (z != null) {
                 map[t] = z
