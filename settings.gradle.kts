@@ -72,5 +72,3 @@ rootDir.listFiles()?.filter {
         findProject(":anthill-infrastructure:${pit.name}")?.name = pit.name
     }
 }
-include("anthill-infrastructure:anthill-infrastructure-datasource")
-findProject(":anthill-infrastructure:anthill-infrastructure-datasource")?.name = "anthill-infrastructure-datasource"
