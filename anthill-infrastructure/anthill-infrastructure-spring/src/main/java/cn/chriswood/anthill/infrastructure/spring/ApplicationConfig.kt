@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.framework.config
+package cn.chriswood.anthill.infrastructure.spring
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties

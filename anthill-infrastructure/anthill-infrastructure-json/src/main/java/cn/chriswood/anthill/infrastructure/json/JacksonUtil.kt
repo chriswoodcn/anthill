@@ -122,7 +122,7 @@ object JacksonUtil {
         get() {
             if (field == null) {
                 val builder = Jackson2ObjectMapperBuilder()
-                jackson2ObjectMapperBuilderCustomizer(null).customize(builder)
+                jackson2ObjectMapperBuilderCustomizer().customize(builder)
                 field = builder.build()
             }
             return field
