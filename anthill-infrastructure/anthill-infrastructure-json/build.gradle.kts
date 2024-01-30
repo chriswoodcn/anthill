@@ -17,9 +17,9 @@ tasks.withType<KotlinCompile> {
 }
 dependencies {
     implementation("org.springframework:spring-web")
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

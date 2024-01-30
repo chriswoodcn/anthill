@@ -1,18 +1,11 @@
 package cn.chriswood.anthill.datasource
 
-import org.springframework.boot.context.properties.ConfigurationProperties
+import com.zaxxer.hikari.HikariConfig
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-@ConfigurationProperties(prefix = DataSourceProperties.PREFIX)
 data class DataSourceProperties(
-    @NestedConfigurationProperty
     val dataSources: Map<String, DataSourceProperty?>
 ) {
-    companion object {
-        const val PREFIX = "spring.datasource.multi"
-        const val POOL_PREFIX = "HikariPool-"
-    }
-
     data class DataSourceProperty(
         val driver: String,
         val url: String,
@@ -20,6 +13,24 @@ data class DataSourceProperties(
         val password: String,
         val query: String,
         val primary: Boolean,
-        val packageScan: String
-    )
+        val packageScan: String,
+        @NestedConfigurationProperty
+        val hikari: HikariConfig
+    ) {
+        /**
+         * 数据源配置参数校验
+         */
+        fun validate(): Boolean {
+            var validateFlag = true
+            when {
+                this.url.isEmpty() -> validateFlag = false
+                this.username.isEmpty() -> validateFlag = false
+                this.password.isEmpty() -> validateFlag = false
+                this.driver.isEmpty() -> validateFlag = false
+                null == this.primary -> validateFlag = false
+                null == this.hikari -> validateFlag = false
+            }
+            return validateFlag
+        }
+    }
 }
