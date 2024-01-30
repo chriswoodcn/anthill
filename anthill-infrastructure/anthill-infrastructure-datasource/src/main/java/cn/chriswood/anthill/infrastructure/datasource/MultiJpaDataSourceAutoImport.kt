@@ -21,7 +21,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import java.util.*
 import java.util.function.Supplier
 
-
 @EnableConfigurationProperties(MultiJpaDataSourceProperties::class)
 class MultiJpaDataSourceAutoImport(
     private val jpaProperties: JpaProperties
