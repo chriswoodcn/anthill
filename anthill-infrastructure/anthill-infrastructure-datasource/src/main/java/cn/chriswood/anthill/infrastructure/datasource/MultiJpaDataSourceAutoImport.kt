@@ -23,7 +23,7 @@ import java.util.function.Supplier
 
 
 @EnableConfigurationProperties(MultiJpaDataSourceProperties::class)
-open class MultiJpaDataSourceAutoImport(
+class MultiJpaDataSourceAutoImport(
     private val jpaProperties: JpaProperties
 ) : BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
 
