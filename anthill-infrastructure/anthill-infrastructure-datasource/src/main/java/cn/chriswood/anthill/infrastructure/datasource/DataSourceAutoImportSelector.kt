@@ -10,8 +10,7 @@ class DataSourceAutoImportSelector : ImportSelector {
     val type: DataSourceTypeEnum = DataSourceTypeEnum.MultiJPA
 
     private val mapDataSourceAutoImport = hashMapOf(
-        DataSourceTypeEnum.MultiJPA to
-            "cn.chriswood.anthill.infrastructure.datasource.MultiJpaDataSourceAutoImport"
+        DataSourceTypeEnum.MultiJPA to MultiJpaDataSourceAutoImport::class.java.name
     )
 
     override fun selectImports(importingClassMetadata: AnnotationMetadata): Array<String> {
