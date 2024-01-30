@@ -16,10 +16,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.springframework:spring-web")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("org.slf4j:slf4j-api")
+    compileOnly("org.springframework:spring-web")
+    compileOnly("com.fasterxml.jackson.core:jackson-databind")
+    compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

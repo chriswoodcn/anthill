@@ -16,7 +16,18 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("org.slf4j:slf4j-api")
+    implementation(
+        project(
+            mapOf(
+                "path" to ":anthill-infrastructure:anthill-infrastructure-json",
+                "path" to ":anthill-infrastructure:anthill-infrastructure-spring"
+            )
+        )
+    )
+    implementation("org.redisson:redisson:3.25.2")
+    implementation("org.redisson:redisson-spring-boot-starter:3.25.2")
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

@@ -18,8 +18,6 @@ tasks.withType<KotlinCompile> {
 dependencies {
     api(project(":anthill-infrastructure:anthill-infrastructure-core"))
     api(project(":anthill-infrastructure:anthill-infrastructure-json"))
-//    implementation("org.springframework.boot:spring-boot")
-//    implementation("org.springframework:spring-context-support")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-configuration-processor")

@@ -1,0 +1,27 @@
+#在versions代码块中，定义用于保存依赖项和插件版本的变量。
+#您可以在后续代码块（libraries和plugins代码块）中使用这些变量
+[versions]
+lib_hutool = "5.8.16"
+lib_spring_doc = "2.3.0"
+plugin_spring_boot = "3.2.2"
+plugin_spring_dependency = "3.2.2"
+plugin_kotlin = "1.9.22"
+
+#在libraries代码块中，定义依赖项
+[libraries]
+hutool-all = { group = "cn.hutool", name = "hutool-all", version.ref = "lib_hutool" }
+spring-doc-api = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "lib_spring_doc" }
+spring-doc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "lib_spring_doc" }
+
+#将多个需要同时引入的依赖定义为一个组，使用时直接引入组
+[bundles]
+spring-doc = ["spring-doc-api", "spring-doc-ui"]
+
+#在plugins代码块中，定义插件
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "plugin_spring_boot" }
+spring-dependency = { id = "io.spring.dependency-management", version.ref = "plugin_spring_dependency" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugin_kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.spring", version.ref = "plugin_kotlin" }
+
+

@@ -16,10 +16,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.springframework:spring-web")
-    implementation("org.springframework.data:spring-data-jpa")
-    implementation("com.zaxxer:HikariCP")
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("org.slf4j:slf4j-api")
+    compileOnly("org.springframework:spring-web")
+    compileOnly("org.springframework.data:spring-data-jpa")
+    compileOnly("com.zaxxer:HikariCP")
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

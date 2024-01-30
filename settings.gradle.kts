@@ -51,15 +51,6 @@ rootProject.name = "anthill"
 
 //println("gradle构建生命周期>>>>>>>>>>     文件=settings.gradle     阶段=initialization phase")
 rootDir.listFiles()?.filter {
-    it.isDirectory &&
-        (File(it, "build.gradle.kts").exists()
-            || File(it, "build.gradle").exists())
-}?.forEach {
-    println(it.name)
-    include(it.name)
-}
-include("anthill-framework")
-rootDir.listFiles()?.filter {
     it.name.startsWith("anthill-infrastructure")
         && it.isDirectory
 }?.forEach {

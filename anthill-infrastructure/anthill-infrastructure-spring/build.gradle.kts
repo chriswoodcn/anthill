@@ -6,8 +6,8 @@ plugins {
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
 }
+
 val jvmTargetValue: String by project
-//val hutoolVersion: String by project
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
@@ -16,7 +16,14 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.apache.commons:commons-lang3")
-    api(libs.hutool.all)
+    implementation(
+        project(
+            mapOf(
+                "path" to ":anthill-infrastructure:anthill-infrastructure-core"
+            )
+        )
+    )
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }

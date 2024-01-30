@@ -1,14 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
 }
 
 val jvmTargetValue: String by project
-val docVersion: String by project
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
@@ -17,9 +16,8 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:${docVersion}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${docVersion}")
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("org.slf4j:slf4j-api")
+    api(libs.bundles.spring.doc)
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
 }
