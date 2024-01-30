@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.datasource
+package cn.chriswood.anthill.infrastructure.datasource
 
 import com.zaxxer.hikari.HikariConfig
 import org.springframework.boot.context.properties.NestedConfigurationProperty

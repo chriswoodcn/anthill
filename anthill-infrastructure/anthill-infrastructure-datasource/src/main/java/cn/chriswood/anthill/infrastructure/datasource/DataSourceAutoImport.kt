@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.datasource
+package cn.chriswood.anthill.infrastructure.datasource
 
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory

@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.datasource
+package cn.chriswood.anthill.infrastructure.datasource
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Configuration
