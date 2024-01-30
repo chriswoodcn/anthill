@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Import
 
 @Configuration
 @ConditionalOnProperty(
-    prefix = "anthill.datasource.multi",
+    prefix = "anthill.datasource.multi-jpa",
     name = ["enabled"],
     havingValue = "true",
     matchIfMissing = true
 )
-@Import(DataSourceAutoImport::class)
+@Import(MultiJpaDataSourceAutoImport::class)
 class DataSourceAutoConfig

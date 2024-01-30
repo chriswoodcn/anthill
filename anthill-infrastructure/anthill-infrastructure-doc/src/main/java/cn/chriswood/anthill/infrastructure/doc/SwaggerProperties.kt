@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.framework.config
+package cn.chriswood.anthill.infrastructure.doc
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.ExternalDocumentation

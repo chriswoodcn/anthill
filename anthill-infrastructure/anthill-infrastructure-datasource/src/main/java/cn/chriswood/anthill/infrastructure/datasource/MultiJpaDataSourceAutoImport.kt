@@ -22,8 +22,8 @@ import java.util.*
 import java.util.function.Supplier
 
 
-@EnableConfigurationProperties(DataSourceProperties::class)
-open class DataSourceAutoImport(
+@EnableConfigurationProperties(MultiJpaDataSourceProperties::class)
+open class MultiJpaDataSourceAutoImport(
     private val jpaProperties: JpaProperties
 ) : BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
 
@@ -57,7 +57,7 @@ open class DataSourceAutoImport(
      * 注册Hikari数据源
      * @param dataSourceProperty  数据源配置信息
      */
-    private fun registryDataSource(dataSourceProperty: DataSourceProperties.DataSourceProperty): BeanDefinition {
+    private fun registryDataSource(dataSourceProperty: MultiJpaDataSourceProperties.JpaDataSourceProperty): BeanDefinition {
         return BeanDefinitionBuilder.genericBeanDefinition(
             HikariDataSource::class.java,
             Supplier {
@@ -78,7 +78,7 @@ open class DataSourceAutoImport(
      */
     private fun registryEntityManagerFactory(
         name: String,
-        dataSourceProperty: DataSourceProperties.DataSourceProperty,
+        dataSourceProperty: MultiJpaDataSourceProperties.JpaDataSourceProperty,
         beanFactory: DefaultListableBeanFactory
     ): BeanDefinition {
         val hikariDataSource = beanFactory.getBean(
@@ -114,8 +114,8 @@ open class DataSourceAutoImport(
     override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
         val defaultListableBeanFactory = beanFactory as DefaultListableBeanFactory
 
-        val dataSourceProperties: DataSourceProperties = Binder.get(environment)
-            .bind(DATASOURCE_PREFIX, DataSourceProperties::class.java).get()
+        val dataSourceProperties: MultiJpaDataSourceProperties = Binder.get(environment)
+            .bind(DATASOURCE_PREFIX, MultiJpaDataSourceProperties::class.java).get()
 
         if (Optional.ofNullable<Any>(dataSourceProperties).isPresent
             && dataSourceProperties.dataSources.isNotEmpty()

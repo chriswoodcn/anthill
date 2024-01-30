@@ -3,10 +3,10 @@ package cn.chriswood.anthill.infrastructure.datasource
 import com.zaxxer.hikari.HikariConfig
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-data class DataSourceProperties(
-    val dataSources: Map<String, DataSourceProperty?>
+data class MultiJpaDataSourceProperties(
+    val dataSources: Map<String, JpaDataSourceProperty?>
 ) {
-    data class DataSourceProperty(
+    data class JpaDataSourceProperty(
         val driver: String,
         val url: String,
         val username: String,
