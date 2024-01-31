@@ -1,5 +1,6 @@
-package cn.chriswood.anthill.infrastructure.datasource
+package cn.chriswood.anthill.infrastructure.datasource.multi
 
+import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
@@ -28,7 +29,7 @@ class MultiJpaDataSourceAutoImport(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val DATASOURCE_PREFIX = "spring.datasource.multi"
+    private val DATASOURCE_PREFIX = "anthill.jpa.multi"
 
     private val BEAN_DATASOURCE = "%sDataSource"
 
@@ -56,7 +57,7 @@ class MultiJpaDataSourceAutoImport(
      * 注册Hikari数据源
      * @param dataSourceProperty  数据源配置信息
      */
-    private fun registryDataSource(dataSourceProperty: MultiJpaDataSourceProperties.JpaDataSourceProperty): BeanDefinition {
+    private fun registryDataSource(dataSourceProperty: JpaDataSourceProperty): BeanDefinition {
         return BeanDefinitionBuilder.genericBeanDefinition(
             HikariDataSource::class.java,
             Supplier {
@@ -77,7 +78,7 @@ class MultiJpaDataSourceAutoImport(
      */
     private fun registryEntityManagerFactory(
         name: String,
-        dataSourceProperty: MultiJpaDataSourceProperties.JpaDataSourceProperty,
+        dataSourceProperty: JpaDataSourceProperty,
         beanFactory: DefaultListableBeanFactory
     ): BeanDefinition {
         val hikariDataSource = beanFactory.getBean(
@@ -120,7 +121,7 @@ class MultiJpaDataSourceAutoImport(
             && dataSourceProperties.dataSources.isNotEmpty()
         ) {
             dataSourceProperties.dataSources.entries.forEach {
-                log.info(">>>>>>>>>> 校验数据源配置[{}]", it.key)
+                log.info(">>>>>>>>>> 多数据源配置[{}]", it.key)
                 // 校验数据源参数
                 if (it.value == null) return@forEach
                 if (!it.value!!.validate()) return@forEach

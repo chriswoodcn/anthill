@@ -19,6 +19,8 @@ tasks.withType<KotlinCompile> {
 dependencies {
     compileOnly("org.springframework:spring-web")
     compileOnly("org.springframework.data:spring-data-jpa")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-jpa")
+    compileOnly("org.springframework.boot:spring-boot-starter-aop")
     compileOnly("com.zaxxer:HikariCP")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.slf4j:slf4j-api")

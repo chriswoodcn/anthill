@@ -13,12 +13,13 @@ plugin_kotlin = "1.9.22"
 hutool-all = { group = "cn.hutool", name = "hutool-all", version.ref = "lib_hutool" }
 spring-doc-api = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "lib_spring_doc" }
 spring-doc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "lib_spring_doc" }
-redisson = {group ="org.redisson", name = "redisson", version.ref = "lib_redisson"}
-spring-redisson = {group ="org.redisson", name = "redisson-spring-boot-starter", version.ref = "lib_redisson"}
+redisson = { group = "org.redisson", name = "redisson", version.ref = "lib_redisson" }
+redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring-boot-starter", version.ref = "lib_redisson" }
 
 #将多个需要同时引入的依赖定义为一个组，使用时直接引入组
 [bundles]
 spring-doc = ["spring-doc-api", "spring-doc-ui"]
+spring-redisson = ["redisson", "redisson-spring-boot-starter"]
 
 #在plugins代码块中，定义插件
 [plugins]
