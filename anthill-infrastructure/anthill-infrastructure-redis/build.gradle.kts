@@ -17,6 +17,7 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
     implementation(libs.bundles.spring.redisson)

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 
@@ -82,5 +83,10 @@ class RedisConfig(
             }
             log.info(">>>>>>>>>> init RedissonAutoConfigurationCustomizer >>>>>>>>>>")
         }
+    }
+
+    @Bean
+    fun cacheManager(): CacheManager {
+        return SpringCacheManager()
     }
 }

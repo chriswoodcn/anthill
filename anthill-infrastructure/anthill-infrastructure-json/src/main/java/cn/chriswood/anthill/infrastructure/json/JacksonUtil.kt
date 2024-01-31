@@ -118,20 +118,16 @@ object JacksonUtil {
         }
     }
 
-    var objectMapper: ObjectMapper? = null
-        get() {
-            if (field == null) {
-                val builder = Jackson2ObjectMapperBuilder()
-                jackson2ObjectMapperBuilderCustomizer().customize(builder)
-                field = builder.build()
-            }
-            return field
-        }
+    var objectMapper: ObjectMapper
+    init {
+        val builder = Jackson2ObjectMapperBuilder()
+        jackson2ObjectMapperBuilderCustomizer().customize(builder)
+        objectMapper = builder.build()
+    }
 
     fun bean2string(o: Any?): String? {
-        if (objectMapper == null) return null
         return try {
-            objectMapper!!.writeValueAsString(o)
+            objectMapper.writeValueAsString(o)
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil bean2string error {}", e.message)
             return null
@@ -139,9 +135,8 @@ object JacksonUtil {
     }
 
     fun <T> string2bean(o: String?): T? {
-        if (objectMapper == null) return null
         return try {
-            objectMapper!!.readValue(o, object : TypeReference<T>() {})
+            objectMapper.readValue(o, object : TypeReference<T>() {})
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil string2bean error {}", e.message)
             return null
@@ -150,7 +145,7 @@ object JacksonUtil {
 
     fun <T> string2list(o: String?): List<T> {
         return try {
-            objectMapper!!.readValue(o, object : TypeReference<List<T>>() {})
+            objectMapper.readValue(o, object : TypeReference<List<T>>() {})
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil string2list error {}", e.message)
             ArrayList()
@@ -159,7 +154,7 @@ object JacksonUtil {
 
     fun <K, V> string2map(o: String?): Map<K, V> {
         return try {
-            objectMapper!!.readValue(o, object : TypeReference<Map<K, V>>() {})
+            objectMapper.readValue(o, object : TypeReference<Map<K, V>>() {})
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil string2map error {}", e.message)
             hashMapOf()
