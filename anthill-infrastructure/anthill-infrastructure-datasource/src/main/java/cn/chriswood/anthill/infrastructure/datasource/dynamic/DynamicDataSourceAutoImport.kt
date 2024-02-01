@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
 import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
+import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
@@ -14,7 +15,6 @@ import org.springframework.core.env.Environment
 import org.springframework.core.type.AnnotationMetadata
 import java.util.*
 import javax.sql.DataSource
-
 
 class DynamicDataSourceAutoImport :
     ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
@@ -45,11 +45,13 @@ class DynamicDataSourceAutoImport :
      * @param dataSourceProperty  数据源配置信息
      */
     private fun createDataSource(dataSourceProperty: JpaDataSourceProperty): HikariDataSource {
-        dataSourceProperty.hikari.jdbcUrl = dataSourceProperty.url
-        dataSourceProperty.hikari.username = dataSourceProperty.username
-        dataSourceProperty.hikari.password = dataSourceProperty.password
-        dataSourceProperty.hikari.driverClassName = dataSourceProperty.driver
-        dataSourceProperty.hikari.connectionTestQuery = dataSourceProperty.query
+        if (dataSourceProperty.hikari == null)
+            dataSourceProperty.hikari = HikariConfig()
+        dataSourceProperty.hikari!!.jdbcUrl = dataSourceProperty.url
+        dataSourceProperty.hikari!!.username = dataSourceProperty.username
+        dataSourceProperty.hikari!!.password = dataSourceProperty.password
+        dataSourceProperty.hikari!!.driverClassName = dataSourceProperty.driver
+        dataSourceProperty.hikari!!.connectionTestQuery = dataSourceProperty.query
         return HikariDataSource(dataSourceProperty.hikari)
     }
 

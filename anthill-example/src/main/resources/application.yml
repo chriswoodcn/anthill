@@ -1,0 +1,13 @@
+anthill:
+  application:
+    name: anthill-example
+    version: 1.0.0-SNAPSHOT
+  jpa:
+    type: dynamic
+    dynamic:
+      primary:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: rootroot
+        query: SELECT 1 FROM DUAL

@@ -1,6 +1,8 @@
 package cn.chriswood.anthill.infrastructure.datasource.multi
 
 import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
+import cn.hutool.extra.spring.SpringUtil
+import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor
 import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -22,10 +23,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import java.util.*
 import java.util.function.Supplier
 
-@EnableConfigurationProperties(MultiJpaDataSourceProperties::class)
-class MultiJpaDataSourceAutoImport(
-    private val jpaProperties: JpaProperties
-) : BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
+class MultiJpaDataSourceAutoImport: BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
+
+    private val jpaProperties: JpaProperties = SpringUtil.getBean(JpaProperties::class.java)
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -61,11 +61,13 @@ class MultiJpaDataSourceAutoImport(
         return BeanDefinitionBuilder.genericBeanDefinition(
             HikariDataSource::class.java,
             Supplier {
-                dataSourceProperty.hikari.jdbcUrl = dataSourceProperty.url
-                dataSourceProperty.hikari.username = dataSourceProperty.username
-                dataSourceProperty.hikari.password = dataSourceProperty.password
-                dataSourceProperty.hikari.driverClassName = dataSourceProperty.driver
-                dataSourceProperty.hikari.connectionTestQuery = dataSourceProperty.query
+                if (dataSourceProperty.hikari == null)
+                    dataSourceProperty.hikari = HikariConfig()
+                dataSourceProperty.hikari!!.jdbcUrl = dataSourceProperty.url
+                dataSourceProperty.hikari!!.username = dataSourceProperty.username
+                dataSourceProperty.hikari!!.password = dataSourceProperty.password
+                dataSourceProperty.hikari!!.driverClassName = dataSourceProperty.driver
+                dataSourceProperty.hikari!!.connectionTestQuery = dataSourceProperty.query
                 HikariDataSource(dataSourceProperty.hikari)
             }).getBeanDefinition()
     }

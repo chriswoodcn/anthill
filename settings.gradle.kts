@@ -61,3 +61,4 @@ rootDir.listFiles()?.filter {
         findProject(":anthill-infrastructure:${pit.name}")?.name = pit.name
     }
 }
+include("anthill-example")
