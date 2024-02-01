@@ -18,6 +18,7 @@ tasks.withType<KotlinCompile> {
 }
 dependencies {
     api(libs.bundles.spring.doc)
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))
