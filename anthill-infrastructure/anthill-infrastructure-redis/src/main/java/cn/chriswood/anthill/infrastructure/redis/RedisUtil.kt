@@ -9,7 +9,7 @@ import java.util.stream.Stream
 
 object RedisUtil {
 
-    private val CLIENT: RedissonClient = SpringUtil.getBean(RedissonClient::class.java)
+    val CLIENT: RedissonClient = SpringUtil.getBean(RedissonClient::class.java)
 
     fun getClient(): RedissonClient {
         return CLIENT

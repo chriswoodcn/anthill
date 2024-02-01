@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean
 
 @AutoConfiguration
 @ConditionalOnProperty(
-    prefix = "anthill.webinvoke",
+    prefix = "anthill.web.invoke",
     name = ["enabled"],
     havingValue = "true",
     matchIfMissing = true

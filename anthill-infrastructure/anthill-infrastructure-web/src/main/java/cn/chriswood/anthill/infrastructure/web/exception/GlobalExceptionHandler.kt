@@ -6,6 +6,7 @@ import cn.chriswood.anthill.infrastructure.web.core.R
 import org.slf4j.LoggerFactory
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
+import org.springframework.core.annotation.Order
 import org.springframework.validation.BindException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -14,6 +15,7 @@ import java.util.stream.Collectors
 
 @ConditionalOnWebApplication
 @RestControllerAdvice
+@Order
 class GlobalExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)

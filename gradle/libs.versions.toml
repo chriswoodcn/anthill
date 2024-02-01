@@ -4,6 +4,7 @@
 lib_hutool = "5.8.16"
 lib_spring_doc = "2.3.0"
 lib_redisson = "3.25.2"
+lib_satoken = "1.37.0"
 plugin_spring_boot = "3.2.2"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
@@ -15,11 +16,14 @@ spring-doc-api = { group = "org.springdoc", name = "springdoc-openapi-starter-we
 spring-doc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "lib_spring_doc" }
 redisson = { group = "org.redisson", name = "redisson", version.ref = "lib_redisson" }
 redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring-boot-starter", version.ref = "lib_redisson" }
+satoken-jwt = { group = "cn.dev33", name = "sa-token-jwt", version.ref = "lib_satoken" }
+satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "lib_satoken" }
 
 #将多个需要同时引入的依赖定义为一个组，使用时直接引入组
 [bundles]
 spring-doc = ["spring-doc-api", "spring-doc-ui"]
 spring-redisson = ["redisson", "redisson-spring-boot-starter"]
+spring-satoken = ["satoken-spring-boot-starter", "satoken-jwt"]
 
 #在plugins代码块中，定义插件
 [plugins]
