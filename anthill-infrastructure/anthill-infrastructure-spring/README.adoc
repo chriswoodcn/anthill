@@ -1,0 +1,8 @@
+= anthill-infrastructure-spring
+
+提供框架spring工具支持以及yml配置等
+
+== Dependencies
+    1.anthill-infrastructure-core
+
+

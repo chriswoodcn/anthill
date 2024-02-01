@@ -1,0 +1,9 @@
+= anthill-infrastructure-web
+
+提供框架web支持，xss，cors，invoke，utils工具
+
+== Dependencies
+    1.anthill-infrastructure-core
+    2.anthill-infrastructure-json
+
+

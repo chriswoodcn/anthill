@@ -1,3 +1,4 @@
-cn.chriswood.anthill.infrastructure.web.WebInvokeMvcConfig
-cn.chriswood.anthill.infrastructure.web.RepeatableFilterConfig
-cn.chriswood.anthill.infrastructure.web.XssFilterConfig
+cn.chriswood.anthill.infrastructure.web.config.WebCorsMvcConfig
+cn.chriswood.anthill.infrastructure.web.config.WebInvokeMvcConfig
+cn.chriswood.anthill.infrastructure.web.config.RepeatableFilterConfig
+cn.chriswood.anthill.infrastructure.web.config.XssFilterConfig

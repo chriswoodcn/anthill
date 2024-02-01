@@ -1,13 +1,14 @@
-package cn.chriswood.anthill.infrastructure.core.exception
+package cn.chriswood.anthill.infrastructure.web.exception
 
-import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
+import cn.chriswood.anthill.infrastructure.core.exception.ExceptionAssert
+import cn.chriswood.anthill.infrastructure.web.utils.I18nMessageUtil
 
 enum class SystemExceptionEnum(
     private val code: Int
 ) : ExceptionAssert {
     SEVER_ERROR(500),
 
-    // 格式filename funname error
+    // 格式filename uname error
     SEVER_FUNC_ERROR(50000);
 
     fun getMessage(vararg args: Any?): String {

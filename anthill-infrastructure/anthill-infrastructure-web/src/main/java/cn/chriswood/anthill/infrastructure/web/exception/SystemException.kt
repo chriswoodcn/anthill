@@ -1,6 +1,7 @@
-package cn.chriswood.anthill.infrastructure.core.exception
+package cn.chriswood.anthill.infrastructure.web.exception
 
-import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
+import cn.chriswood.anthill.infrastructure.core.exception.BaseException
+import cn.chriswood.anthill.infrastructure.web.utils.I18nMessageUtil
 
 
 class SystemException(

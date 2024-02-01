@@ -1,0 +1,10 @@
+= anthill-infrastructure-redis
+
+提供框架redis支持，底层依赖redisson
+
+== Dependencies
+    1.anthill-infrastructure-core
+    2.anthill-infrastructure-spring
+    3.anthill-infrastructure-json
+
+

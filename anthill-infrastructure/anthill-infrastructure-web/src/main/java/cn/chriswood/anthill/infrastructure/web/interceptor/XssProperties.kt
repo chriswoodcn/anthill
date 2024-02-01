@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.web
+package cn.chriswood.anthill.infrastructure.web.interceptor
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -10,16 +10,21 @@ import java.util.*
 import java.util.function.Function
 import java.util.stream.Collectors
 import kotlin.math.max
+
 object StringUtil {
     const val SEPARATOR = ","
     const val EMPTY = StringUtils.EMPTY
     val join: (List<String>, Char) -> String = StringUtils::join
     val split: (String, Char) -> Array<String> = StringUtils::split
+    val repeat: (Char, Int) -> String = StringUtils::repeat
+    val rightPad: (String, Int, Char) -> String = StringUtils::rightPad
     val isNotBlank: (String?) -> Boolean = StringUtils::isNotBlank
     val isBlank: (String?) -> Boolean = StringUtils::isBlank
     val endsWithAny: (file: String?, ends: Array<String?>) -> Boolean = StringUtils::endsWithAny
+
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault
     val isEmpty: (str: String?) -> Boolean = StrUtil::isEmpty
+
     fun isNotEmpty(str: String?): Boolean {
         return !isEmpty(str)
     }
@@ -283,10 +288,7 @@ object StringUtil {
     fun <T> splitTo(str: String?, separator: String?, mapper: Function<in Any?, T>?): List<T> {
         return if (StringUtils.isBlank(str)) {
             ArrayList(0)
-        } else StrUtil.split(str, separator)
-            .stream()
-            .filter { obj: String? -> Objects.nonNull(obj) }
-            .map(mapper)
+        } else StrUtil.split(str, separator).stream().filter { obj: String? -> Objects.nonNull(obj) }.map(mapper)
             .collect(Collectors.toList())
     }
 }

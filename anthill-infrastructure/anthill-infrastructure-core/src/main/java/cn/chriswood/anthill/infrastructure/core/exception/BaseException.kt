@@ -1,8 +1,5 @@
 package cn.chriswood.anthill.infrastructure.core.exception
 
-import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
-
-
 open class BaseException(
     override var message: String,
     open var code: Int,
@@ -15,12 +12,7 @@ open class BaseException(
     }
 
     constructor(code: Int, vararg args: Any) :
-        this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, args) {
-        val i18nMessage = I18nMessageUtil.message(code, args)
-        if (!i18nMessage.isNullOrEmpty()) {
-            this.message = i18nMessage
-        }
-    }
+        this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, args)
 
     constructor(message: String, code: Int, vararg args: Any) :
         this(message, code, DEFAULT_MODULE, args)

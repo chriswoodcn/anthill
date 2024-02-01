@@ -1,6 +1,8 @@
-package cn.chriswood.anthill.infrastructure.web
+package cn.chriswood.anthill.infrastructure.web.config
 
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
+import cn.chriswood.anthill.infrastructure.web.interceptor.XssFilter
+import cn.chriswood.anthill.infrastructure.web.interceptor.XssProperties
 import jakarta.servlet.DispatcherType
 import jakarta.servlet.Filter
 import org.slf4j.LoggerFactory

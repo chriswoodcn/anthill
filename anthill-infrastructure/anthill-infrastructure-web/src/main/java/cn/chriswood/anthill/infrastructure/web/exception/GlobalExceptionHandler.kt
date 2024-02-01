@@ -1,8 +1,8 @@
-package cn.chriswood.anthill.infrastructure.core.exception
+package cn.chriswood.anthill.infrastructure.web.exception
 
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
-import cn.chriswood.anthill.infrastructure.core.web.R
+import cn.chriswood.anthill.infrastructure.web.core.R
 import org.slf4j.LoggerFactory
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.util.stream.Collectors
+
 @ConditionalOnWebApplication
 @RestControllerAdvice
 class GlobalExceptionHandler {
