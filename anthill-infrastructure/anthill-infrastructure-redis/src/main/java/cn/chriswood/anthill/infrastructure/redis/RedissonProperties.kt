@@ -5,7 +5,7 @@ import org.redisson.config.SubscriptionMode
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-@ConfigurationProperties("redisson")
+@ConfigurationProperties("anthill.redisson")
 data class RedissonProperties(
     /**
      * redis缓存key前缀
@@ -18,7 +18,7 @@ data class RedissonProperties(
     /**
      * 线程池数量,默认值 = 当前处理核数量 * 2
      */
-    val nettyThreads: Int = Runtime.getRuntime().availableProcessors() * 2,
+    var nettyThreads: Int = Runtime.getRuntime().availableProcessors() * 2,
     /**
      * 单机服务配置
      */

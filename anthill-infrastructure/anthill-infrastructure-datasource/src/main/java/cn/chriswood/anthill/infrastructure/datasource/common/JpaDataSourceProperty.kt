@@ -9,7 +9,6 @@ data class JpaDataSourceProperty(
     val username: String,
     val password: String,
     val query: String,
-    val primary: Boolean,
     val packageScan: String,
     @NestedConfigurationProperty
     val hikari: HikariConfig
@@ -24,7 +23,6 @@ data class JpaDataSourceProperty(
             this.username.isEmpty() -> validateFlag = false
             this.password.isEmpty() -> validateFlag = false
             this.driver.isEmpty() -> validateFlag = false
-            null == this.primary -> validateFlag = false
             null == this.hikari -> validateFlag = false
         }
         return validateFlag

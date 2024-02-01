@@ -1,9 +1,14 @@
 = anthill-infrastructure-web
 
-提供框架web支持，xss，cors，invoke，utils工具
+提供框架web基础能力支持
 
 == Dependencies
     1.anthill-infrastructure-core
     2.anthill-infrastructure-json
 
 
+== Configurations
+    anthill.web.xss.enabled=true #默认开启xss过滤
+    anthill.web.cors.enabled=true #默认开启跨域
+    anthill.web.invoke.enabled=true #默认开启请求返回调用日志
+    anthill.web.captcha.enabled=true #默认开启验证码图片生成器

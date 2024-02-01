@@ -1,8 +1,13 @@
 = anthill-infrastructure-spring
 
-提供框架spring工具支持以及yml配置等
+提供框架spring工具支持
 
-== Dependencies
+== Module Dependencies
     1.anthill-infrastructure-core
 
-
+== Configurations
+    application.name=xxxx
+    application.version=xxxx
+    application.description=xxxx
+    application.author=xxxx
+    application.email=xxxx

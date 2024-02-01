@@ -9,10 +9,12 @@ import cn.dev33.satoken.stp.StpInterface
 import cn.dev33.satoken.stp.StpLogic
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.PropertySource
 
 @AutoConfiguration
+@ConditionalOnWebApplication
 @ConditionalOnProperty(
     prefix = "anthill.web.auth",
     name = ["enabled"],
