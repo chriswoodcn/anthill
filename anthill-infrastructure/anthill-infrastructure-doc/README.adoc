@@ -1,0 +1,8 @@
+= anthill-infrastructure-doc
+
+提供框架springdoc支持
+
+== Dependencies
+    1.anthill-infrastructure-core
+
+

@@ -3,7 +3,7 @@ package cn.chriswood.anthill.infrastructure.core.enums
 /**
  * 终端类型
  */
-enum class EndPointType(var code: String) {
+enum class EndpointType(var code: String) {
     /**
      * 浏览器
      */
@@ -25,9 +25,9 @@ enum class EndPointType(var code: String) {
     UNKNOWN("unknown");
 
     companion object {
-        fun getEnumByCode(code: String): EndPointType {
+        fun getEnumByCode(code: String): EndpointType {
             var enum = UNKNOWN
-            EndPointType.entries.forEach {
+            EndpointType.entries.forEach {
                 if (code == it.code) enum = it
             }
             return enum

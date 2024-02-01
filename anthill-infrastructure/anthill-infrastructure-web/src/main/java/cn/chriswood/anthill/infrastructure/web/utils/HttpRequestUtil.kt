@@ -1,5 +1,7 @@
 package cn.chriswood.anthill.infrastructure.web.utils
 
+import cn.chriswood.anthill.infrastructure.core.enums.DeviceType
+import cn.chriswood.anthill.infrastructure.core.enums.EndpointType
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -9,8 +11,8 @@ object HttpRequestUtil {
     const val LanguageTag = "language"
     const val DefaultLang = "en"
     const val DeviceTag = "device"
-    const val SignTypeTag = "signtype"
-    const val DefaultTag = "anonymous"
+    const val EndpointTag = "endpoint"
+    const val DefaultTag = "unknown"
     private fun getRequest(): HttpServletRequest {
         return (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
     }
@@ -29,9 +31,17 @@ object HttpRequestUtil {
         return headerIgnoreCase ?: DefaultTag
     }
 
-    fun getSignType(): String {
-        val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), SignTypeTag)
+    fun getDeviceEnum(): DeviceType {
+        return DeviceType.getEnumByCode(getDevice())
+    }
+
+    fun getEndpoint(): String {
+        val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), EndpointTag)
         return headerIgnoreCase ?: DefaultTag
+    }
+
+    fun getEndpointEnum(): EndpointType {
+        return EndpointType.getEnumByCode(getEndpoint())
     }
 
     private fun getHeaderIgnoreCase(request: HttpServletRequest, nameIgnoreCase: String?): String? {
