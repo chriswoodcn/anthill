@@ -22,6 +22,7 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-starter-data-jpa")
     compileOnly("org.springframework.boot:spring-boot-starter-aop")
     compileOnly("com.zaxxer:HikariCP")
+    compileOnly("org.jetbrains.kotlin:kotlin-reflect")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))

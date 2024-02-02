@@ -10,7 +10,6 @@ data class JpaDataSourceProperty(
     val password: String,
     val query: String?,
     val packageScan: String?,
-    @NestedConfigurationProperty
     var hikari: HikariConfig?
 ) {
     /**
@@ -19,10 +18,10 @@ data class JpaDataSourceProperty(
     fun validate(): Boolean {
         var validateFlag = true
         when {
+            this.driver.isEmpty() -> validateFlag = false
             this.url.isEmpty() -> validateFlag = false
             this.username.isEmpty() -> validateFlag = false
             this.password.isEmpty() -> validateFlag = false
-            this.driver.isEmpty() -> validateFlag = false
         }
         return validateFlag
     }

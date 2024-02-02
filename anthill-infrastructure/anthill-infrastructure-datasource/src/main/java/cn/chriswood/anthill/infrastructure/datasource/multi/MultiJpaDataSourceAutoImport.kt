@@ -1,7 +1,8 @@
 package cn.chriswood.anthill.infrastructure.datasource.multi
 
+import cn.chriswood.anthill.infrastructure.datasource.DataSourceTypeEnum
+import cn.chriswood.anthill.infrastructure.datasource.common.Constants
 import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
-import cn.hutool.extra.spring.SpringUtil
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor
 import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
+import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -23,9 +25,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import java.util.*
 import java.util.function.Supplier
 
-class MultiJpaDataSourceAutoImport: BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
+class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, EnvironmentAware, ApplicationContextAware {
 
-    private val jpaProperties: JpaProperties = SpringUtil.getBean(JpaProperties::class.java)
+    private var jpaProperties: JpaProperties? = null
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -95,7 +97,7 @@ class MultiJpaDataSourceAutoImport: BeanDefinitionRegistryPostProcessor, Environ
                 entityManagerFactoryBean.setDataSource(hikariDataSource)
                 entityManagerFactoryBean.setPackagesToScan(dataSourceProperty.packageScan)
                 entityManagerFactoryBean.jpaVendorAdapter = HibernateJpaVendorAdapter()
-                entityManagerFactoryBean.setJpaPropertyMap(jpaProperties.properties)
+                entityManagerFactoryBean.setJpaPropertyMap(jpaProperties?.properties)
                 entityManagerFactoryBean.setPersistenceUnitName(String.format(PERSISTENCE_NAME, name))
                 entityManagerFactoryBean
             }).getBeanDefinition()
@@ -115,29 +117,31 @@ class MultiJpaDataSourceAutoImport: BeanDefinitionRegistryPostProcessor, Environ
 
     override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
         val defaultListableBeanFactory = beanFactory as DefaultListableBeanFactory
-
-        val dataSourceProperties: MultiJpaDataSourceProperties = Binder.get(environment)
-            .bind(DATASOURCE_PREFIX, MultiJpaDataSourceProperties::class.java).get()
-
-        if (Optional.ofNullable<Any>(dataSourceProperties).isPresent
-            && dataSourceProperties.dataSources.isNotEmpty()
-        ) {
-            dataSourceProperties.dataSources.entries.forEach {
+        val binder = Binder.get(environment)
+        val dataSourceType = binder.bindOrCreate(Constants.DATASOURCE_TYPE, Bindable.of(String::class.java))
+        if (dataSourceType != DataSourceTypeEnum.MultiJPA.code) return
+        val dataSourceProperties: MutableMap<String, JpaDataSourceProperty>? =
+            binder.bindOrCreate(
+                DATASOURCE_PREFIX,
+                Bindable.mapOf(String::class.java, JpaDataSourceProperty::class.java)
+            )
+        jpaProperties = binder.bindOrCreate("spring.jpa", Bindable.of(JpaProperties::class.java))
+        if (!dataSourceProperties.isNullOrEmpty()) {
+            dataSourceProperties.entries.forEach {
                 log.info(">>>>>>>>>> 多数据源配置[{}]", it.key)
                 // 校验数据源参数
-                if (it.value == null) return@forEach
-                if (!it.value!!.validate()) return@forEach
+                if (!it.value.validate()) return@forEach
                 // 注册数据源
                 log.info(">>>>>>>>>> 注册{}DataSource", it.key)
                 defaultListableBeanFactory.registerBeanDefinition(
                     String.format(BEAN_DATASOURCE, it.key),
-                    registryDataSource(it.value!!)
+                    registryDataSource(it.value)
                 )
                 log.info(">>>>>>>>>> 注册{}EntityManagerFactory", it.key)
                 defaultListableBeanFactory.registerBeanDefinition(
                     String.format(BEAN_ENTITY_MANAGER_FACTORY, it.key),
                     registryEntityManagerFactory(
-                        it.key, it.value!!,
+                        it.key, it.value,
                         defaultListableBeanFactory
                     )
                 )
