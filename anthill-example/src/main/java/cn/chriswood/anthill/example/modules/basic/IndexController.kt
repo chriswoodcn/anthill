@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.example.modules.sys
+package cn.chriswood.anthill.example.modules.basic
 
 import cn.chriswood.anthill.infrastructure.spring.ApplicationConfig
 import org.springframework.web.bind.annotation.GetMapping

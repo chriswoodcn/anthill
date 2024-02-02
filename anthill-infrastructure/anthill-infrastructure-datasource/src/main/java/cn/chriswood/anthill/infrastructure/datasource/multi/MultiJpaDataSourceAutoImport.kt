@@ -5,6 +5,7 @@ import cn.chriswood.anthill.infrastructure.datasource.common.Constants
 import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
@@ -36,6 +37,8 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
     private val BEAN_DATASOURCE = "%sDataSource"
 
     private val BEAN_ENTITY_MANAGER_FACTORY = "%sEntityManagerFactory"
+
+    private val BEAN_ENTITY_MANAGER = "%sEntityManager"
 
     private val BEAN_TRANSACTION_MANAGER = "%sTransactionManager"
 
@@ -89,7 +92,7 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
             String.format(BEAN_DATASOURCE, name),
             HikariDataSource::class.java
         )
-        return BeanDefinitionBuilder.genericBeanDefinition(
+        val beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
             LocalContainerEntityManagerFactoryBean::class.java,
             Supplier {
                 val entityManagerFactoryBean =
@@ -101,6 +104,22 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
                 entityManagerFactoryBean.setPersistenceUnitName(String.format(PERSISTENCE_NAME, name))
                 entityManagerFactoryBean
             }).getBeanDefinition()
+        return beanDefinition
+    }
+
+    private fun registryEntityManager(
+        name: String,
+        beanFactory: DefaultListableBeanFactory
+    ): BeanDefinition {
+        val factoryBean = beanFactory.getBean(
+            String.format(BEAN_ENTITY_MANAGER_FACTORY, name),
+            LocalContainerEntityManagerFactoryBean::class.java
+        )
+        return BeanDefinitionBuilder.genericBeanDefinition(
+            EntityManager::class.java,
+            Supplier {
+                factoryBean.`object`?.createEntityManager()
+            }).getBeanDefinition()
     }
 
     /**
@@ -108,7 +127,7 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
      * @param name
      * @param beanFactory
      */
-    private fun registryTransactionManager(name: String?, beanFactory: DefaultListableBeanFactory?): BeanDefinition {
+    private fun registryTransactionManager(name: String, beanFactory: DefaultListableBeanFactory): BeanDefinition {
         val builder: BeanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(JpaTransactionManager::class.java)
         builder.addConstructorArgReference(String.format(BEAN_ENTITY_MANAGER_FACTORY, name))
         return builder.getBeanDefinition()
@@ -128,16 +147,16 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
         jpaProperties = binder.bindOrCreate("spring.jpa", Bindable.of(JpaProperties::class.java))
         if (!dataSourceProperties.isNullOrEmpty()) {
             dataSourceProperties.entries.forEach {
-                log.info(">>>>>>>>>> 多数据源配置[{}]", it.key)
+                log.debug(">>>>>>>>>> [anthill-infrastructure-datasource] 多数据源配置[{}]", it.key)
                 // 校验数据源参数
-                if (!it.value.validate()) return@forEach
+                if (!it.value.validateWithPackage()) return@forEach
                 // 注册数据源
-                log.info(">>>>>>>>>> 注册{}DataSource", it.key)
+                log.debug(">>>>>>>>>> 注册{}DataSource", it.key)
                 defaultListableBeanFactory.registerBeanDefinition(
                     String.format(BEAN_DATASOURCE, it.key),
                     registryDataSource(it.value)
                 )
-                log.info(">>>>>>>>>> 注册{}EntityManagerFactory", it.key)
+                log.debug(">>>>>>>>>> 注册{}EntityManagerFactory", it.key)
                 defaultListableBeanFactory.registerBeanDefinition(
                     String.format(BEAN_ENTITY_MANAGER_FACTORY, it.key),
                     registryEntityManagerFactory(
@@ -145,7 +164,15 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
                         defaultListableBeanFactory
                     )
                 )
-                log.info(">>>>>>>>>> 注册{}TransactionManager", it.key)
+                log.debug(">>>>>>>>>> 注册{}EntityManager", it.key)
+                defaultListableBeanFactory.registerBeanDefinition(
+                    String.format(BEAN_ENTITY_MANAGER, it.key),
+                    registryEntityManager(
+                        it.key,
+                        defaultListableBeanFactory
+                    )
+                )
+                log.debug(">>>>>>>>>> 注册{}TransactionManager", it.key)
                 defaultListableBeanFactory.registerBeanDefinition(
                     String.format(BEAN_TRANSACTION_MANAGER, it.key),
                     registryTransactionManager(

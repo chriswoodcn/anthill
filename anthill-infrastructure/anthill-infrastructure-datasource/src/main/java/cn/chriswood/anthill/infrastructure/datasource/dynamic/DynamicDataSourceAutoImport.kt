@@ -69,16 +69,15 @@ class DynamicDataSourceAutoImport :
 
         if (!dataSourceProperties.isNullOrEmpty()) {
             dataSourceProperties.entries.forEach {
-                log.info(">>>>>>>>>> 动态数据源配置[{}]", it.key)
+                log.debug(">>>>>>>>>> 动态数据源配置[{}]", it.key)
                 // 校验数据源参数
                 if (!it.value.validate()) return@forEach
                 val hikariDataSource = createDataSource(it.value)
-                log.info(">>>>>>>>>> hikariDataSource:{}", hikariDataSource)
                 dynamicDataSources[it.key] = hikariDataSource
             }
             DynamicDataSourceContextHolder.setDataSourcesTypes(dataSourceProperties.keys.toList())
             DynamicDataSourceContextHolder.setDataSourceType(Constants.PRIMARY)
-            log.info(">>>>>>>>>> 一共生成{}个数据源", dynamicDataSources.size)
+            log.debug(">>>>>>>>>> 一共生成{}个数据源", dynamicDataSources.size)
             registryDynamicDataSource(dynamicDataSources)
         }
     }

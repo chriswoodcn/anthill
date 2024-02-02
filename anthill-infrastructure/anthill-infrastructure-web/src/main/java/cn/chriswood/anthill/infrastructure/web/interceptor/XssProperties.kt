@@ -2,7 +2,7 @@ package cn.chriswood.anthill.infrastructure.web.interceptor
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties("xss")
+@ConfigurationProperties("anthill.web.xss")
 data class XssProperties(
     /**
      * 过滤开关

@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.example.persistence.entity
+package cn.chriswood.anthill.example.persistence.other.entity
 
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import jakarta.persistence.*
@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "sys_user")
-class SysUserEntity {
+class OtherSysUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var userId: Long = 0L

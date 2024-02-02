@@ -1,1 +1,5 @@
 cn.chriswood.anthill.infrastructure.datasource.DataSourceAutoConfig
+cn.chriswood.anthill.infrastructure.datasource.multi.JpaConfigPrimary
+cn.chriswood.anthill.infrastructure.datasource.multi.JpaConfigSecond
+cn.chriswood.anthill.infrastructure.datasource.multi.JpaConfigThird
+cn.chriswood.anthill.infrastructure.datasource.multi.EntityManagerFactoryBuilderConfig

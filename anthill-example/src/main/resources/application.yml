@@ -18,4 +18,37 @@ anthill:
         username: root
         password: rootroot
         query: SELECT 1 FROM DUAL
-        package-scan: cn.chriswood.anthill.example.persistence.repository
+        package-scan: cn.chriswood.anthill.example.persistence.primary
+      second:
+        enabled: true
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+        username: root
+        password: TAOtao88888888
+        query: SELECT 1 FROM DUAL
+        package-scan: cn.chriswood.anthill.example.persistence.other
+  web:
+    xss:
+      enabled: false
+
+logging:
+  level:
+    cn.chriswood.anthill.infrastructure: debug
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+        query:
+          mutation_strategy:
+            global_temporary:
+              create_tables: false
+              drop_tables: false
+        format_sql: true
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+

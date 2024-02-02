@@ -25,4 +25,10 @@ data class JpaDataSourceProperty(
         }
         return validateFlag
     }
+
+    fun validateWithPackage(): Boolean {
+        var validateFlag = validate()
+        if (validateFlag && this.packageScan.isNullOrEmpty()) validateFlag = false
+        return validateFlag
+    }
 }

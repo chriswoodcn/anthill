@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.core
 
-class BaseController {
+interface BaseController {
     /**
      * 响应返回结果
      *

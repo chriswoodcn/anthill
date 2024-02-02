@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.example.persistence.repository
+package cn.chriswood.anthill.example.persistence.primary.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
