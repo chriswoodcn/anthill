@@ -1,6 +1,5 @@
 package cn.chriswood.anthill.infrastructure.datasource.multi
 
-import cn.chriswood.anthill.infrastructure.datasource.common.ConditionOnMultiDataSourceValid
 import cn.chriswood.anthill.infrastructure.datasource.common.Constants
 import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperties
 import com.zaxxer.hikari.HikariDataSource
@@ -45,16 +44,16 @@ class JpaConfigThird(
 
     @Bean(name = [Constants.THIRD])
     @Primary
-    fun primary(): DataSource {
-        val primary = HikariDataSource()
-        primary.driverClassName = properties.multi[Constants.THIRD]!!.driver
-        primary.jdbcUrl = properties.multi[Constants.THIRD]!!.url
-        primary.username = properties.multi[Constants.THIRD]!!.username
-        primary.password = properties.multi[Constants.THIRD]!!.password
-        primary.poolName = String.format("HikariPool-%s", Constants.THIRD)
-        primary.isReadOnly = false
-        primary.connectionTestQuery = properties.multi[Constants.THIRD]!!.query
-        return primary
+    fun dataSource(): DataSource {
+        val dataSource = HikariDataSource()
+        dataSource.driverClassName = properties.multi[Constants.THIRD]!!.driver
+        dataSource.jdbcUrl = properties.multi[Constants.THIRD]!!.url
+        dataSource.username = properties.multi[Constants.THIRD]!!.username
+        dataSource.password = properties.multi[Constants.THIRD]!!.password
+        dataSource.poolName = String.format("HikariPool-%s", Constants.THIRD)
+        dataSource.isReadOnly = false
+        dataSource.connectionTestQuery = properties.multi[Constants.THIRD]!!.query
+        return dataSource
     }
 
     @Bean(name = [Constants.THIRD + "EntityManager"])
@@ -63,12 +62,12 @@ class JpaConfigThird(
         dataSource: DataSource,
         builder: EntityManagerFactoryBuilder
     ): EntityManager {
-        return primaryEntityManagerFactory(dataSource, builder).getObject()!!
+        return entityManagerFactory(dataSource, builder).getObject()!!
             .createEntityManager()
     }
 
     @Bean(name = [Constants.THIRD + "EntityManagerFactory"])
-    fun primaryEntityManagerFactory(
+    fun entityManagerFactory(
         @Qualifier(Constants.THIRD)
         dataSource: DataSource,
         builder: EntityManagerFactoryBuilder
@@ -114,7 +113,7 @@ class JpaConfigThird(
         builder: EntityManagerFactoryBuilder
     ): PlatformTransactionManager {
         return JpaTransactionManager(
-            primaryEntityManagerFactory(dataSource, builder)
+            entityManagerFactory(dataSource, builder)
                 .getObject()!!
         )
     }
