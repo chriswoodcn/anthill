@@ -26,14 +26,4 @@ class WebInvokeMvcConfig : WebMvcConfigurer {
         log.info(">>>>>>>>>> init WebInvokeTimeInterceptor >>>>>>>>>>")
         super.addInterceptors(registry)
     }
-
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowCredentials(true)
-            // 默认 GET POST HEAD开放
-//            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .maxAge(3600)
-        log.info(">>>>>>>>>> init CorsRegistry >>>>>>>>>>")
-    }
 }

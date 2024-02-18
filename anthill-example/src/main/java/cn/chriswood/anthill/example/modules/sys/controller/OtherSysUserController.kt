@@ -9,7 +9,7 @@
 //import org.springframework.web.bind.annotation.RestController
 //
 //@RestController
-//@RequestMapping("/sys")
+//@RequestMapping("/other")
 //class OtherSysUserController(
 //    private val repository: OtherSysUserRepository
 //) : BaseController {

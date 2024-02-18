@@ -4,13 +4,13 @@ anthill:
     version: 1.0.0-SNAPSHOT
   jpa:
     type: multi
-    dynamic:
-      primary:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
+#    dynamic:
+#      primary:
+#        driver: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#        username: root
+#        password: rootroot
+#        query: SELECT 1 FROM DUAL
     multi:
       primary:
         driver: com.mysql.cj.jdbc.Driver
@@ -18,14 +18,15 @@ anthill:
         username: root
         password: rootroot
         query: SELECT 1 FROM DUAL
+        dialect: org.hibernate.dialect.MySQLDialect
         package-scan: cn.chriswood.anthill.example.persistence.primary
       second:
-        enabled: true
         driver: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
         username: root
         password: TAOtao88888888
         query: SELECT 1 FROM DUAL
+        dialect: org.hibernate.dialect.MySQLDialect
         package-scan: cn.chriswood.anthill.example.persistence.other
   web:
     xss:
