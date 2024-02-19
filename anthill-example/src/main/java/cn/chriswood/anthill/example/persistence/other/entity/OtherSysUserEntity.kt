@@ -9,9 +9,9 @@ import java.time.LocalDateTime
 class OtherSysUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+//    @Column(name = "user_id")
     var userId: Long = 0L
-    @Column(name = "user_name")
+//    @Column(name = "user_name")
     var userName: String = StringUtil.EMPTY
 //    var password: String = StringUtil.EMPTY
 //    var salt: String = StringUtil.EMPTY
@@ -19,6 +19,6 @@ class OtherSysUserEntity {
 //    var mobile: String? = null
 //    var status: String? = null
 //    var createUserId: Long? = null
-    @Column(name = "create_time")
+//    @Column(name = "create_time")
     var createTime: LocalDateTime? = null
 }

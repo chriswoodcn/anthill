@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.getBean
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -33,7 +35,7 @@ class MultiDataSourceAutoImport :
 
     private val PERSISTENCE_NAME = "%sPersistenceUnit"
 
-    private val jpaProperties: Map<String, Any> = hashMapOf()
+    private val jpaProperties: Map<String, String> = hashMapOf()
 
     private var environment: Environment? = null
 
@@ -90,7 +92,13 @@ class MultiDataSourceAutoImport :
             entityManagerFactoryBean.setDataSource(hikariDataSource)
             entityManagerFactoryBean.setPackagesToScan(dataSourceProperty.packageScan)
             entityManagerFactoryBean.jpaVendorAdapter = HibernateJpaVendorAdapter()
-            entityManagerFactoryBean.setJpaPropertyMap(jpaProperties)
+            val hibernateProperties =
+                context?.getBean<HibernateProperties>("hibernateProperties") ?: HibernateProperties()
+            val properties = hibernateProperties.determineHibernateProperties(
+                jpaProperties,
+                HibernateSettings()
+            )
+            entityManagerFactoryBean.setJpaPropertyMap(properties)
             entityManagerFactoryBean.setPersistenceUnitName(String.format(PERSISTENCE_NAME, name))
             entityManagerFactoryBean
         }.addDependsOn(String.format(BEAN_DATASOURCE, name))
