@@ -2,7 +2,6 @@ package cn.chriswood.anthill.example.modules.sys.controller
 
 import cn.chriswood.anthill.example.persistence.primary.entity.SysUserEntity
 import cn.chriswood.anthill.example.persistence.primary.repository.SysUserRepository
-import cn.chriswood.anthill.infrastructure.datasource.dynamic.DDS
 import cn.chriswood.anthill.infrastructure.web.core.BaseController
 import cn.chriswood.anthill.infrastructure.web.core.R
 import org.springframework.web.bind.annotation.GetMapping

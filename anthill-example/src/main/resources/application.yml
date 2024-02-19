@@ -3,37 +3,37 @@ anthill:
     name: anthill-example
     version: 1.0.0-SNAPSHOT
   jpa:
-    type: dynamic
-    dynamic:
-      primary:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
-      slave:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-        username: root
-        password: TAOtao88888888
-        query: SELECT 1 FROM DUAL
-#    multi:
+    type: multi
+#    dynamic:
 #      primary:
 #        driver: com.mysql.cj.jdbc.Driver
 #        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
 #        username: root
 #        password: rootroot
 #        query: SELECT 1 FROM DUAL
-#        dialect: org.hibernate.dialect.MySQLDialect
-#        package-scan: cn.chriswood.anthill.example.persistence.primary
-#      second:
+#      slave:
 #        driver: com.mysql.cj.jdbc.Driver
 #        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
 #        username: root
 #        password: TAOtao88888888
 #        query: SELECT 1 FROM DUAL
-#        dialect: org.hibernate.dialect.MySQLDialect
-#        package-scan: cn.chriswood.anthill.example.persistence.other
+    multi:
+      primary:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: rootroot
+        query: SELECT 1 FROM DUAL
+        dialect: org.hibernate.dialect.MySQLDialect
+        package-scan: cn.chriswood.anthill.example.persistence.primary
+      second:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+        username: root
+        password: TAOtao88888888
+        query: SELECT 1 FROM DUAL
+        dialect: org.hibernate.dialect.MySQLDialect
+        package-scan: cn.chriswood.anthill.example.persistence.other
   web:
     xss:
       enabled: false
@@ -41,6 +41,7 @@ anthill:
 logging:
   level:
     cn.chriswood.anthill.infrastructure: debug
+    org.springframework.data.jpa: debug
 spring:
   jpa:
     show-sql: true
@@ -57,5 +58,5 @@ spring:
   data:
     jpa:
       repositories:
-        bootstrap-mode: deferred
+        bootstrap-mode: deferred #jpa启动模式优化
 

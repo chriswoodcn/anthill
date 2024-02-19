@@ -95,15 +95,4 @@ class DynamicDataSourceAutoImport :
             DynamicDataSourceContextHolder.setDataSourcesTypes(dataSourceProperties.keys.toList())
         }
     }
-
-    private fun registryDynamicDataSource(dynamicDataSources: Map<String, DataSource>): BeanDefinition {
-        return BeanDefinitionBuilder.genericBeanDefinition(
-            DynamicDataSource::class.java,
-            Supplier {
-                val dynamicDataSource = DynamicDataSource()
-                dynamicDataSource.setDefaultTargetDataSource(Constants.PRIMARY)
-                dynamicDataSource.setTargetDataSources(dynamicDataSources as Map<Any, Any>)
-                dynamicDataSource
-            }).getBeanDefinition()
-    }
 }

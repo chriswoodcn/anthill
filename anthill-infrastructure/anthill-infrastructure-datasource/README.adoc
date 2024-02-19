@@ -6,6 +6,7 @@
     anthill.jpa.enabled=true #默认开启srping-data-jpa配置
 
     #开启多数据源
+    1.yml配置
     anthill.jpa.type=multi
     anthill.jpa.first.driver=xxx
     anthill.jpa.first.url=xxx
@@ -13,6 +14,7 @@
     anthill.jpa.first.password=xxx
     anthill.jpa.first.query=xxx
     anthill.jpa.first.package-scan=xxx
+    anthill.jpa.first.dialect=xxx
     anthill.jpa.first.hikari.xx=xxx
     anthill.jpa.second.driver=xxx
     anthill.jpa.second.url=xxx
@@ -20,9 +22,32 @@
     anthill.jpa.second.password=xxx
     anthill.jpa.second.query=xxx
     anthill.jpa.second.package-scan=xxx
+    anthill.jpa.second.dialect=xxx
     anthill.jpa.second.hikari.xx=xxx
+    2.项目入口配置 关闭默认的DataSourceAutoConfiguration
+    @SpringBootApplication(exclude = [DataSourceAutoConfiguration::class])
+    3.对应的package-scan包内配置
+    ~~~
+    @Configuration
+    @EnableTransactionManagement
+    @EnableJpaRepositories(
+        entityManagerFactoryRef = "firstEntityManagerFactory",
+        transactionManagerRef = "firstTransactionManager",
+    )
+    class FirstJpaConfigurations
+    ~~~
+    ~~~
+    @Configuration
+    @EnableTransactionManagement
+    @EnableJpaRepositories(
+        entityManagerFactoryRef = "secondEntityManagerFactory",
+        transactionManagerRef = "secondTransactionManager",
+    )
+    class SecondJpaConfigurations
+    ~~~
 
     #开启动态数据源
+    1.yml配置 默认主库是primary
     anthill.jpa.type=dynamic
     anthill.jpa.primary.driver=xxx
     anthill.jpa.primary.url=xxx
@@ -36,3 +61,7 @@
     anthill.jpa.other.password=xxx
     anthill.jpa.other.query=xxx
     anthill.jpa.other.hikari.xx=xxx
+    2.项目入口配置 关闭默认的DataSourceAutoConfiguration 开启JpaRepositories自动配置 aop切面拦截
+    @SpringBootApplication(exclude = [DataSourceAutoConfiguration::class])
+    @EnableJpaRepositories
+    @EnableAspectJAutoProxy

@@ -9,13 +9,16 @@ import java.time.LocalDateTime
 class OtherSysUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     var userId: Long = 0L
-//    var userName: String = StringUtil.EMPTY
+    @Column(name = "user_name")
+    var userName: String = StringUtil.EMPTY
 //    var password: String = StringUtil.EMPTY
 //    var salt: String = StringUtil.EMPTY
 //    var email: String? = null
 //    var mobile: String? = null
 //    var status: String? = null
 //    var createUserId: Long? = null
+    @Column(name = "create_time")
     var createTime: LocalDateTime? = null
 }

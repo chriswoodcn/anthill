@@ -2,7 +2,6 @@ package cn.chriswood.anthill.example.modules.sys.controller
 
 import cn.chriswood.anthill.example.persistence.other.entity.OtherSysUserEntity
 import cn.chriswood.anthill.example.persistence.other.repository.OtherSysUserRepository
-import cn.chriswood.anthill.infrastructure.datasource.dynamic.DDS
 import cn.chriswood.anthill.infrastructure.web.core.BaseController
 import cn.chriswood.anthill.infrastructure.web.core.R
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +14,6 @@ class OtherSysUserController(
     private val repository: OtherSysUserRepository
 ) : BaseController {
     @GetMapping("/user/list")
-    @DDS("slave")
     fun list(): R<List<OtherSysUserEntity>> {
         return R.ok(repository.findAll())
     }

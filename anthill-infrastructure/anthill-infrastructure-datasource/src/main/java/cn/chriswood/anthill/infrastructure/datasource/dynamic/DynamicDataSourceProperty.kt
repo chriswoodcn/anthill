@@ -8,7 +8,6 @@ data class DynamicDataSourceProperty(
     val username: String,
     val password: String,
     val query: String?,
-    val packageScan: String?,
     var hikari: HikariConfig?
 ) {
     /**
@@ -22,12 +21,6 @@ data class DynamicDataSourceProperty(
             this.username.isEmpty() -> validateFlag = false
             this.password.isEmpty() -> validateFlag = false
         }
-        return validateFlag
-    }
-
-    fun validateWithPackage(): Boolean {
-        var validateFlag = validate()
-        if (validateFlag && this.packageScan.isNullOrEmpty()) validateFlag = false
         return validateFlag
     }
 }
