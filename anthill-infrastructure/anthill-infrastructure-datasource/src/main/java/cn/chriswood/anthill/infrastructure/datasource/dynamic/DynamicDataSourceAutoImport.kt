@@ -2,21 +2,24 @@ package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
 import cn.chriswood.anthill.infrastructure.datasource.DataSourceTypeEnum
 import cn.chriswood.anthill.infrastructure.datasource.common.Constants
-import cn.chriswood.anthill.infrastructure.datasource.common.JpaDataSourceProperty
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
+import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.EnvironmentAware
+import org.springframework.context.annotation.EnableAspectJAutoProxy
+import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar
 import org.springframework.core.env.Environment
 import org.springframework.core.type.AnnotationMetadata
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import java.util.function.Supplier
 import javax.sql.DataSource
 
@@ -34,6 +37,8 @@ class DynamicDataSourceAutoImport :
 
     private var context: ApplicationContext? = null
 
+    private var defaultTargetDataSource: DataSource? = null
+
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         this.context = applicationContext
     }
@@ -46,7 +51,7 @@ class DynamicDataSourceAutoImport :
      * 注册Hikari数据源
      * @param dataSourceProperty  数据源配置信息
      */
-    private fun createDataSource(dataSourceProperty: JpaDataSourceProperty): HikariDataSource {
+    private fun createDataSource(dataSourceProperty: DynamicDataSourceProperty): HikariDataSource {
         if (dataSourceProperty.hikari == null)
             dataSourceProperty.hikari = HikariConfig()
         dataSourceProperty.hikari!!.jdbcUrl = dataSourceProperty.url
@@ -61,10 +66,10 @@ class DynamicDataSourceAutoImport :
         val binder = Binder.get(environment)
         val dataSourceType = binder.bindOrCreate(Constants.DATASOURCE_TYPE, Bindable.of(String::class.java))
         if (dataSourceType != DataSourceTypeEnum.DynamicJPA.code) return
-        val dataSourceProperties: MutableMap<String, JpaDataSourceProperty>? =
+        val dataSourceProperties: MutableMap<String, DynamicDataSourceProperty>? =
             binder.bindOrCreate(
                 DATASOURCE_PREFIX,
-                Bindable.mapOf(String::class.java, JpaDataSourceProperty::class.java)
+                Bindable.mapOf(String::class.java, DynamicDataSourceProperty::class.java)
             )
 
         if (!dataSourceProperties.isNullOrEmpty()) {
@@ -74,11 +79,20 @@ class DynamicDataSourceAutoImport :
                 if (!it.value.validate()) return@forEach
                 val hikariDataSource = createDataSource(it.value)
                 dynamicDataSources[it.key] = hikariDataSource
+                if (Constants.PRIMARY == it.key) defaultTargetDataSource = hikariDataSource
             }
-            DynamicDataSourceContextHolder.setDataSourcesTypes(dataSourceProperties.keys.toList())
-            DynamicDataSourceContextHolder.setDataSourceType(Constants.PRIMARY)
             log.debug(">>>>>>>>>> 一共生成{}个数据源", dynamicDataSources.size)
-            registryDynamicDataSource(dynamicDataSources)
+            // bean定义类
+            val dynamicDataSourceBeanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
+                DynamicDataSource::class.java,
+                Supplier {
+                    val dynamicDataSource = DynamicDataSource()
+                    dynamicDataSource.setDefaultTargetDataSource(defaultTargetDataSource!!)
+                    dynamicDataSource.setTargetDataSources(dynamicDataSources as Map<Any, Any>)
+                    dynamicDataSource
+                }).getBeanDefinition()
+            registry.registerBeanDefinition("datasource", dynamicDataSourceBeanDefinition)
+            DynamicDataSourceContextHolder.setDataSourcesTypes(dataSourceProperties.keys.toList())
         }
     }
 

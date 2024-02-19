@@ -1,10 +1,12 @@
 package cn.chriswood.anthill.infrastructure.datasource
 
+import cn.chriswood.anthill.infrastructure.datasource.dynamic.DynamicDataSourceAspect
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.EnableTransactionManagement
 
@@ -16,5 +18,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     matchIfMissing = true
 )
 @EnableTransactionManagement
-@Import(DataSourceAutoImportSelector::class)
+@Import(DataSourceAutoImportSelector::class, DynamicDataSourceAspect::class)
 class DataSourceAutoConfig

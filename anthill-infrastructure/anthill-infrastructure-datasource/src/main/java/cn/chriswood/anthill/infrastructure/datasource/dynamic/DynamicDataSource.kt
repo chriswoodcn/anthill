@@ -11,6 +11,6 @@ class DynamicDataSource : AbstractRoutingDataSource() {
      * 允许使用任意键。返回的键需要与存储的查找键类型匹配，如resolveSpecifiedLookupKey方法所解析的
      */
     override fun determineCurrentLookupKey(): Any {
-        return DynamicDataSourceContextHolder.getDataSourceType();
+        return DynamicDataSourceContextHolder.getDataSourceType()
     }
 }

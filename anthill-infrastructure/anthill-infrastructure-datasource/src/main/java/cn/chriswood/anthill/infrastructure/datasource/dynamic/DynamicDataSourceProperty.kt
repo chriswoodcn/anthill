@@ -1,9 +1,8 @@
-package cn.chriswood.anthill.infrastructure.datasource.common
+package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
 import com.zaxxer.hikari.HikariConfig
-import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-data class JpaDataSourceProperty(
+data class DynamicDataSourceProperty(
     val driver: String,
     val url: String,
     val username: String,

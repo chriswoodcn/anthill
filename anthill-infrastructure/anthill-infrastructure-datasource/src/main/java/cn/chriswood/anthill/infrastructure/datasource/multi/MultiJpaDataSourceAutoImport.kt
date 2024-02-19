@@ -50,12 +50,6 @@ class MultiJpaDataSourceAutoImport : BeanDefinitionRegistryPostProcessor, Enviro
     override fun postProcessBeanDefinitionRegistry(registry: BeanDefinitionRegistry) {
     }
 
-    //    fun MultipleDataSourceRegistryPostProcessor() {
-//        jpaProperties.put("current_session_context_class", "org.springframework.orm.hibernate5.SpringSessionContext")
-//        jpaProperties.put("hibernate.show_sql", "true")
-//        jpaProperties.put("hibernate.format_sql", "true")
-//        jpaProperties.put("hibernate.hbm2ddl.auto", "none")
-//    }
     private fun registryDataSource(dataSourceProperty: MultiDataSourceProperty): BeanDefinition {
         return BeanDefinitionBuilder.genericBeanDefinition(
             HikariDataSource::class.java

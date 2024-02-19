@@ -1,5 +1,6 @@
 package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
+import cn.chriswood.anthill.infrastructure.datasource.common.Constants
 import org.slf4j.LoggerFactory
 
 
@@ -17,7 +18,7 @@ object DynamicDataSourceContextHolder {
      * 管理所有的数据源id;
      * 主要是为了判断数据源是否存在;
      */
-    private var dataSourceTypes: List<String> = ArrayList()
+    private var dataSourceTypes: List<String?> = ArrayList()
 
     //设置数据源
     fun setDataSourceType(dataSourceType: String) {
@@ -27,7 +28,8 @@ object DynamicDataSourceContextHolder {
 
     //获取数据源
     fun getDataSourceType(): String {
-        return contextHolder.get()
+        println(">>>>>>>>>> 获取数据源 : " + contextHolder.get())
+        return contextHolder.get() ?: Constants.PRIMARY
     }
 
     //清除数据源

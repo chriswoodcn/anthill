@@ -46,7 +46,7 @@ class DynamicDataSourceAspect {
     }
 
     @After(value = "@annotation(source)")
-    fun restoreDataSource(point: JoinPoint?, source: DDS?) {
+    fun restoreDataSource(point: JoinPoint?, source: DDS) {
         DynamicDataSourceContextHolder.setDataSourceType(Constants.PRIMARY)
         if (entityManager == null) return
         val session = entityManager.unwrap(SessionImplementor::class.java)
