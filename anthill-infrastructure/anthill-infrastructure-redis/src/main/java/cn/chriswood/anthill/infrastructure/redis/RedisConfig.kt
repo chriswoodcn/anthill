@@ -11,7 +11,6 @@ import org.redisson.codec.TypedJsonJacksonCodec
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.CacheManager

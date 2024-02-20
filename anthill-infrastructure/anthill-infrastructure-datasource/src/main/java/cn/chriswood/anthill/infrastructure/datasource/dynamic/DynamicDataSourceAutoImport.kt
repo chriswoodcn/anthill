@@ -2,25 +2,18 @@ package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
 import cn.chriswood.anthill.infrastructure.datasource.DataSourceTypeEnum
 import cn.chriswood.anthill.infrastructure.datasource.common.Constants
-import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
-import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.EnvironmentAware
-import org.springframework.context.annotation.EnableAspectJAutoProxy
-import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar
 import org.springframework.core.env.Environment
 import org.springframework.core.type.AnnotationMetadata
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import java.util.function.Supplier
 import javax.sql.DataSource
 
 class DynamicDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
@@ -80,12 +73,12 @@ class DynamicDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAw
             log.debug(">>>>>>>>>> 一共创建{}个数据源", dynamicDataSources.size)
             // bean定义类
             val dynamicDataSourceBeanDefinition =
-                BeanDefinitionBuilder.genericBeanDefinition(DynamicDataSource::class.java, Supplier {
+                BeanDefinitionBuilder.genericBeanDefinition(DynamicDataSource::class.java) {
                     val dynamicDataSource = DynamicDataSource()
                     dynamicDataSource.setDefaultTargetDataSource(defaultTargetDataSource!!)
                     dynamicDataSource.setTargetDataSources(dynamicDataSources as Map<Any, Any>)
                     dynamicDataSource
-                }).getBeanDefinition()
+                }.getBeanDefinition()
             registry.registerBeanDefinition("datasource", dynamicDataSourceBeanDefinition)
             DynamicDataSourceContextHolder.setDataSourcesTypes(dataSourceProperties.keys.toList())
         }
