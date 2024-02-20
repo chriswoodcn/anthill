@@ -7,6 +7,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 @ConfigurationProperties("anthill.redisson")
 data class RedissonProperties(
+    /**
+     * 是否开启
+     */
     var enabled: Boolean?,
     /**
      * redis缓存key前缀

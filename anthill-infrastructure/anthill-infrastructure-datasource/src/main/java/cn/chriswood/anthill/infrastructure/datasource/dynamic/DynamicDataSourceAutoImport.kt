@@ -23,7 +23,7 @@ class DynamicDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAw
     private val DATASOURCE_PREFIX = "anthill.jpa.dynamic"
 
     //存储注册的数据源
-    private val dynamicDataSources: MutableMap<String, DataSource> = mutableMapOf()
+    private val dynamicDataSources: MutableMap<Any, Any> = mutableMapOf()
 
     private var environment: Environment? = null
 
@@ -76,7 +76,7 @@ class DynamicDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAw
                 BeanDefinitionBuilder.genericBeanDefinition(DynamicDataSource::class.java) {
                     val dynamicDataSource = DynamicDataSource()
                     dynamicDataSource.setDefaultTargetDataSource(defaultTargetDataSource!!)
-                    dynamicDataSource.setTargetDataSources(dynamicDataSources as Map<Any, Any>)
+                    dynamicDataSource.setTargetDataSources(dynamicDataSources)
                     dynamicDataSource
                 }.getBeanDefinition()
             registry.registerBeanDefinition("datasource", dynamicDataSourceBeanDefinition)
