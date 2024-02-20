@@ -8,6 +8,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -34,8 +35,6 @@ class MultiDataSourceAutoImport :
     private val BEAN_TRANSACTION_MANAGER = "%sTransactionManager"
 
     private val PERSISTENCE_NAME = "%sPersistenceUnit"
-
-    private val jpaProperties: Map<String, String> = hashMapOf()
 
     private var environment: Environment? = null
 
@@ -94,8 +93,11 @@ class MultiDataSourceAutoImport :
             entityManagerFactoryBean.jpaVendorAdapter = HibernateJpaVendorAdapter()
             val hibernateProperties =
                 context?.getBean<HibernateProperties>("hibernateProperties") ?: HibernateProperties()
+            val jpaProperties =
+                Binder.get(environment).bindOrCreate("spring.jpa", JpaProperties::class.java)
+            log.debug("jpaProperties.properties: {}", jpaProperties.properties.toString())
             val properties = hibernateProperties.determineHibernateProperties(
-                jpaProperties,
+                jpaProperties.properties,
                 HibernateSettings()
             )
             entityManagerFactoryBean.setJpaPropertyMap(properties)
