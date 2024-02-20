@@ -101,11 +101,11 @@ class SwaggerConfig(
 
     @Bean
     fun openApiCustomizer(): OpenApiCustomizer {
-        val contextPath: String = serverProperties.servlet.contextPath
+        val contextPath: String? = serverProperties.servlet.contextPath
         val finalContextPath: String = if (StringUtil.isBlank(contextPath) || "/" == contextPath) {
             ""
         } else {
-            contextPath
+            contextPath!!
         }
         // 对所有路径增加前置上下文路径
         return OpenApiCustomizer { openApi: OpenAPI ->

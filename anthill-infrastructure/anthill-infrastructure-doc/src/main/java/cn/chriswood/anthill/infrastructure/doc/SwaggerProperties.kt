@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.tags.Tag
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
-@ConfigurationProperties("swagger")
+@ConfigurationProperties("anthill.swagger")
 data class SwaggerProperties(
     /**
      * 文档基本信息

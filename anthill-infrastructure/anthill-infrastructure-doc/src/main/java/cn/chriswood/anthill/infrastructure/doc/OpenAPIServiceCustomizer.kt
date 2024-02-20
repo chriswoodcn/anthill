@@ -17,7 +17,6 @@ import org.springdoc.core.providers.JavadocProvider
 import org.springdoc.core.service.OpenAPIService
 import org.springdoc.core.service.SecurityService
 import org.springdoc.core.utils.PropertyResolverUtils
-import org.springframework.context.ApplicationContext
 import org.springframework.core.annotation.AnnotatedElementUtils
 import org.springframework.util.CollectionUtils
 import org.springframework.web.method.HandlerMethod
