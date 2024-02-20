@@ -4,19 +4,19 @@ anthill:
     version: 1.0.0-SNAPSHOT
   jpa:
     type: multi
-#    dynamic:
-#      primary:
-#        driver: com.mysql.cj.jdbc.Driver
-#        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-#        username: root
-#        password: rootroot
-#        query: SELECT 1 FROM DUAL
-#      slave:
-#        driver: com.mysql.cj.jdbc.Driver
-#        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-#        username: root
-#        password: TAOtao88888888
-#        query: SELECT 1 FROM DUAL
+    #    dynamic:
+    #      primary:
+    #        driver: com.mysql.cj.jdbc.Driver
+    #        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    #        username: root
+    #        password: rootroot
+    #        query: SELECT 1 FROM DUAL
+    #      slave:
+    #        driver: com.mysql.cj.jdbc.Driver
+    #        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+    #        username: root
+    #        password: TAOtao88888888
+    #        query: SELECT 1 FROM DUAL
     multi:
       primary:
         driver: com.mysql.cj.jdbc.Driver
@@ -37,6 +37,14 @@ anthill:
   web:
     xss:
       enabled: false
+  swagger:
+    info:
+      title: ${anthill.application.name}
+      version: ${anthill.application.version}
+      description: 'anthill-example'
+      contact:
+        name: chriswoodcn
+        email: chriswoodcn@aliyun.com
 
 logging:
   level:
@@ -59,4 +67,20 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred #jpa启动模式优化
+
+springdoc:
+  default-flat-param-object: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: sys
+      display-name: sys
+      packages-to-scan:
+        - cn.chriswood.anthill.example.modules.sys
+
 

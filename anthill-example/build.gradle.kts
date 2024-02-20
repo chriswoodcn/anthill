@@ -21,6 +21,7 @@ dependencies {
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-datasource")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-doc")))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
