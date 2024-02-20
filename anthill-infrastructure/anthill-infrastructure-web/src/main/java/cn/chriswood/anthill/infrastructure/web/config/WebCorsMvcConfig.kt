@@ -25,6 +25,6 @@ class WebCorsMvcConfig : WebMvcConfigurer {
             .allowedOriginPatterns("*")
             .allowCredentials(true)
             .maxAge(3600)
-        log.info(">>>>>>>>>> init CorsRegistry >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init WebCorsMvcConfig >>>>>>>>>>")
     }
 }

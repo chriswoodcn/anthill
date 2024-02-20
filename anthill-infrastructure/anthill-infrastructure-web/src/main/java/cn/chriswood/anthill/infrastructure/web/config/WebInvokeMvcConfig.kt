@@ -23,7 +23,7 @@ class WebInvokeMvcConfig : WebMvcConfigurer {
     private val log = LoggerFactory.getLogger(javaClass)
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addWebRequestInterceptor(WebInvokeTimeInterceptor())
-        log.info(">>>>>>>>>> init WebInvokeTimeInterceptor >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init WebInvokeMvcConfig >>>>>>>>>>")
         super.addInterceptors(registry)
     }
 }

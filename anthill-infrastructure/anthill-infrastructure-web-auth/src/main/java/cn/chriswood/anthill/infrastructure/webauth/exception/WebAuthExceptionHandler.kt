@@ -2,8 +2,6 @@ package cn.chriswood.anthill.infrastructure.webauth.exception
 
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
 import cn.chriswood.anthill.infrastructure.web.core.R
-import cn.dev33.satoken.exception.NotLoginException
-import cn.dev33.satoken.exception.NotPermissionException
 import cn.dev33.satoken.exception.SaTokenException
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
@@ -20,6 +18,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class WebAuthExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    init {
+        log.debug(">>>>>>>>>> init WebAuthExceptionHandler >>>>>>>>>>")
+    }
 
     @ExceptionHandler(SaTokenException::class)
     fun handleSaTokenException(e: SaTokenException, request: HttpServletRequest): R<Void> {

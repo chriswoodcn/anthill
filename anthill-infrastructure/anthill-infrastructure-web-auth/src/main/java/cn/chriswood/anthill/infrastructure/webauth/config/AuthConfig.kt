@@ -12,6 +12,7 @@ import cn.dev33.satoken.stp.StpUtil
 import cn.hutool.extra.spring.SpringUtil
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
+import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @AutoConfiguration
+@AutoConfigureAfter(SaTokenConfig::class)
 @EnableConfigurationProperties(AuthProperties::class)
 @ConditionalOnWebApplication
 @ConditionalOnProperty(
@@ -54,5 +56,7 @@ class AuthConfig(
         registry.addInterceptor(saInterceptor)
             .addPathPatterns("/**")
             .excludePathPatterns(authProperties.excludes ?: emptyList())
+
+        log.debug(">>>>>>>>>> init AuthConfig addInterceptors >>>>>>>>>>")
     }
 }

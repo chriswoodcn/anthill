@@ -37,7 +37,7 @@ class XssFilterConfig(
         initParameters["excludes"] = xssProperties.excludes!!
         initParameters["enabled"] = xssProperties.enabled!!
         registration.setInitParameters(initParameters)
-        log.info(">>>>>>>>>> init xssFilter >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init XssFilterConfig >>>>>>>>>>")
         return registration
     }
 }

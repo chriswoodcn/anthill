@@ -6,6 +6,4 @@ object Constants {
     const val MULTI = "multi"
     const val DATASOURCE_TYPE = "anthill.jpa.type"
     const val PRIMARY = "primary"
-    const val SECOND = "second"
-    const val THIRD = "third"
 }

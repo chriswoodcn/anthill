@@ -8,7 +8,7 @@ data class DynamicDataSourceProperty(
     val username: String,
     val password: String,
     val query: String?,
-    var hikari: HikariConfig?
+    var hikari: HikariConfig = HikariConfig()
 ) {
     /**
      * 数据源配置参数校验

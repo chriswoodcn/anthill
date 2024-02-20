@@ -19,10 +19,8 @@ import org.springframework.core.type.AnnotationMetadata
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
-import org.springframework.transaction.PlatformTransactionManager
 
-class MultiDataSourceAutoImport :
-    ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
+class MultiDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -48,37 +46,32 @@ class MultiDataSourceAutoImport :
     }
 
     override fun registerBeanDefinitions(importingClassMetadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
-        val multipleDataSourceProperties = Binder.get(environment)
-            .bindOrCreate(DATASOURCE_PREFIX, MultiDataSourceProperties::class.java)
+        log.debug(">>>>>>>>>> init jpa多数据源配置 >>>>>>>>>>")
+        val multipleDataSourceProperties =
+            Binder.get(environment).bindOrCreate(DATASOURCE_PREFIX, MultiDataSourceProperties::class.java)
         if (multipleDataSourceProperties.multi.isNotEmpty()) {
             multipleDataSourceProperties.validate()
             multipleDataSourceProperties.multi.forEach {
-                log.debug("注册数据源[{}]", it.key)
+                log.debug("注册{}DataSource", it.key)
                 registerDataSource(it.key, it.value, registry)
                 log.debug("注册{}EntityManagerFactory", it.key)
                 registerEntityManagerFactory(it.key, it.value, registry)
-                log.debug("注册{}事务管理器", it.key)
-                registerTransactionManager(it.key, it.value, registry)
+                log.debug("注册{}TransactionManager", it.key)
+                registerTransactionManager(it.key, registry)
             }
         }
     }
 
     private fun registerTransactionManager(
-        name: String,
-        property: MultiDataSourceProperty,
-        registry: BeanDefinitionRegistry
+        name: String, registry: BeanDefinitionRegistry
     ) {
-        val beanDefinition = BeanDefinitionBuilder
-            .rootBeanDefinition(JpaTransactionManager::class.java)
-            .addConstructorArgReference(String.format(BEAN_ENTITY_MANAGER_FACTORY, name))
-            .getBeanDefinition()
+        val beanDefinition = BeanDefinitionBuilder.rootBeanDefinition(JpaTransactionManager::class.java)
+            .addConstructorArgReference(String.format(BEAN_ENTITY_MANAGER_FACTORY, name)).getBeanDefinition()
         registry.registerBeanDefinition(String.format(BEAN_TRANSACTION_MANAGER, name), beanDefinition)
     }
 
     private fun registerEntityManagerFactory(
-        name: String,
-        dataSourceProperty: MultiDataSourceProperty,
-        registry: BeanDefinitionRegistry
+        name: String, dataSourceProperty: MultiDataSourceProperty, registry: BeanDefinitionRegistry
     ) {
         val beanDefinition = BeanDefinitionBuilder.rootBeanDefinition(
             LocalContainerEntityManagerFactoryBean::class.java
@@ -93,36 +86,29 @@ class MultiDataSourceAutoImport :
             entityManagerFactoryBean.jpaVendorAdapter = HibernateJpaVendorAdapter()
             val hibernateProperties =
                 context?.getBean<HibernateProperties>("hibernateProperties") ?: HibernateProperties()
-            val jpaProperties =
-                Binder.get(environment).bindOrCreate("spring.jpa", JpaProperties::class.java)
-            log.debug("jpaProperties.properties: {}", jpaProperties.properties.toString())
+            val jpaProperties = Binder.get(environment).bindOrCreate("spring.jpa", JpaProperties::class.java)
+            log.debug(">>>>>>>>>> merge jpaProperties.properties: {}", jpaProperties.properties.toString())
             val properties = hibernateProperties.determineHibernateProperties(
-                jpaProperties.properties,
-                HibernateSettings()
+                jpaProperties.properties, HibernateSettings()
             )
             entityManagerFactoryBean.setJpaPropertyMap(properties)
             entityManagerFactoryBean.setPersistenceUnitName(String.format(PERSISTENCE_NAME, name))
             entityManagerFactoryBean
-        }.addDependsOn(String.format(BEAN_DATASOURCE, name))
-            .getBeanDefinition()
+        }.addDependsOn(String.format(BEAN_DATASOURCE, name)).getBeanDefinition()
         registry.registerBeanDefinition(String.format(BEAN_ENTITY_MANAGER_FACTORY, name), beanDefinition)
     }
 
     private fun registerDataSource(
-        name: String,
-        dataSourceProperty: MultiDataSourceProperty,
-        registry: BeanDefinitionRegistry
+        name: String, dataSourceProperty: MultiDataSourceProperty, registry: BeanDefinitionRegistry
     ) {
         val beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
             HikariDataSource::class.java
         ) {
-            if (dataSourceProperty.hikari == null)
-                dataSourceProperty.hikari = HikariConfig()
-            dataSourceProperty.hikari!!.jdbcUrl = dataSourceProperty.url
-            dataSourceProperty.hikari!!.username = dataSourceProperty.username
-            dataSourceProperty.hikari!!.password = dataSourceProperty.password
-            dataSourceProperty.hikari!!.driverClassName = dataSourceProperty.driver
-            dataSourceProperty.hikari!!.connectionTestQuery = dataSourceProperty.query
+            dataSourceProperty.hikari.jdbcUrl = dataSourceProperty.url
+            dataSourceProperty.hikari.username = dataSourceProperty.username
+            dataSourceProperty.hikari.password = dataSourceProperty.password
+            dataSourceProperty.hikari.driverClassName = dataSourceProperty.driver
+            dataSourceProperty.hikari.connectionTestQuery = dataSourceProperty.query
             HikariDataSource(dataSourceProperty.hikari);
         }.getBeanDefinition()
         registry.registerBeanDefinition(String.format(BEAN_DATASOURCE, name), beanDefinition)

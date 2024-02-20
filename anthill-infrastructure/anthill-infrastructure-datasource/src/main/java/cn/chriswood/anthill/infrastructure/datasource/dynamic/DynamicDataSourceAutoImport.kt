@@ -23,8 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import java.util.function.Supplier
 import javax.sql.DataSource
 
-class DynamicDataSourceAutoImport :
-    ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
+class DynamicDataSourceAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, ApplicationContextAware {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -52,40 +51,36 @@ class DynamicDataSourceAutoImport :
      * @param dataSourceProperty  数据源配置信息
      */
     private fun createDataSource(dataSourceProperty: DynamicDataSourceProperty): HikariDataSource {
-        if (dataSourceProperty.hikari == null)
-            dataSourceProperty.hikari = HikariConfig()
-        dataSourceProperty.hikari!!.jdbcUrl = dataSourceProperty.url
-        dataSourceProperty.hikari!!.username = dataSourceProperty.username
-        dataSourceProperty.hikari!!.password = dataSourceProperty.password
-        dataSourceProperty.hikari!!.driverClassName = dataSourceProperty.driver
-        dataSourceProperty.hikari!!.connectionTestQuery = dataSourceProperty.query
+        dataSourceProperty.hikari.jdbcUrl = dataSourceProperty.url
+        dataSourceProperty.hikari.username = dataSourceProperty.username
+        dataSourceProperty.hikari.password = dataSourceProperty.password
+        dataSourceProperty.hikari.driverClassName = dataSourceProperty.driver
+        dataSourceProperty.hikari.connectionTestQuery = dataSourceProperty.query
         return HikariDataSource(dataSourceProperty.hikari)
     }
 
     override fun registerBeanDefinitions(importingClassMetadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
+        log.debug(">>>>>>>>>> init jpa动态数据源配置 >>>>>>>>>>")
         val binder = Binder.get(environment)
         val dataSourceType = binder.bindOrCreate(Constants.DATASOURCE_TYPE, Bindable.of(String::class.java))
         if (dataSourceType != DataSourceTypeEnum.DynamicJPA.code) return
-        val dataSourceProperties: MutableMap<String, DynamicDataSourceProperty>? =
-            binder.bindOrCreate(
-                DATASOURCE_PREFIX,
-                Bindable.mapOf(String::class.java, DynamicDataSourceProperty::class.java)
-            )
+        val dataSourceProperties: MutableMap<String, DynamicDataSourceProperty>? = binder.bindOrCreate(
+            DATASOURCE_PREFIX, Bindable.mapOf(String::class.java, DynamicDataSourceProperty::class.java)
+        )
 
         if (!dataSourceProperties.isNullOrEmpty()) {
             dataSourceProperties.entries.forEach {
-                log.debug(">>>>>>>>>> 动态数据源配置[{}]", it.key)
+                log.debug(">>>>>>>>>> 创建数据源{}", it.key)
                 // 校验数据源参数
                 if (!it.value.validate()) return@forEach
                 val hikariDataSource = createDataSource(it.value)
                 dynamicDataSources[it.key] = hikariDataSource
                 if (Constants.PRIMARY == it.key) defaultTargetDataSource = hikariDataSource
             }
-            log.debug(">>>>>>>>>> 一共生成{}个数据源", dynamicDataSources.size)
+            log.debug(">>>>>>>>>> 一共创建{}个数据源", dynamicDataSources.size)
             // bean定义类
-            val dynamicDataSourceBeanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
-                DynamicDataSource::class.java,
-                Supplier {
+            val dynamicDataSourceBeanDefinition =
+                BeanDefinitionBuilder.genericBeanDefinition(DynamicDataSource::class.java, Supplier {
                     val dynamicDataSource = DynamicDataSource()
                     dynamicDataSource.setDefaultTargetDataSource(defaultTargetDataSource!!)
                     dynamicDataSource.setTargetDataSources(dynamicDataSources as Map<Any, Any>)

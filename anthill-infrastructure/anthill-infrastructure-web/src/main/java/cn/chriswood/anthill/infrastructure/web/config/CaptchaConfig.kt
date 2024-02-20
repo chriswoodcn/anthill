@@ -5,6 +5,7 @@ import cn.hutool.captcha.CaptchaUtil
 import cn.hutool.captcha.CircleCaptcha
 import cn.hutool.captcha.LineCaptcha
 import cn.hutool.captcha.ShearCaptcha
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -22,6 +23,8 @@ import java.awt.Font
     matchIfMissing = true
 )
 class CaptchaConfig {
+    private val log = LoggerFactory.getLogger(javaClass)
+
     private val width = 160
     private val height = 60
     private val background = Color.PINK
@@ -36,6 +39,7 @@ class CaptchaConfig {
         val captcha = CaptchaUtil.createCircleCaptcha(width, height)
         captcha.setBackground(background)
         captcha.setFont(font)
+        log.debug(">>>>>>>>>> init CaptchaConfig circleCaptcha >>>>>>>>>>")
         return captcha
     }
 
@@ -48,6 +52,7 @@ class CaptchaConfig {
         val captcha = CaptchaUtil.createLineCaptcha(width, height)
         captcha.setBackground(background)
         captcha.setFont(font)
+        log.debug(">>>>>>>>>> init CaptchaConfig lineCaptcha >>>>>>>>>>")
         return captcha
     }
 
@@ -60,6 +65,7 @@ class CaptchaConfig {
         val captcha = CaptchaUtil.createShearCaptcha(width, height)
         captcha.setBackground(background)
         captcha.setFont(font)
+        log.debug(">>>>>>>>>> init CaptchaConfig shearCaptcha >>>>>>>>>>")
         return captcha
     }
 }

@@ -11,7 +11,7 @@ data class MultiDataSourceProperty(
     val packageScan: String,
     val query: String,
     val dialect: String,
-    var hikari: HikariConfig?
+    var hikari: HikariConfig = HikariConfig()
 ) {
     /**
      * 数据源配置参数校验

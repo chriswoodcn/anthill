@@ -25,7 +25,7 @@ class RepeatableFilterConfig {
         registration.addUrlPatterns("/*")
         registration.setName("repeatableFilter")
         registration.order = FilterRegistrationBean.LOWEST_PRECEDENCE
-        log.info(">>>>>>>>>> init repeatableFilter >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init RepeatableFilterConfig >>>>>>>>>>")
         return registration
     }
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
+import org.slf4j.LoggerFactory
 import org.springdoc.core.customizers.OpenApiBuilderCustomizer
 import org.springdoc.core.customizers.OpenApiCustomizer
 import org.springdoc.core.customizers.ServerBaseUrlCustomizer
@@ -33,10 +34,12 @@ import java.util.*
     havingValue = "true",
     matchIfMissing = true
 )
-class SwaggerConfig(
+class SpringdocConfig(
     private val swaggerProperties: SwaggerProperties,
     private val serverProperties: ServerProperties
 ) {
+    private val log = LoggerFactory.getLogger(javaClass)
+
     @Bean
     @ConditionalOnMissingBean(OpenAPI::class)
     fun openApi(): OpenAPI {
@@ -61,6 +64,7 @@ class SwaggerConfig(
             list.add(securityRequirement)
             openApi.security(list)
         }
+        log.debug(">>>>>>>>>> init SwaggerConfig openApi >>>>>>>>>>")
         return openApi
     }
 

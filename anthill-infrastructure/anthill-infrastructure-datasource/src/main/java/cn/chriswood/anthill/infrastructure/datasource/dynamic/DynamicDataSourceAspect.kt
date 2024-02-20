@@ -33,14 +33,18 @@ class DynamicDataSourceAspect {
     @PersistenceContext
     private val entityManager: EntityManager? = null
 
+    init {
+        log.debug(">>>>>>>>>> init DynamicDataSourceAspect >>>>>>>>>>")
+    }
+
     @Before(value = "@annotation(source)")
     fun changeDataSource(point: JoinPoint?, source: DDS) {
         val currentSource = source.value
         if (DynamicDataSourceContextHolder.containsDataSourceType(currentSource)) {
-            log.info("切换数据源->[$currentSource]")
+            log.debug("切换数据源->[$currentSource]")
             DynamicDataSourceContextHolder.setDataSourceType(currentSource)
         } else {
-            log.info("数据源[$currentSource]不存在，使用默认数据源->[${Constants.PRIMARY}]")
+            log.debug("数据源[$currentSource]不存在，使用默认数据源->[${Constants.PRIMARY}]")
             DynamicDataSourceContextHolder.setDataSourceType(Constants.PRIMARY)
         }
     }

@@ -22,7 +22,7 @@ class JacksonConfig {
     @Bean
     @ConditionalOnMissingBean(Jackson2ObjectMapperBuilderCustomizer::class)
     fun customizer(): Jackson2ObjectMapperBuilderCustomizer {
-        log.info(">>>>>>>>>> init JacksonConfig >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init JacksonConfig >>>>>>>>>>")
         return JacksonUtil.jackson2ObjectMapperBuilderCustomizer()
     }
 }

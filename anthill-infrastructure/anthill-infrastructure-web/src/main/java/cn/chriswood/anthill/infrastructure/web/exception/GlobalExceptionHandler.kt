@@ -24,6 +24,10 @@ class GlobalExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    init {
+        log.debug(">>>>>>>>>> init GlobalExceptionHandler >>>>>>>>>>")
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception, request: HttpServletRequest): R<Void> {
         log.error(e.javaClass.name)
