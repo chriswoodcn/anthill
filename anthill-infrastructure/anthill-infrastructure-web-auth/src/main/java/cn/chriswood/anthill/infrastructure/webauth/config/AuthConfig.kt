@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Import
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -34,11 +35,12 @@ class AuthConfig(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         val saInterceptor = SaInterceptor {
-            val allUrlHandler: AllUrlHandler = SpringUtil.getBean(AllUrlHandler::class.java)
+            // val allUrlHandler: AllUrlHandler = SpringUtil.getBean(AllUrlHandler::class.java)
             // 登录验证 -- 排除多个路径
             SaRouter
                 // 获取所有的web路径
-                .match(allUrlHandler.urls)
+                .match("/**")
+                .notMatch(authProperties.excludes ?: emptyList())
                 // 对未排除的路径进行检查
                 .check(SaFunction {
                     StpUtil.checkLogin()
@@ -51,6 +53,6 @@ class AuthConfig(
         // 注册路由拦截器，自定义验证规则
         registry.addInterceptor(saInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns(authProperties.excludes)
+            .excludePathPatterns(authProperties.excludes ?: emptyList())
     }
 }

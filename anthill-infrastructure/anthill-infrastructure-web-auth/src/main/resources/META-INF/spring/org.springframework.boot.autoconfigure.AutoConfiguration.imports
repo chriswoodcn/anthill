@@ -1,2 +1,3 @@
 cn.chriswood.anthill.infrastructure.webauth.config.AuthConfig
 cn.chriswood.anthill.infrastructure.webauth.config.SaTokenConfig
+cn.chriswood.anthill.infrastructure.webauth.exception.WebAuthExceptionHandler

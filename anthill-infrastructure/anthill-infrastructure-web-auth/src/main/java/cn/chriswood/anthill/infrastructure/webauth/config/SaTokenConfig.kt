@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.webauth.config
 
 import cn.chriswood.anthill.framework.factory.YmlPropertySourceFactory
+import cn.chriswood.anthill.infrastructure.webauth.exception.WebAuthExceptionHandler
 import cn.chriswood.anthill.infrastructure.webauth.handler.SaPermissionImpl
 import cn.chriswood.anthill.infrastructure.webauth.handler.SaTokenDaoImpl
 import cn.dev33.satoken.dao.SaTokenDao
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.PropertySource
 
 @AutoConfiguration
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.PropertySource
     matchIfMissing = true
 )
 @PropertySource(value = ["classpath:common-satoken.yml"], factory = YmlPropertySourceFactory::class)
+@Import(SaTokenContextByPatternsRequestCondition::class,)
 class SaTokenConfig {
 
     /**

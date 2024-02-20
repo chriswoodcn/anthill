@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 @ConfigurationProperties("anthill.redisson")
 data class RedissonProperties(
+    var enabled: Boolean?,
     /**
      * redis缓存key前缀
      */
@@ -28,88 +29,88 @@ data class RedissonProperties(
     var clusterServersConfig: ClusterServersConfig? = null,
 ) {
 
-    class SingleServerConfig {
+    data class SingleServerConfig(
         /**
          * 客户端名称
          */
-        val clientName: String? = null
+        val clientName: String?,
 
         /**
          * 最小空闲连接数
          */
-        val connectionMinimumIdleSize = 0
+        val connectionMinimumIdleSize: Int = 0,
 
         /**
          * 连接池大小
          */
-        val connectionPoolSize = 0
+        val connectionPoolSize: Int = 0,
 
         /**
          * 连接空闲超时，单位：毫秒
          */
-        val idleConnectionTimeout = 0
+        val idleConnectionTimeout: Int = 0,
 
         /**
          * 命令等待超时，单位：毫秒
          */
-        val timeout = 0
+        val timeout: Int = 0,
 
         /**
          * 发布和订阅连接池大小
          */
-        val subscriptionConnectionPoolSize = 0
-    }
+        val subscriptionConnectionPoolSize: Int = 0,
+    )
 
-    class ClusterServersConfig {
+    data class ClusterServersConfig(
         /**
          * 客户端名称
          */
-        val clientName: String? = null
+        val clientName: String? = null,
 
         /**
          * master最小空闲连接数
          */
-        val masterConnectionMinimumIdleSize = 0
+        val masterConnectionMinimumIdleSize: Int = 0,
 
         /**
          * master连接池大小
          */
-        val masterConnectionPoolSize = 0
+        val masterConnectionPoolSize: Int = 0,
 
         /**
          * slave最小空闲连接数
          */
-        val slaveConnectionMinimumIdleSize = 0
+        val slaveConnectionMinimumIdleSize: Int = 0,
 
         /**
          * slave连接池大小
          */
-        val slaveConnectionPoolSize = 0
+        val slaveConnectionPoolSize: Int = 0,
 
         /**
          * 连接空闲超时，单位：毫秒
          */
-        val idleConnectionTimeout = 0
+        val idleConnectionTimeout: Int = 0,
 
         /**
          * 命令等待超时，单位：毫秒
          */
-        val timeout = 0
+        val timeout: Int = 0,
 
         /**
          * 发布和订阅连接池大小
          */
-        val subscriptionConnectionPoolSize = 0
+        val subscriptionConnectionPoolSize: Int = 0,
 
         /**
          * 读取模式
          */
-        val readMode: ReadMode? = null
+        val readMode: ReadMode? = null,
 
         /**
          * 订阅模式
          */
-        val subscriptionMode: SubscriptionMode? = null
-    }
+        val subscriptionMode: SubscriptionMode? = null,
+    )
 
 }

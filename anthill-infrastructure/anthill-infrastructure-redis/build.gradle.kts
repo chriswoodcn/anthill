@@ -17,10 +17,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 dependencies {
+    api(libs.bundles.spring.redisson)
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
-    implementation(libs.bundles.spring.redisson)
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.slf4j:slf4j-api")
     testImplementation(kotlin("test"))

@@ -27,7 +27,7 @@ class AllUrlHandler : InitializingBean {
             Objects.requireNonNull<Set<PathPattern>>(
                 info.pathPatternsCondition!!.patterns
             )
-                .forEach(Consumer<PathPattern> { url: PathPattern ->
+                .forEach(Consumer { url: PathPattern ->
                     set.add(
                         ReUtil.replaceAll(
                             url.patternString,

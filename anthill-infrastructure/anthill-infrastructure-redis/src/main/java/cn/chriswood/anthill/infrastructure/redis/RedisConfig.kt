@@ -35,7 +35,7 @@ class RedisConfig(
     fun redissonCustomizer(): RedissonAutoConfigurationCustomizer {
         return RedissonAutoConfigurationCustomizer { config ->
 
-            val om: ObjectMapper = JacksonUtil.objectMapper!!.copy()
+            val om: ObjectMapper = JacksonUtil.objectMapper.copy()
             om.setVisibility(
                 PropertyAccessor.ALL,
                 JsonAutoDetect.Visibility.ANY

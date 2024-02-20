@@ -34,9 +34,42 @@ anthill:
         query: SELECT 1 FROM DUAL
         dialect: org.hibernate.dialect.MySQLDialect
         package-scan: cn.chriswood.anthill.example.persistence.other
+  redisson:
+    enabled: true
+    keyPrefix: ${anthill.application.name}
+    # 单节点配置
+    singleServerConfig:
+      # 客户端名称
+      clientName: ${anthill.application.name}
+      # 最小空闲连接数
+      connectionMinimumIdleSize: 8
+      # 连接池大小
+      connectionPoolSize: 32
+      # 连接空闲超时，单位：毫秒
+      idleConnectionTimeout: 10000
+      # 命令等待超时，单位：毫秒
+      timeout: 3000
+      # 发布和订阅连接池大小
+      subscriptionConnectionPoolSize: 50
   web:
     xss:
       enabled: false
+    auth:
+      excludes:
+        # 静态资源
+        - /*.html
+        - /**/*.html
+        - /**/*.css
+        - /**/*.js
+        # 公共路径
+        - /favicon.ico
+        - /error
+        # swagger 文档配置
+        - /*/api-docs
+        - /*/api-docs/**
+        # actuator 监控配置
+        - /actuator
+        - /actuator/**
   swagger:
     info:
       title: ${anthill.application.name}
@@ -50,7 +83,25 @@ logging:
   level:
     cn.chriswood.anthill.infrastructure: debug
     org.springframework.data.jpa: debug
+
 spring:
+#  SpringBoot 3.x 路由拦截鉴权报错
+#  No more pattern data allowed after {*...} or ** pattern element
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    password:
+    timeout: 10s
+    lettuce:
+      pool:
+        min-idle: 1
+        max-idle: 8
+        max-active: 8
+        max-wait: -1ms
   jpa:
     show-sql: true
     properties:
@@ -67,6 +118,7 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred #jpa启动模式优化
+
 
 springdoc:
   default-flat-param-object: true

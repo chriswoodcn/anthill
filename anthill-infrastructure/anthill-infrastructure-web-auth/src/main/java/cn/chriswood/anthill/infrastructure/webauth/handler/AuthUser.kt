@@ -1,103 +1,101 @@
 package cn.chriswood.anthill.infrastructure.webauth.handler
 
-data class AuthUser(
-
+interface AuthUser {
     /**
      * 用户类型
      */
-    var userType: String,
+    var userType: String
 
     /**
      * 设备类型
      */
-    val deviceType: String,
+    val deviceType: String
 
     /**
      * 终端类型
      */
-    val endpointType: String,
+    val endpointType: String
 
     /**
      * 用户ID
      */
-    var userId: Long = 0L,
+    var userId: Long
 
     /**
      * 部门ID
      */
-    var deptId: Long? = null,
+    var deptId: Long?
 
     /**
      * 部门名
      */
-    var deptName: String? = null,
+    var deptName: String?
 
     /**
      * 用户唯一标识
      */
-    var token: String,
+    var token: String
 
     /**
      * 登录时间
      */
-    var loginTime: Long = 0L,
+    var loginTime: Long
 
     /**
      * 过期时间
      */
-    var expireTime: Long = 0L,
+    var expireTime: Long
 
     /**
      * 登录IP地址
      */
-    var ipaddr: String? = null,
+    var ipaddr: String?
 
     /**
      * 登录地点
      */
-    var loginLocation: String? = null,
+    var loginLocation: String?
 
     /**
      * 浏览器类型
      */
-    var browser: String? = null,
+    var browser: String?
 
     /**
      * 操作系统
      */
-    var os: String? = null,
+    var os: String?
 
     /**
      * 菜单权限
      */
-    var menuPermission: Set<String> = setOf(),
+    var menuPermission: Set<String>
 
     /**
      * 角色权限
      */
-    var rolePermission: Set<String> = setOf(),
+    var rolePermission: Set<String>
 
     /**
      * 用户名
      */
-    var username: String? = null,
+    var username: String?
 
     /**
      * 用户昵称
      */
-
-    var nickname: String? = null,
+    var nickname: String?
 
     /**
      * 角色对象
      */
-    var roles: List<Any> = listOf(),
+    var roles: List<Any>
 
     /**
      * 数据权限 当前角色ID
      */
-    var roleId: Long = 0L,
-) {
+    var roleId: Long
+
     fun getAuthLabel(): String {
         return "$userType:$userId"
     }

@@ -1,10 +1,13 @@
 package cn.chriswood.anthill.infrastructure.web.exception
 
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
+import cn.chriswood.anthill.infrastructure.core.exception.BaseException
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
+import cn.chriswood.anthill.infrastructure.json.JacksonUtil
 import cn.chriswood.anthill.infrastructure.web.core.R
 import org.slf4j.LoggerFactory
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.core.annotation.Order
 import org.springframework.validation.BindException
@@ -16,19 +19,22 @@ import java.util.stream.Collectors
 @ConditionalOnWebApplication
 @RestControllerAdvice
 @Order
+@AutoConfiguration
 class GlobalExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception, request: HttpServletRequest): R<Void> {
+        log.error(e.javaClass.name)
+        log.error(JacksonUtil.bean2string(e))
         val requestURI = request.requestURI
         log.error("请求地址'{}',错误'{}'", requestURI, e.message)
         return R.fail(HttpStatus.NOT_FOUND, e.message)
     }
 
-    @ExceptionHandler(RuntimeException::class)
-    fun handleRuntimeException(e: RuntimeException, request: HttpServletRequest): R<Void> {
+    @ExceptionHandler(BaseException::class)
+    fun handleRuntimeException(e: BaseException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("请求地址'{}',错误'{}'", requestURI, e.message)
         return R.fail(HttpStatus.FAIL, e.message)

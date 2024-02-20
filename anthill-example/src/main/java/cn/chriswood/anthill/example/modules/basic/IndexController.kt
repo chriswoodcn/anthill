@@ -25,13 +25,13 @@ class IndexController(private val applicationConfig: ApplicationConfig) {
         val second: DataSource = SpringUtil.getBean("secondDataSource")
         log.info(second.connection.metaData.url)
         val primaryEntityManagerFactory: LocalContainerEntityManagerFactoryBean = SpringUtil.getBean("&primaryEntityManagerFactory")
-        log.info(primaryEntityManagerFactory.toString())
+        log.info(JacksonUtil.bean2string(primaryEntityManagerFactory))
         val primaryTransactionManager: JpaTransactionManager = SpringUtil.getBean("primaryTransactionManager")
-        log.info(primaryTransactionManager.toString())
+        log.info(JacksonUtil.bean2string(primaryTransactionManager))
         val secondEntityManagerFactory: LocalContainerEntityManagerFactoryBean = SpringUtil.getBean("&secondEntityManagerFactory")
-        log.info(secondEntityManagerFactory.toString())
+        log.info(JacksonUtil.bean2string(secondEntityManagerFactory))
         val secondTransactionManager: JpaTransactionManager = SpringUtil.getBean("secondTransactionManager")
-        log.info(secondTransactionManager.toString())
+        log.info(JacksonUtil.bean2string(secondTransactionManager))
         return MessageFormat.format(
             "欢迎使用{0}后台系统,当前版本：v{1},请通过前端地址访问.",
             applicationConfig.name,
