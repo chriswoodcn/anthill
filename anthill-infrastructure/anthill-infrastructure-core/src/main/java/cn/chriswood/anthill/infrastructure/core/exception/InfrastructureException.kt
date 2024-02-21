@@ -1,9 +1,8 @@
-package cn.chriswood.anthill.infrastructure.web.exception
+package cn.chriswood.anthill.infrastructure.core.exception
 
-import cn.chriswood.anthill.infrastructure.core.exception.BaseException
-import cn.chriswood.anthill.infrastructure.web.utils.I18nMessageUtil
+import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
 
-class InfrastructureWebException(
+open class InfrastructureException(
     override var message: String,
     override var code: Int,
     override var module: String,
@@ -11,8 +10,8 @@ class InfrastructureWebException(
     vararg args: Any?
 ) : BaseException(message, code, module) {
     companion object {
-        const val DEFAULT_MESSAGE = "InfrastructureWebException error"
-        const val DEFAULT_MODULE = "InfrastructureWeb"
+        const val DEFAULT_MESSAGE = "InfrastructureException error"
+        const val DEFAULT_MODULE = "Infrastructure"
     }
 
     constructor(code: Int, dialect: String?, vararg args: Any?) :

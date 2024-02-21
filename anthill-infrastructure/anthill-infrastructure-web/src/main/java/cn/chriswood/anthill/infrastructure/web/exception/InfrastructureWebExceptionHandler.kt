@@ -2,12 +2,14 @@ package cn.chriswood.anthill.infrastructure.web.exception
 
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
 import cn.chriswood.anthill.infrastructure.core.exception.BaseException
+import cn.chriswood.anthill.infrastructure.core.exception.InfrastructureException
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
-import cn.chriswood.anthill.infrastructure.web.core.R
+import cn.chriswood.anthill.infrastructure.web.base.R
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
+import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.validation.BindException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -17,14 +19,14 @@ import java.util.stream.Collectors
 
 @ConditionalOnWebApplication
 @RestControllerAdvice
-@Order
 @AutoConfiguration
-class GlobalExceptionHandler {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+class InfrastructureWebExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     init {
-        log.debug(">>>>>>>>>> init GlobalExceptionHandler >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init InfrastructureWebExceptionHandler >>>>>>>>>>")
     }
 
     @ExceptionHandler(Exception::class)
@@ -35,17 +37,17 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BaseException::class)
-    fun handleRuntimeException(e: BaseException, request: HttpServletRequest): R<Void> {
+    fun handleBaseException(e: BaseException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("BaseException >>> Module[{}], RequestURI[{}], MESSAGE[{}]", e.module, requestURI, e.message)
         return R.fail(HttpStatus.FAIL, e.message)
     }
 
-    @ExceptionHandler(InfrastructureWebException::class)
-    fun handleRuntimeException(e: InfrastructureWebException, request: HttpServletRequest): R<Void> {
+    @ExceptionHandler(InfrastructureException::class)
+    fun handleInfrastructureWebException(e: InfrastructureException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error(
-            "InfrastructureWebException >>> Module[{}], RequestURI[{}], MESSAGE[{}]",
+            "InfrastructureException >>> Module[{}], RequestURI[{}], MESSAGE[{}]",
             e.module,
             requestURI,
             e.message

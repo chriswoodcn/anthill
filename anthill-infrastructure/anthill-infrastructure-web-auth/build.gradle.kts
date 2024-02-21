@@ -20,7 +20,6 @@ dependencies {
     api(libs.bundles.spring.satoken)
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
-    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
     compileOnly("org.springframework.boot:spring-boot-starter-web")

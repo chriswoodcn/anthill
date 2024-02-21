@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.framework.factory
+package cn.chriswood.anthill.infrastructure.core.factory
 
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean

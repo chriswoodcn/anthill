@@ -11,9 +11,9 @@ open class BaseException(
         const val DEFAULT_MODULE = "Base"
     }
 
-    constructor(code: Int, dialect: String) :
+    constructor(code: Int, dialect: String?) :
         this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, dialect)
 
-    constructor(message: String, code: Int, dialect: String) :
+    constructor(message: String, code: Int, dialect: String?) :
         this(message, code, DEFAULT_MODULE, dialect)
 }

@@ -155,7 +155,7 @@ object JacksonUtil {
             objectMapper.readValue(o, object : TypeReference<List<T>>() {})
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil string2list error {}", e.message)
-            ArrayList()
+            emptyList()
         }
     }
 
@@ -164,7 +164,7 @@ object JacksonUtil {
             objectMapper.readValue(o, object : TypeReference<Map<K, V>>() {})
         } catch (e: JsonProcessingException) {
             log.error("JacksonUtil string2map error {}", e.message)
-            hashMapOf()
+            emptyMap()
         }
     }
 }

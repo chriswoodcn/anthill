@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.webauth.config
 
-import cn.chriswood.anthill.framework.factory.YmlPropertySourceFactory
+import cn.chriswood.anthill.infrastructure.core.factory.YmlPropertySourceFactory
 import cn.chriswood.anthill.infrastructure.redis.RedisConfig
 import cn.chriswood.anthill.infrastructure.webauth.handler.SaPermissionImpl
 import cn.chriswood.anthill.infrastructure.webauth.handler.SaTokenDaoImpl

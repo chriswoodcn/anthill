@@ -2,4 +2,4 @@ cn.chriswood.anthill.infrastructure.web.config.WebCorsMvcConfig
 cn.chriswood.anthill.infrastructure.web.config.WebInvokeMvcConfig
 cn.chriswood.anthill.infrastructure.web.config.RepeatableFilterConfig
 cn.chriswood.anthill.infrastructure.web.config.XssFilterConfig
-cn.chriswood.anthill.infrastructure.web.exception.GlobalExceptionHandler
+cn.chriswood.anthill.infrastructure.web.exception.InfrastructureWebExceptionHandler

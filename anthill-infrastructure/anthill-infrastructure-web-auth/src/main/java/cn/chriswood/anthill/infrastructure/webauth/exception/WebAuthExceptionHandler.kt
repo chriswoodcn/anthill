@@ -1,7 +1,7 @@
 package cn.chriswood.anthill.infrastructure.webauth.exception
 
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
-import cn.chriswood.anthill.infrastructure.web.core.R
+import cn.chriswood.anthill.infrastructure.web.base.R
 import cn.dev33.satoken.exception.SaTokenException
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
