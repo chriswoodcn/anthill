@@ -7,4 +7,8 @@
 
 
 == Configurations
-    anthill.swagger..enabled=true #默认开启springdoc配置和swagger配置
+    anthill.swagger.enabled=true #默认开启springdoc配置和swagger配置
+    anthill.swagger.info.title=xxxx
+    anthill.swagger.info.description=xxxx
+    anthill.swagger.info.version=xxxx
+    ...
