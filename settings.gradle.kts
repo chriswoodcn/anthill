@@ -62,3 +62,5 @@ rootDir.listFiles()?.filter {
     }
 }
 include("anthill-example")
+include("anthill-infrastructure:anthill-infrastructure-sms")
+findProject(":anthill-infrastructure:anthill-infrastructure-sms")?.name = "anthill-infrastructure-sms"
