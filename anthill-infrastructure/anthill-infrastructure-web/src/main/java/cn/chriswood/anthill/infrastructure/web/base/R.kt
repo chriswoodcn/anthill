@@ -8,8 +8,8 @@ data class R<T>(
     companion object {
         private const val SUCCESS = "SUCCESS"
         private const val FAIL = "FAIL"
-        private const val SUCCESS_CODE = 200
-        private const val FAIL_CODE = 500
+        const val SUCCESS_CODE = 200
+        const val FAIL_CODE = 500
         fun <T> ok(): R<T> {
             return R(SUCCESS_CODE, SUCCESS, null)
         }
