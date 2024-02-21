@@ -8,7 +8,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.*
 
 object HttpRequestUtil {
-    const val LanguageTag = "language"
+    const val LanguageTag = "content-language"
     const val DefaultLang = "en"
     const val DeviceTag = "device"
     const val EndpointTag = "endpoint"

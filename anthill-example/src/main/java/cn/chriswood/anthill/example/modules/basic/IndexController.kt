@@ -1,16 +1,12 @@
 package cn.chriswood.anthill.example.modules.basic
 
-import cn.chriswood.anthill.infrastructure.json.JacksonUtil
 import cn.chriswood.anthill.infrastructure.spring.ApplicationConfig
-import cn.hutool.extra.spring.SpringUtil
+import cn.chriswood.anthill.infrastructure.web.exception.InfrastructureWebEnum
 import org.slf4j.LoggerFactory
-import org.springframework.orm.jpa.JpaTransactionManager
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.text.MessageFormat
-import javax.sql.DataSource
 
 @RestController
 @RequestMapping("/")
@@ -20,18 +16,7 @@ class IndexController(private val applicationConfig: ApplicationConfig) {
 
     @GetMapping("/")
     fun index(): String {
-        val primary: DataSource = SpringUtil.getBean("primaryDataSource")
-        log.info(primary.connection.metaData.url)
-        val second: DataSource = SpringUtil.getBean("secondDataSource")
-        log.info(second.connection.metaData.url)
-        val primaryEntityManagerFactory: LocalContainerEntityManagerFactoryBean = SpringUtil.getBean("&primaryEntityManagerFactory")
-        log.info(JacksonUtil.bean2string(primaryEntityManagerFactory))
-        val primaryTransactionManager: JpaTransactionManager = SpringUtil.getBean("primaryTransactionManager")
-        log.info(JacksonUtil.bean2string(primaryTransactionManager))
-        val secondEntityManagerFactory: LocalContainerEntityManagerFactoryBean = SpringUtil.getBean("&secondEntityManagerFactory")
-        log.info(JacksonUtil.bean2string(secondEntityManagerFactory))
-        val secondTransactionManager: JpaTransactionManager = SpringUtil.getBean("secondTransactionManager")
-        log.info(JacksonUtil.bean2string(secondTransactionManager))
+        InfrastructureWebEnum.FUNC_ERROR.eject("IndexController", "index", "其实并没有报错，只是测试下")
         return MessageFormat.format(
             "欢迎使用{0}后台系统,当前版本：v{1},请通过前端地址访问.",
             applicationConfig.name,

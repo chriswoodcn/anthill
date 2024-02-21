@@ -3,10 +3,9 @@ package cn.chriswood.anthill.infrastructure.web.exception
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
 import cn.chriswood.anthill.infrastructure.core.exception.BaseException
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
-import cn.chriswood.anthill.infrastructure.json.JacksonUtil
 import cn.chriswood.anthill.infrastructure.web.core.R
-import org.slf4j.LoggerFactory
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.core.annotation.Order
@@ -30,31 +29,46 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception, request: HttpServletRequest): R<Void> {
-        log.error(e.javaClass.name)
-        log.error(JacksonUtil.bean2string(e))
         val requestURI = request.requestURI
-        log.error("请求地址'{}',错误'{}'", requestURI, e.message)
+        log.error("Exception >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
         return R.fail(HttpStatus.NOT_FOUND, e.message)
     }
 
     @ExceptionHandler(BaseException::class)
     fun handleRuntimeException(e: BaseException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
-        log.error("请求地址'{}',错误'{}'", requestURI, e.message)
+        log.error("BaseException >>> Module[{}], RequestURI[{}], MESSAGE[{}]", e.module, requestURI, e.message)
+        return R.fail(HttpStatus.FAIL, e.message)
+    }
+
+    @ExceptionHandler(InfrastructureWebException::class)
+    fun handleRuntimeException(e: InfrastructureWebException, request: HttpServletRequest): R<Void> {
+        val requestURI = request.requestURI
+        log.error(
+            "InfrastructureWebException >>> Module[{}], RequestURI[{}], MESSAGE[{}]",
+            e.module,
+            requestURI,
+            e.message
+        )
         return R.fail(HttpStatus.FAIL, e.message)
     }
 
     @ExceptionHandler(BindException::class)
-    fun handleBindException(e: BindException): R<Void> {
-        log.error(e.message)
+    fun handleBindException(e: BindException, request: HttpServletRequest): R<Void> {
+        val requestURI = request.requestURI
+        log.error("BindException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
         val collect = e.allErrors.stream().map { it.defaultMessage!! }.collect(Collectors.toList())
         val message: String = StringUtil.join(collect, ',')
         return R.fail(message)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): R<Void> {
-        log.error(e.message)
+    fun handleMethodArgumentNotValidException(
+        e: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): R<Void> {
+        val requestURI = request.requestURI
+        log.error("MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
         val message = e.bindingResult.fieldError!!.defaultMessage!!
         return R.fail(message)
     }
