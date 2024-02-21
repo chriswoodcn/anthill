@@ -1,22 +1,15 @@
 package cn.chriswood.anthill.infrastructure.webauth.config
 
-import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
-import cn.chriswood.anthill.infrastructure.web.utils.ServletUtil
-import cn.chriswood.anthill.infrastructure.webauth.handler.AllUrlHandler
-import cn.chriswood.anthill.infrastructure.webauth.handler.AuthHelper
-import cn.dev33.satoken.exception.NotLoginException
 import cn.dev33.satoken.`fun`.SaFunction
 import cn.dev33.satoken.interceptor.SaInterceptor
 import cn.dev33.satoken.router.SaRouter
 import cn.dev33.satoken.stp.StpUtil
-import cn.hutool.extra.spring.SpringUtil
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Import
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
