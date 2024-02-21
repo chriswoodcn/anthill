@@ -5,7 +5,7 @@ lib_hutool = "5.8.16"
 lib_spring_doc = "2.3.0"
 lib_redisson = "3.25.2"
 lib_satoken = "1.37.0"
-lib_sms4j = "3.1.0"
+lib_sms4j = "3.1.1"
 plugin_spring_boot = "3.2.2"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
@@ -19,7 +19,7 @@ redisson = { group = "org.redisson", name = "redisson", version.ref = "lib_redis
 redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring-boot-starter", version.ref = "lib_redisson" }
 satoken-jwt = { group = "cn.dev33", name = "sa-token-jwt", version.ref = "lib_satoken" }
 satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "lib_satoken" }
-sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starterr", version.ref = "lib_sms4j" }
+sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starter", version.ref = "lib_sms4j" }
 
 #将多个需要同时引入的依赖定义为一个组，使用时直接引入组
 [bundles]
