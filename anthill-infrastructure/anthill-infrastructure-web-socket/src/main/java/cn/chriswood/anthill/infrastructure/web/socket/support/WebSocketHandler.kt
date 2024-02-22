@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.socket.support
 
-import cn.chriswood.anthill.infrastructure.web.auth.handler.AuthUser
+import cn.chriswood.anthill.infrastructure.web.auth.support.AuthUser
 import cn.hutool.extra.spring.SpringUtil
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
