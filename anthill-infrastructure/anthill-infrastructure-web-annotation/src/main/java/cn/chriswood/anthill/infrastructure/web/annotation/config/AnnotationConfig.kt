@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.web.annotation.config
 
 import cn.chriswood.anthill.infrastructure.redis.RedisUtil
+import cn.chriswood.anthill.infrastructure.web.annotation.rateLimit.RateLimitAspect
 import cn.chriswood.anthill.infrastructure.web.annotation.repeatLimit.RepeatLimitAspect
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -12,5 +13,11 @@ class AnnotationConfig {
     @ConditionalOnClass(RedisUtil::class)
     fun repeatLimitAspect(): RepeatLimitAspect {
         return RepeatLimitAspect()
+    }
+
+    @Bean
+    @ConditionalOnClass(RedisUtil::class)
+    fun rateLimitAspect(): RateLimitAspect {
+        return RateLimitAspect()
     }
 }

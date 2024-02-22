@@ -1,5 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.utils
 
+import cn.hutool.extra.servlet.JakartaServletUtil
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -19,5 +20,9 @@ object ServletUtil {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun getClientIP(): String {
+        return JakartaServletUtil.getClientIP(getRequest())
     }
 }

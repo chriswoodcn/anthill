@@ -24,7 +24,7 @@ object RedisUtil {
      * @param rateInterval 速率间隔
      * @return -1 表示失败
      */
-    fun rateLimiter(key: String, rateType: RateType, rate: Int, rateInterval: Int): Long {
+    fun rateLimit(key: String, rateType: RateType, rate: Int, rateInterval: Int): Long {
         val rateLimiter: RRateLimiter = CLIENT.getRateLimiter(key)
         rateLimiter.trySetRate(rateType, rate.toLong(), rateInterval.toLong(), RateIntervalUnit.SECONDS)
         return if (rateLimiter.tryAcquire()) {
@@ -528,5 +528,4 @@ object RedisUtil {
         val rKeys: RKeys = CLIENT.keys
         return rKeys.countExists(key) > 0
     }
-
 }

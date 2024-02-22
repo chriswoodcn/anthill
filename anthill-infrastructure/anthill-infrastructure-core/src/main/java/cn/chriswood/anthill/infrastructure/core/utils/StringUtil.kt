@@ -25,6 +25,9 @@ object StringUtil {
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault
     val isEmpty: (str: String?) -> Boolean = StrUtil::isEmpty
     val trimToEmpty: (str: String) -> String = StringUtils::trimToEmpty
+    val containsAny: (String?, String?) -> Boolean = StringUtils::containsAny
+    val startsWith: (String?, String?) -> Boolean = StringUtils::startsWith
+    val endsWith: (String?, String?) -> Boolean = StringUtils::endsWith
 
     fun isNotEmpty(str: String?): Boolean {
         return !isEmpty(str)

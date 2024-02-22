@@ -17,6 +17,7 @@ import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
+import org.slf4j.LoggerFactory
 import org.springframework.validation.BindingResult
 import org.springframework.web.multipart.MultipartFile
 import java.time.Duration
@@ -24,6 +25,8 @@ import java.util.*
 
 @Aspect
 class RepeatLimitAspect {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     private val KEY_CACHE = ThreadLocal<String>()
 

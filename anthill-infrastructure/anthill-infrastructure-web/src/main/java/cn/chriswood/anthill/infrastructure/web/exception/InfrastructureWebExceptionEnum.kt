@@ -8,7 +8,9 @@ enum class InfrastructureWebExceptionEnum(
     private val dialect: String,
 ) : ExceptionAssert {
     // 方法调用异常 格式class func error
-    REPEAT_SUBMIT(49000, "REPEAT_SUBMIT");
+    FUNC_ERROR(500,"FUNC_ERROR"),
+    REPEAT_SUBMIT(49000, "REPEAT_SUBMIT"),
+    RATE_LIMIT(49001, "RATE_LIMIT");
 
     fun getMessage(vararg args: Any?): String {
         return I18nMessageUtil.message(dialect, *args)
