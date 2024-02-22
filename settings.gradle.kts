@@ -32,6 +32,20 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
         maven {
+            credentials {
+                username = "622562d6944dcd36d9e2186e"
+                password = "btIFsIsDHEbX"
+            }
+            url = uri("https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
+        }
+        maven {
+            credentials {
+                username = "622562d6944dcd36d9e2186e"
+                password = "btIFsIsDHEbX"
+            }
+            url = uri("https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+        }
+        maven {
             url = uri("https://maven.aliyun.com/nexus/content/groups/public/")
         }
         maven {

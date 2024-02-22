@@ -6,6 +6,7 @@ lib_spring_doc = "2.3.0"
 lib_redisson = "3.25.2"
 lib_satoken = "1.37.0"
 lib_sms4j = "3.1.1"
+lib_anthill_infrastructure = "1.0.0-SNAPSHOT"
 plugin_spring_boot = "3.2.2"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
@@ -20,6 +21,16 @@ redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring
 satoken-jwt = { group = "cn.dev33", name = "sa-token-jwt", version.ref = "lib_satoken" }
 satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "lib_satoken" }
 sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starter", version.ref = "lib_sms4j" }
+anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
+anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
+anthill-datasource = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-datasource", version.ref = "lib_anthill_infrastructure" }
+anthill-redis = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-redis", version.ref = "lib_anthill_infrastructure" }
+anthill-sms = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-sms", version.ref = "lib_anthill_infrastructure" }
+anthill-spring-doc = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-spring-doc", version.ref = "lib_anthill_infrastructure" }
+anthill-web = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web", version.ref = "lib_anthill_infrastructure" }
+anthill-web-auth = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web-auth", version.ref = "lib_anthill_infrastructure" }
+anthill-web-annotation = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web-annotation", version.ref = "lib_anthill_infrastructure" }
+anthill-web-socket = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web-socket", version.ref = "lib_anthill_infrastructure" }
 
 #将多个需要同时引入的依赖定义为一个组，使用时直接引入组
 [bundles]
@@ -27,6 +38,18 @@ spring-doc = ["spring-doc-api", "spring-doc-ui"]
 spring-redisson = ["redisson", "redisson-spring-boot-starter"]
 spring-satoken = ["satoken-spring-boot-starter", "satoken-jwt"]
 spring-sms4j = ["sms4j-spring-boot-starter"]
+anthill = [
+    "anthill-core",
+    "anthill-json",
+    "anthill-datasource",
+    "anthill-redis",
+    "anthill-sms",
+    "anthill-spring-doc",
+    "anthill-web",
+    "anthill-web-auth",
+    "anthill-web-annotation",
+    "anthill-web-socket",
+]
 
 #在plugins代码块中，定义插件
 [plugins]

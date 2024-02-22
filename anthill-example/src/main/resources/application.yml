@@ -114,6 +114,8 @@ spring:
       repositories:
         bootstrap-mode: DEFERRED #jpa启动模式优化
     redis:
+      repositories:
+        enabled: false
       # 地址
       host: localhost
       # 端口，默认为6379
