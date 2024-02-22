@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
-import cn.chriswood.anthill.infrastructure.datasource.common.Constants
+import cn.chriswood.anthill.infrastructure.datasource.support.Constants
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.aspectj.lang.JoinPoint

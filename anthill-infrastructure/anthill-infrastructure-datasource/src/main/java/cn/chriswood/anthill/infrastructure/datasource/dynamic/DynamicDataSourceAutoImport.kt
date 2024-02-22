@@ -1,7 +1,7 @@
 package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
-import cn.chriswood.anthill.infrastructure.datasource.DataSourceTypeEnum
-import cn.chriswood.anthill.infrastructure.datasource.common.Constants
+import cn.chriswood.anthill.infrastructure.datasource.support.DataSourceTypeEnum
+import cn.chriswood.anthill.infrastructure.datasource.support.Constants
 import com.zaxxer.hikari.HikariDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.support.BeanDefinitionBuilder

@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.sms
 
-import cn.chriswood.anthill.infrastructure.redis.RedisUtil
+import cn.chriswood.anthill.infrastructure.redis.utils.RedisUtil
+import cn.chriswood.anthill.infrastructure.sms.support.SmsDaoImpl
 import org.dromara.sms4j.api.dao.SmsDao
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass

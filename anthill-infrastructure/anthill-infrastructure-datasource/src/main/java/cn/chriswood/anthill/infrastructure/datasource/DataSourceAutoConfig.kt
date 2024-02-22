@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.datasource
 
 import cn.chriswood.anthill.infrastructure.datasource.dynamic.DynamicDataSourceAspect
+import cn.chriswood.anthill.infrastructure.datasource.support.DataSourceAutoImportSelector
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

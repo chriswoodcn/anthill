@@ -1,12 +1,12 @@
 package cn.chriswood.anthill.infrastructure.json
 
+import cn.chriswood.anthill.infrastructure.json.utils.JacksonUtil
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
 @AutoConfiguration
 @ConditionalOnProperty(

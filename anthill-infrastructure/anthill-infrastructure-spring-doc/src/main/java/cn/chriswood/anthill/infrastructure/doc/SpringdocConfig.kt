@@ -1,6 +1,8 @@
 package cn.chriswood.anthill.infrastructure.doc
 
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
+import cn.chriswood.anthill.infrastructure.doc.support.OpenAPIServiceCustomizer
+import cn.chriswood.anthill.infrastructure.doc.support.SwaggerProperties
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem

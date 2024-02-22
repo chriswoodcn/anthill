@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.datasource.dynamic
 
-import cn.chriswood.anthill.infrastructure.datasource.common.Constants
+import cn.chriswood.anthill.infrastructure.datasource.support.Constants
 import org.slf4j.LoggerFactory
 
 

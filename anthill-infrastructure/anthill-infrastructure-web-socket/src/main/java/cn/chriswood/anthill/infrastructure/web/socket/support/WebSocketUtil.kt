@@ -1,7 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.socket.support
 
-import cn.chriswood.anthill.infrastructure.redis.RedisUtil
-import cn.chriswood.anthill.infrastructure.web.socket.constants.WebSocketConstants
+import cn.chriswood.anthill.infrastructure.redis.utils.RedisUtil
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.PongMessage
 import org.springframework.web.socket.TextMessage

@@ -1,7 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.socket.support
 
 import cn.chriswood.anthill.infrastructure.web.auth.handler.AuthHelper
-import cn.chriswood.anthill.infrastructure.web.socket.constants.WebSocketConstants
 import org.springframework.http.HttpStatus
 import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
