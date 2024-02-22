@@ -4,6 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties("anthill.web.auth")
 data class AuthProperties(
-    val excludes: List<String>? = listOf(),
+    val excludes: List<String> = emptyList(),
     val enabled: Boolean?,
 )

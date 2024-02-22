@@ -50,6 +50,6 @@ class AuthConfig(
             .addPathPatterns("/**")
             .excludePathPatterns(authProperties.excludes ?: emptyList())
 
-        log.debug(">>>>>>>>>> init AuthConfig addInterceptors >>>>>>>>>>")
+        log.debug(">>>>>>>>>> init AuthConfig >>>>>>>>>>")
     }
 }

@@ -32,15 +32,16 @@ class SaTokenConfig {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    init {
+        log.debug(">>>>>>>>>> init SaTokenConfig >>>>>>>>>>")
+    }
 
     /**
      * Sa-Token 整合 jwt (简单模式)
      */
     @Bean
     fun getStpLogicJwt(): StpLogic {
-        val stpLogicJwtForSimple = StpLogicJwtForSimple()
-        log.debug(">>>>>>>>>> init SaTokenConfig StpLogicJwt >>>>>>>>>>")
-        return stpLogicJwtForSimple
+        return StpLogicJwtForSimple()
     }
 
     /**
@@ -48,9 +49,7 @@ class SaTokenConfig {
      */
     @Bean
     fun stpInterface(): StpInterface {
-        val saPermissionImpl = SaPermissionImpl()
-        log.debug(">>>>>>>>>> init SaTokenConfig StpInterface >>>>>>>>>>")
-        return saPermissionImpl
+        return SaPermissionImpl()
     }
 
     /**
@@ -58,8 +57,6 @@ class SaTokenConfig {
      */
     @Bean
     fun saTokenDao(): SaTokenDao {
-        val saTokenDaoImpl = SaTokenDaoImpl()
-        log.debug(">>>>>>>>>> init SaTokenConfig SaTokenDao >>>>>>>>>>")
-        return saTokenDaoImpl
+        return SaTokenDaoImpl()
     }
 }
