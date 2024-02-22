@@ -1,6 +1,6 @@
-package cn.chriswood.anthill.infrastructure.annotation.repeatLimit
+package cn.chriswood.anthill.infrastructure.web.annotation.repeatLimit
 
-import cn.chriswood.anthill.infrastructure.annotation.constants.CacheKeys
+import cn.chriswood.anthill.infrastructure.web.annotation.constants.CacheKeys
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.chriswood.anthill.infrastructure.json.JacksonUtil
 import cn.chriswood.anthill.infrastructure.redis.RedisUtil
@@ -10,6 +10,7 @@ import cn.chriswood.anthill.infrastructure.web.utils.ServletUtil
 import cn.dev33.satoken.SaManager
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.ObjectUtil
+import cn.hutool.crypto.SecureUtil
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.aspectj.lang.JoinPoint
@@ -30,17 +31,19 @@ class RepeatLimitAspect {
     @Throws(Throwable::class)
     fun doBefore(point: JoinPoint, repeatSubmit: RepeatLimit) {
         // 如果注解不为0 则使用注解数值
-        val interval: Long = repeatSubmit.timeUnit.toSeconds(repeatSubmit.interval)
-        InfrastructureWebExceptionEnum.REPEAT_SUBMIT.stateFalse(interval < 1, 1)
-        val request: HttpServletRequest = ServletUtil.getRequest() ?: return
-        val nowParams: String = argsArrayToString(point.args)
+        var interval: Long = repeatSubmit.timeUnit.toSeconds(repeatSubmit.interval)
+        if (interval <= 0) interval = 100 //至少100ms
+        val request = ServletUtil.getRequest() ?: return
+        val nowParams = argsArrayToString(point.args)
         // 请求地址（作为存放cache的key值）
         val url: String = request.requestURI
-        // 唯一值（没有消息头则使用请求地址）
-        var submitKey: String = StringUtil.trimToEmpty(request.getHeader(SaManager.getConfig().tokenName))
-        submitKey = cn.hutool.crypto.SecureUtil.md5("$submitKey:$nowParams")
+        // header中取token
+        val header = request.getHeader(SaManager.getConfig().tokenName) ?: return
+        val token = StringUtil.trimToEmpty(header)
+        // 拼接参数
+        val submitKey = SecureUtil.md5("$token:$nowParams")
         // 唯一标识（指定key + url + 消息头）
-        val cacheRepeatKey: String = CacheKeys.REPEAT_SUBMIT_KEY + url + submitKey
+        val cacheRepeatKey = "${CacheKeys.REPEAT_SUBMIT_KEY}$url:$submitKey"
         if (RedisUtil.setObjectIfAbsent(cacheRepeatKey, "", Duration.ofSeconds(interval))) {
             KEY_CACHE.set(cacheRepeatKey)
         } else {
@@ -53,12 +56,15 @@ class RepeatLimitAspect {
      *
      * @param joinPoint 切点
      */
-    @AfterReturning(pointcut = "@annotation(repeatSubmit)", returning = "res")
-    fun doAfterReturning(joinPoint: JoinPoint?, repeatSubmit: RepeatLimit?, res: Any?) {
-        if (res is R<*>) {
+    @AfterReturning(
+        pointcut = "@annotation(repeatSubmit)",
+        returning = "result"
+    )
+    fun doAfterReturning(joinPoint: JoinPoint, repeatSubmit: RepeatLimit, result: Any) {
+        if (result is R<*>) {
             try {
                 // 成功则不删除redis数据 保证在有效时间内无法重复提交
-                if (res.code == R.SUCCESS_CODE) {
+                if (result.code == R.SUCCESS_CODE) {
                     return
                 }
                 RedisUtil.deleteObject(KEY_CACHE.get())

@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.config
+package cn.chriswood.anthill.infrastructure.web.auth.config
 
 import cn.dev33.satoken.spring.SaTokenContextForSpringInJakartaServlet
 import cn.dev33.satoken.spring.pathmatch.SaPatternsRequestConditionHolder

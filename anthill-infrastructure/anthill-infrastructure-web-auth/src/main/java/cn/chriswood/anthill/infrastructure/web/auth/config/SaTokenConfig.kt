@@ -1,9 +1,9 @@
-package cn.chriswood.anthill.infrastructure.webauth.config
+package cn.chriswood.anthill.infrastructure.web.auth.config
 
 import cn.chriswood.anthill.infrastructure.core.factory.YmlPropertySourceFactory
 import cn.chriswood.anthill.infrastructure.redis.RedisConfig
-import cn.chriswood.anthill.infrastructure.webauth.handler.SaPermissionImpl
-import cn.chriswood.anthill.infrastructure.webauth.handler.SaTokenDaoImpl
+import cn.chriswood.anthill.infrastructure.web.auth.handler.SaPermissionImpl
+import cn.chriswood.anthill.infrastructure.web.auth.handler.SaTokenDaoImpl
 import cn.dev33.satoken.dao.SaTokenDao
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple
 import cn.dev33.satoken.stp.StpInterface

@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.handler
+package cn.chriswood.anthill.infrastructure.web.auth.handler
 
 import cn.chriswood.anthill.infrastructure.redis.RedisUtil
 import cn.dev33.satoken.dao.SaTokenDao

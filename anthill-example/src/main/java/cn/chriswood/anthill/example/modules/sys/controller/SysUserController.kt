@@ -2,6 +2,7 @@ package cn.chriswood.anthill.example.modules.sys.controller
 
 import cn.chriswood.anthill.example.persistence.primary.entity.SysUserEntity
 import cn.chriswood.anthill.example.persistence.primary.repository.SysUserRepository
+import cn.chriswood.anthill.infrastructure.web.annotation.repeatLimit.RepeatLimit
 import cn.chriswood.anthill.infrastructure.web.base.BaseController
 import cn.chriswood.anthill.infrastructure.web.base.R
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,6 +15,7 @@ class SysUserController(
     private val repository: SysUserRepository
 ) : BaseController {
     @GetMapping("/user/list")
+    @RepeatLimit
     fun list(): R<List<SysUserEntity>> {
         return R.ok(repository.findAll())
     }

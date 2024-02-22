@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.handler
+package cn.chriswood.anthill.infrastructure.web.auth.handler
 
 import cn.chriswood.anthill.infrastructure.core.enums.UserType
 import cn.dev33.satoken.context.SaHolder
@@ -35,7 +35,8 @@ object AuthHelper {
      * 获取用户(多级缓存)
      */
     fun getAuthUser(): AuthUser? {
-        return getStorageIfAbsentSet(LOGIN_USER_KEY,
+        return getStorageIfAbsentSet(
+            LOGIN_USER_KEY,
             Supplier getStorageIfAbsentSet@{
                 val session = StpUtil.getTokenSession()
                 if (ObjectUtil.isNull(session)) {

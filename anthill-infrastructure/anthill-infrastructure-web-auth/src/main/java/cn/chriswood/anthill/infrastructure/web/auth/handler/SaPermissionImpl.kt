@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.handler
+package cn.chriswood.anthill.infrastructure.web.auth.handler
 
 import cn.chriswood.anthill.infrastructure.core.enums.UserType
 import cn.dev33.satoken.stp.StpInterface

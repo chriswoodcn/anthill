@@ -18,8 +18,11 @@ object HttpRequestUtil {
     }
 
     fun getLang(): String {
-        val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), LanguageTag)
-        return headerIgnoreCase ?: DefaultLang
+        val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), LanguageTag) ?: return DefaultLang
+        if (headerIgnoreCase.indexOf('_') > -1) {
+            return headerIgnoreCase.split('_')[0]
+        }
+        return headerIgnoreCase
     }
 
     fun getLocale(): Locale {

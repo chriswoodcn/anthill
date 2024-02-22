@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.handler
+package cn.chriswood.anthill.infrastructure.web.auth.handler
 
 import cn.hutool.core.util.ReUtil
 import cn.hutool.extra.spring.SpringUtil

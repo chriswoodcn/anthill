@@ -30,10 +30,10 @@ object I18nMessageUtil {
         }
     }
 
-    fun messageByLang(code: Int, lang: String, vararg args: Any): String? {
+    fun messageByLang(lang: String, key: String, vararg args: Any): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {
-            messageSource.getMessage(code.toString(), args, Locale(lang))
+            messageSource.getMessage(key, args, Locale(lang))
         } catch (e: Exception) {
             log.error("I18nMessageUtil messageByLang invoke error: {}", e.message)
             null

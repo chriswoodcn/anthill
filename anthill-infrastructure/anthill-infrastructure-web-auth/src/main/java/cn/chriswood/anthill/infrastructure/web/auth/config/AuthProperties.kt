@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.config
+package cn.chriswood.anthill.infrastructure.web.auth.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

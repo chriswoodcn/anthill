@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.annotation.constants
+package cn.chriswood.anthill.infrastructure.web.annotation.constants
 
 object CacheKeys {
     private const val GLOBAL_CACHE_KEY = "global:"

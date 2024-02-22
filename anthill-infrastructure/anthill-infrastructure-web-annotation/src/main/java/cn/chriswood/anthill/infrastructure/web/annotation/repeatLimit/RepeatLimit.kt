@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.annotation.repeatLimit
+package cn.chriswood.anthill.infrastructure.web.annotation.repeatLimit
 
 import java.util.concurrent.TimeUnit
 
@@ -9,6 +9,6 @@ import java.util.concurrent.TimeUnit
 annotation class RepeatLimit(
     val interval: Long = 1000L,
     val timeUnit: TimeUnit = TimeUnit.MILLISECONDS,
-    val dialect: String = "RepeatLimit.message",
+    val dialect: String = "InfrastructureWeb.REPEAT_SUBMIT",
     val message: String = "forbid repeat submit",
 )

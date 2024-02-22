@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.webauth.config
+package cn.chriswood.anthill.infrastructure.web.auth.config
 
 import cn.dev33.satoken.`fun`.SaFunction
 import cn.dev33.satoken.interceptor.SaInterceptor
