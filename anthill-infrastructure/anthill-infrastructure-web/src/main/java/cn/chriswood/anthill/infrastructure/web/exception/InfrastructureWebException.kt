@@ -1,6 +1,8 @@
 package cn.chriswood.anthill.infrastructure.web.exception
 
 import cn.chriswood.anthill.infrastructure.core.exception.InfrastructureException
+import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
+import org.springframework.context.i18n.LocaleContextHolder
 
 class InfrastructureWebException(
     override var message: String,
@@ -15,7 +17,18 @@ class InfrastructureWebException(
     }
 
     constructor(code: Int, dialect: String?, vararg args: Any?) :
-        this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, dialect, *args)
+        this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, dialect, *args) {
+        val i18nMessage = I18nMessageUtil.innerMessageByLang(
+            DEFAULT_MODULE,
+            InfrastructureWebExceptionMessages.messages,
+            LocaleContextHolder.getLocale().language,
+            "${InfrastructureException.DEFAULT_MODULE}.$dialect",
+            *args
+        )
+        if (!i18nMessage.isNullOrEmpty()) {
+            this.message = i18nMessage
+        }
+    }
 
     constructor(message: String, code: Int, dialect: String?, vararg args: Any?) :
         this(message, code, DEFAULT_MODULE, dialect, *args)

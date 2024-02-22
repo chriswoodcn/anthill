@@ -5,7 +5,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Import
 
 @AutoConfiguration
-@EnableConfigurationProperties(ApplicationConfig::class)
+@EnableConfigurationProperties(
+    ApplicationConfig::class,
+    ExceptionConfig::class
+)
 @Import(
     cn.hutool.extra.spring.SpringUtil::class
 )

@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.core.exception
 
 import cn.chriswood.anthill.infrastructure.core.utils.I18nMessageUtil
+import org.springframework.context.i18n.LocaleContextHolder
 
 open class InfrastructureException(
     override var message: String,
@@ -16,8 +17,12 @@ open class InfrastructureException(
 
     constructor(code: Int, dialect: String?, vararg args: Any?) :
         this(DEFAULT_MESSAGE, code, DEFAULT_MODULE, dialect, *args) {
-        val i18nMessage = I18nMessageUtil.message(
-            "$DEFAULT_MODULE.$dialect", *args
+        val i18nMessage = I18nMessageUtil.innerMessageByLang(
+            DEFAULT_MODULE,
+            InfrastructureExceptionMessages.messages,
+            LocaleContextHolder.getLocale().language,
+            "$DEFAULT_MODULE.$dialect",
+            *args
         )
         if (!i18nMessage.isNullOrEmpty()) {
             this.message = i18nMessage

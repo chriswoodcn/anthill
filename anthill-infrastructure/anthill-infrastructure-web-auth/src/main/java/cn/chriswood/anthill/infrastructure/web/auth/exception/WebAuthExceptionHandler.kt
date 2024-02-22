@@ -22,15 +22,17 @@ class WebAuthExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    private val module = "InfrastructureWebAuth"
+
     private val messageDialectMap = hashMapOf(
-        11011 to "InfrastructureWebAuth.noToken",
-        11012 to "InfrastructureWebAuth.invalidToken",
-        11013 to "InfrastructureWebAuth.expireToken",
-        11014 to "InfrastructureWebAuth.pushOffline",
-        11015 to "InfrastructureWebAuth.kickOffline",
-        11016 to "InfrastructureWebAuth.frozen",
-        11041 to "InfrastructureWebAuth.noCorrespondRole",
-        11051 to "InfrastructureWebAuth.noCorrespondPermission",
+        11011 to "$module.noToken",
+        11012 to "$module.invalidToken",
+        11013 to "$module.expireToken",
+        11014 to "$module.pushOffline",
+        11015 to "$module.kickOffline",
+        11016 to "$module.frozen",
+        11041 to "$module.noCorrespondRole",
+        11051 to "$module.noCorrespondPermission",
     )
 
     init {
@@ -41,13 +43,18 @@ class WebAuthExceptionHandler {
     fun handleSaTokenException(e: SaTokenException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("SaTokenException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
-        var dialectName = "InfrastructureWebAuth.message"
+        var dialectName = "$module.message"
         if (e.code in messageDialectMap.keys) {
             dialectName = messageDialectMap[e.code]!!
         }
         return R.fail(
             HttpStatus.UNAUTHORIZED,
-            I18nMessageUtil.messageByLang(HttpRequestUtil.getLang(), dialectName)
+            I18nMessageUtil.innerMessageByLang(
+                module,
+                InfrastructureWebAuthExceptionMessages.messages,
+                HttpRequestUtil.getLang(),
+                dialectName
+            )
         )
     }
 }

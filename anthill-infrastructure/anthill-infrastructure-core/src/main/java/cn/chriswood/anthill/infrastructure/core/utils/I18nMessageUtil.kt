@@ -1,14 +1,18 @@
 package cn.chriswood.anthill.infrastructure.core.utils
 
+import cn.chriswood.anthill.infrastructure.core.config.ExceptionConfig
 import cn.hutool.extra.spring.SpringUtil
 import org.slf4j.LoggerFactory
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
+import java.text.MessageFormat
 import java.util.*
 
 object I18nMessageUtil {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    private const val DEFAULT_LANGUAGE = "en"
 
     fun message(key: String, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
@@ -30,7 +34,7 @@ object I18nMessageUtil {
         }
     }
 
-    fun messageByLang(lang: String, key: String, vararg args: Any): String? {
+    fun messageByLang(lang: String, key: String, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {
             messageSource.getMessage(key, args, Locale(lang))
@@ -38,6 +42,22 @@ object I18nMessageUtil {
             log.error("I18nMessageUtil messageByLang invoke error: {}", e.message)
             null
         }
+    }
+
+    fun innerMessageByLang(
+        module: String,
+        map: Map<String, Map<String, String>>,
+        lang: String,
+        key: String,
+        vararg args: Any?
+    ): String? {
+        val config: ExceptionConfig = SpringUtil.getBean(ExceptionConfig::class.java)
+        if (config.enableCustomMessage && config.customMessageModule.contains(module)) {
+            return messageByLang(lang, key, *args)
+        }
+        val stringMap = map[lang] ?: map[DEFAULT_LANGUAGE]!!
+        val stringFormat = stringMap[key] ?: return null
+        return MessageFormat.format(stringFormat, *args)
     }
 }
 
