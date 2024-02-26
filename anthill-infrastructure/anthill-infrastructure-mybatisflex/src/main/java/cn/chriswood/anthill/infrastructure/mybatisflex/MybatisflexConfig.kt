@@ -15,9 +15,13 @@ class MybatisflexConfig : MyBatisFlexCustomizer {
 
     private val log = LoggerFactory.getLogger(javaClass)
     override fun customize(config: FlexGlobalConfig) {
-        // 指定逻辑删除字段名
+        // 全局配置逻辑删除字段
         config.logicDeleteColumn = "del_flag"
+        // 全局配置乐观锁字段
+        config.versionColumn = "version"
+        // 全局配置insert监听
         config.registerInsertListener(FlexInsertListener())
+        // 全局配置update监听
         config.registerUpdateListener(FlexUpdateListener())
 
         //开启审计功能
