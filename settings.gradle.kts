@@ -63,7 +63,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "anthill"
 
-//println("gradle构建生命周期>>>>>>>>>>     文件=settings.gradle     阶段=initialization phase")
+println("gradle构建生命周期>>>>>>>>>>     文件=settings.gradle     阶段=initialization phase")
 rootDir.listFiles()?.filter {
     it.name.startsWith("anthill-infrastructure") && it.isDirectory
 }?.forEach {

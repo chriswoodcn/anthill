@@ -3,11 +3,11 @@
 [versions]
 lib_hutool = "5.8.16"
 lib_spring_doc = "2.3.0"
-lib_redisson = "3.25.2"
+lib_redisson = "3.27.0"
 lib_satoken = "1.37.0"
 lib_sms4j = "3.1.1"
 lib_anthill_infrastructure = "1.0.0-SNAPSHOT"
-plugin_spring_boot = "3.2.2"
+plugin_spring_boot = "3.2.3"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
 
@@ -23,7 +23,7 @@ satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot
 sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starter", version.ref = "lib_sms4j" }
 anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
 anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
-anthill-datasource = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-datasource", version.ref = "lib_anthill_infrastructure" }
+anthill-jpa = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-jpa", version.ref = "lib_anthill_infrastructure" }
 anthill-redis = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-redis", version.ref = "lib_anthill_infrastructure" }
 anthill-sms = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-sms", version.ref = "lib_anthill_infrastructure" }
 anthill-spring-doc = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-spring-doc", version.ref = "lib_anthill_infrastructure" }
@@ -41,7 +41,7 @@ spring-sms4j = ["sms4j-spring-boot-starter"]
 anthill = [
     "anthill-core",
     "anthill-json",
-    "anthill-datasource",
+    "anthill-jpa",
     "anthill-redis",
     "anthill-sms",
     "anthill-spring-doc",
