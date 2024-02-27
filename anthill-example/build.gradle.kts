@@ -45,11 +45,12 @@ dependencies {
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring-doc")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mongo")))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-//    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
