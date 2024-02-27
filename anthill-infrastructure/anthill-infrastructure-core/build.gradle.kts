@@ -32,13 +32,13 @@ publishing {
         }
     }
     repositories {
-        val releasesRepoUrl = uri("https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
-        val snapshotsRepoUrl = uri("https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+        val releasesRepoUrl = uri(rootProject.ext["publishReleasesRepoUrl"] as String)
+        val snapshotsRepoUrl = uri(rootProject.ext["publishSnapshotsRepoUrl"] as String)
         maven {
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
             credentials {
-                username = "622562d6944dcd36d9e2186e"
-                password = "btIFsIsDHEbX"
+                username = rootProject.ext["publishUser"] as String
+                password = rootProject.ext["publishPass"] as String
             }
         }
     }

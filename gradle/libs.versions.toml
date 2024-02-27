@@ -7,6 +7,8 @@ lib_redisson = "3.27.0"
 lib_satoken = "1.37.0"
 lib_sms4j = "3.1.1"
 lib_anthill_infrastructure = "1.0.0-SNAPSHOT"
+lib_mail_angus = "2.0.2"
+lib_mail_api = "2.1.2"
 plugin_spring_boot = "3.2.3"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
@@ -21,6 +23,9 @@ redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring
 satoken-jwt = { group = "cn.dev33", name = "sa-token-jwt", version.ref = "lib_satoken" }
 satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "lib_satoken" }
 sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starter", version.ref = "lib_sms4j" }
+mail_angus = { group = "org.eclipse.angus", name = "jakarta.mail", version.ref = "lib_mail_angus" }
+mail_api = { group = "jakarta.mail", name = "jakarta.mail-api", version.ref = "lib_mail_api" }
+#anthill
 anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
 anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
 anthill-jpa = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-jpa", version.ref = "lib_anthill_infrastructure" }
@@ -38,6 +43,7 @@ spring-doc = ["spring-doc-api", "spring-doc-ui"]
 spring-redisson = ["redisson", "redisson-spring-boot-starter"]
 spring-satoken = ["satoken-spring-boot-starter", "satoken-jwt"]
 spring-sms4j = ["sms4j-spring-boot-starter"]
+spring-mail = ["mail_angus", "mail_api"]
 anthill = [
     "anthill-core",
     "anthill-json",
