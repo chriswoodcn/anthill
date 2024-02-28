@@ -46,6 +46,7 @@ dependencies {
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring-doc")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mongo")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mail")))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

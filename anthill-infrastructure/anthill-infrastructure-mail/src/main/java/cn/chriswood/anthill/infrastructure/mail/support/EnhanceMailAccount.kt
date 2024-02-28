@@ -2,9 +2,9 @@ package cn.chriswood.anthill.infrastructure.mail.support
 
 import java.time.LocalDate
 
-class EnhanceMailAccount {
-    val mailAccount: MailAccount? = null
-
+class EnhanceMailAccount(
+    val mailAccount: MailAccount
+) {
     // 发送总次数
     var sendCount: Int = 0
 
@@ -12,5 +12,5 @@ class EnhanceMailAccount {
     var lastSendTime: LocalDate = LocalDate.now()
 
     // 每天发送限制 -1代表无限制
-    val limitCount: Int = -1
+    var limitCount: Int = -1
 }

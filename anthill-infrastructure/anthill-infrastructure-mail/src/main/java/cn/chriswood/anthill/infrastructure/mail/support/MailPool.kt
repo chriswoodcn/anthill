@@ -5,31 +5,80 @@ import cn.hutool.core.io.IoUtil
 import cn.hutool.core.map.MapUtil
 import cn.hutool.core.util.CharUtil
 import cn.hutool.core.util.StrUtil
+import cn.hutool.extra.spring.SpringUtil
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 import java.time.LocalDate
 
+/**
+ * MailPool
+ *
+ * usage:
+ *
+ * MailPool.getOneAvailableMailAccount().sendText(to, subject, content)
+ *
+ */
 object MailPool {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val mailAccounts: List<EnhanceMailAccount> = mutableListOf()
+    private val mailAccounts: MutableCollection<EnhanceMailAccount> = mutableListOf()
+
+    private var hasFetch = false
+
+    private var availableEnhanceMailAccount: ThreadLocal<EnhanceMailAccount?> = ThreadLocal.withInitial(null)
+
+    init {
+        init()
+    }
+
+    private fun init() {
+        val beansOfType = SpringUtil.getBeansOfType(EnhanceMailAccount::class.java)
+        addMailAccounts(beansOfType.values)
+        hasFetch = true
+        log.debug(">>>>>>>>>> MailPool fetch enhanceMailAccount size:${mailAccounts.size}>>>>>>>>>>")
+    }
 
     fun addMailAccount(account: EnhanceMailAccount) {
-        mailAccounts.plus(account)
+        if (mailAccounts.isNotEmpty()) {
+            val exists = mailAccounts.map { it.mailAccount.user!! }
+            if (account.mailAccount.user !in exists) mailAccounts + account
+        } else {
+            mailAccounts + account
+        }
     }
 
-    fun addMailAccounts(accounts: List<EnhanceMailAccount>) {
-        mailAccounts.plus(accounts)
+    fun addMailAccounts(accounts: Collection<EnhanceMailAccount>) {
+        if (mailAccounts.isNotEmpty()) {
+            val exists = mailAccounts.map { it.mailAccount.user!! }
+            accounts.forEach {
+                if (it.mailAccount.user !in exists) mailAccounts + it
+            }
+        } else {
+            mailAccounts.addAll(accounts)
+        }
     }
 
-    fun getOneAvailableMailAccount(): EnhanceMailAccount? {
+    fun getOneAvailableMailAccount(): MailPool {
+        if (!hasFetch && mailAccounts.isEmpty()) {
+            init()
+        }
+        log.debug("[MailPool] [getOneAvailableMailAccount] mailAccounts.size: {}, mailAccounts.users: {}",
+            mailAccounts.size,
+            mailAccounts.map { it.mailAccount.user!! })
+        if (mailAccounts.isEmpty()) {
+            throw MailException("mail account pool is empty")
+        }
         val filtered = mailAccounts.filter {
             !(it.sendCount >= it.limitCount && it.limitCount != -1)
         }
         val sorted = filtered.sortedBy { it.sendCount }
-        if (sorted.isEmpty()) return null
-        return sorted[0]
+        if (sorted.isEmpty()) {
+            throw MailException("no available mail account")
+        }
+        log.debug("[MailPool] [getOneAvailableMailAccount] use account: ${sorted[0].mailAccount.user}")
+        this.availableEnhanceMailAccount.set(sorted[0])
+        return this
     }
 
     fun sendText(to: String, subject: String, content: String, vararg files: File?): Boolean {
@@ -44,29 +93,19 @@ object MailPool {
         return true
     }
 
-    fun sendTo(to: String, subject: String, content: String, isHtml: Boolean, vararg files: File?): String? {
+    private fun sendTo(to: String, subject: String, content: String, isHtml: Boolean, vararg files: File?): String? {
         return sendTos(splitAddress(to), subject, content, isHtml, *files)
     }
 
-    fun sendTos(
-        tos: Collection<String>,
-        subject: String,
-        content: String,
-        isHtml: Boolean,
-        vararg files: File?
+    private fun sendTos(
+        tos: Collection<String>, subject: String, content: String, isHtml: Boolean, vararg files: File?
     ): String? {
         return sendAll(
-            tos,
-            null,
-            null,
-            subject,
-            content,
-            isHtml,
-            *files
+            tos, null, null, subject, content, isHtml, *files
         )
     }
 
-    fun sendAll(
+    private fun sendAll(
         tos: Collection<String>,
         ccs: Collection<String>?,
         bccs: Collection<String>?,
@@ -75,26 +114,16 @@ object MailPool {
         isHtml: Boolean,
         vararg files: File?
     ): String? {
-        val oneAvailableMailAccount = getOneAvailableMailAccount()
-        if (oneAvailableMailAccount == null) {
-            log.error("[MailPool] [sendAll] error: oneAvailableMailAccount is null")
+        if (availableEnhanceMailAccount.get() == null) {
+            log.error("[MailPool] [sendAll] error: available mail account is null")
             return null
         }
         return doSend(
-            oneAvailableMailAccount,
-            false,
-            tos,
-            ccs,
-            bccs,
-            subject,
-            content,
-            null,
-            isHtml,
-            *files
+            availableEnhanceMailAccount.get()!!, false, tos, ccs, bccs, subject, content, null, isHtml, *files
         )
     }
 
-    fun doSend(
+    private fun doSend(
         enhanceMailAccount: EnhanceMailAccount,
         useGlobalSession: Boolean,
         tos: Collection<String>,
@@ -106,10 +135,6 @@ object MailPool {
         isHtml: Boolean,
         vararg files: File?
     ): String? {
-        if (enhanceMailAccount.mailAccount == null) {
-            log.error("[MailPool] [doSend] error: enhanceMailAccount.mailAccount is null")
-            return null
-        }
         val mail = Mail.create(enhanceMailAccount.mailAccount).setUseGlobalSession(useGlobalSession)
 
         // 可选抄送人
@@ -134,15 +159,25 @@ object MailPool {
                 IoUtil.close(value)
             }
         }
-        enhanceMailAccount.sendCount += 1
-        val lastSendDate = enhanceMailAccount.lastSendTime
-        val nowDate = LocalDate.now()
-        enhanceMailAccount.lastSendTime = nowDate
-        // 如果现在比较上次发送日期已经过去了 重置sendCount为1
-        if (nowDate.isAfter(lastSendDate)) {
-            enhanceMailAccount.sendCount = 1
+        var res: String? = null
+        try {
+            res = mail.send()
+            //发送成功 计数加1
+            enhanceMailAccount.sendCount += 1
+        } catch (e: Exception) {
+            log.error("[MailPool] [sendAll] error: {}", e.message)
+        } finally {
+            // 如果现在比较上次发送日期已经过去了 重置sendCount为1
+            val lastSendDate = enhanceMailAccount.lastSendTime
+            val nowDate = LocalDate.now()
+            enhanceMailAccount.lastSendTime = nowDate
+            if (nowDate.isAfter(lastSendDate)) {
+                enhanceMailAccount.sendCount = 1
+            }
+            //可用邮箱账号重置
+            availableEnhanceMailAccount.set(null)
         }
-        return mail.send()
+        return res
     }
 
     private fun splitAddress(addresses: String): List<String> {
