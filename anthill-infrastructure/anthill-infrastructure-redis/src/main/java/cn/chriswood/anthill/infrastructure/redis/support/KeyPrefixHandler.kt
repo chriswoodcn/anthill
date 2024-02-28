@@ -2,7 +2,7 @@ package cn.chriswood.anthill.infrastructure.redis.support
 
 import org.redisson.api.NameMapper
 
-class KeyPrefixHandler(keyPrefix: String?) : NameMapper {
+class KeyPrefixHandler : NameMapper {
     private val keyPrefix: String? = null
         get() {
             return if (field.isNullOrBlank()) "" else "$field:"
