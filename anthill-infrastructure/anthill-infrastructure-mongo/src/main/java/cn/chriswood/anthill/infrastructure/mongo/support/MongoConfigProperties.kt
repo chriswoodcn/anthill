@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.mongo.support
+package cn.chriswood.anthill.infrastructure.mongo.support
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -6,14 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class MongoConfigProperties(
     val enabled: Boolean = false,
     val type: String = MongoDbTypeEnum.SINGLE.code,
-    val transaction: Transaction,
+    val transaction: Transaction = Transaction(false),
     val dbs: Map<String, DbInfo>?,
 ) {
-    class Transaction {
-        val enabled: Boolean = false
-    }
+    class Transaction(val enabled: Boolean = false)
 
-    class DbInfo {
-        val uri: String? = null
-    }
+    class DbInfo(val uri: String? = null)
 }

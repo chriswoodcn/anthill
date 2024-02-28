@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.mongo.support
+package cn.chriswood.anthill.infrastructure.mongo.support
 
 enum class MongoDbTypeEnum(
     var code: String
