@@ -3,10 +3,10 @@
 val groupValue: String by project
 val versionValue: String by project
 
-rootProject.ext.set("publishReleasesRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
-rootProject.ext.set("publishSnapshotsRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
-rootProject.ext.set("publishUser", "622562d6944dcd36d9e2186e")
-rootProject.ext.set("publishPass", "btIFsIsDHEbX")
+rootProject.ext.set("publishReleasesRepoUrl", project.ext["publishReleasesRepoUrl"])
+rootProject.ext.set("publishSnapshotsRepoUrl", project.ext["publishSnapshotsRepoUrl"])
+rootProject.ext.set("publishUser", project.ext["publishUser"])
+rootProject.ext.set("publishPass", project.ext["publishPass"])
 
 allprojects {
     group = groupValue
