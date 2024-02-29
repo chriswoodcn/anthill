@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.json.annotation
 
 import cn.chriswood.anthill.infrastructure.json.support.SensitiveSerializer
+import cn.chriswood.anthill.infrastructure.json.support.SensitiveStrategy
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 /**

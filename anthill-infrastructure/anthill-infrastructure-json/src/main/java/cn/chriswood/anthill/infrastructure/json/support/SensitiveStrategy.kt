@@ -1,4 +1,4 @@
-package cn.chriswood.anthill.infrastructure.json.annotation
+package cn.chriswood.anthill.infrastructure.json.support
 
 import cn.hutool.core.util.DesensitizedUtil
 

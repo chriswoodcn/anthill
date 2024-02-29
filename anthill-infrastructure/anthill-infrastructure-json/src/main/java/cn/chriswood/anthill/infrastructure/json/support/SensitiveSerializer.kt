@@ -1,7 +1,6 @@
 package cn.chriswood.anthill.infrastructure.json.support
 
 import cn.chriswood.anthill.infrastructure.json.annotation.Sensitive
-import cn.chriswood.anthill.infrastructure.json.annotation.SensitiveStrategy
 import cn.hutool.extra.spring.SpringUtil
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.BeanProperty
