@@ -4,11 +4,6 @@ println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶
 val groupValue = libs.versions.anthill.group.get()
 val versionValue = libs.versions.anthill.version.get()
 
-rootProject.ext.set("publishReleasesRepoUrl", project.ext["publishReleasesRepoUrl"])
-rootProject.ext.set("publishSnapshotsRepoUrl", project.ext["publishSnapshotsRepoUrl"])
-rootProject.ext.set("publishUser", project.ext["publishUser"])
-rootProject.ext.set("publishPass", project.ext["publishPass"])
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.spring.boot)
