@@ -13,5 +13,4 @@ rootDir.listFiles()?.filter {
     }
 }
 include("anthill-example")
-include("anthill-infrastructure:anthill-infrastructure-mongo")
-findProject(":anthill-infrastructure:anthill-infrastructure-mongo")?.name = "anthill-infrastructure-mongo"
+

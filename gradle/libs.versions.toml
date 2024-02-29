@@ -1,6 +1,8 @@
 #在versions代码块中，定义用于保存依赖项和插件版本的变量。
 #您可以在后续代码块（libraries和plugins代码块）中使用这些变量
 [versions]
+anthill-group="cn.chriswood.anthill"
+anthill-version="1.0.1-SNAPSHOT"
 lib_hutool = "5.8.16"
 lib_spring_doc = "2.3.0"
 lib_redisson = "3.27.0"

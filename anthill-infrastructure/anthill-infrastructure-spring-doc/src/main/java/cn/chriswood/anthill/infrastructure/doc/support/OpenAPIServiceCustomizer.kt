@@ -142,7 +142,7 @@ class OpenAPIServiceCustomizer(
 
         if (isAutoTagClasses(operation)) {
             if (javadocProvider!!.isPresent) {
-                val description = javadocProvider!!.get().getClassJavadoc(handlerMethod!!.beanType)
+                val description = javadocProvider!!.get().getClassJavadoc(handlerMethod.beanType)
                 if (StringUtils.isNotBlank(description)) {
                     val tag = Tag()
 

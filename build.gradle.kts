@@ -1,16 +1,85 @@
-//println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val groupValue: String by project
-val versionValue: String by project
+println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
+val groupValue = libs.versions.anthill.group.get()
+val versionValue = libs.versions.anthill.version.get()
 
 rootProject.ext.set("publishReleasesRepoUrl", project.ext["publishReleasesRepoUrl"])
 rootProject.ext.set("publishSnapshotsRepoUrl", project.ext["publishSnapshotsRepoUrl"])
 rootProject.ext.set("publishUser", project.ext["publishUser"])
 rootProject.ext.set("publishPass", project.ext["publishPass"])
 
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    `maven-publish`
+}
+val pLibs = libs
 allprojects {
     group = groupValue
     version = versionValue
+}
+subprojects {
+    apply {
+        plugin(pLibs.plugins.spring.boot.get().pluginId)
+        plugin(pLibs.plugins.spring.dependency.get().pluginId)
+        plugin(pLibs.plugins.kotlin.jvm.get().pluginId)
+        plugin(pLibs.plugins.kotlin.spring.get().pluginId)
+    }
+
+    java.sourceCompatibility = JavaVersion.VERSION_17
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs += "-Xjsr305=strict"
+            jvmTarget = "17"
+        }
+    }
+
+    if (project.projectDir.name.startsWith("anthill-infrastructure-")) {
+        apply(plugin = "maven-publish")
+
+        publishing {
+            publications {
+                create<MavenPublication>("maven") {
+                    groupId = "${project.group}"
+                    artifactId = project.projectDir.name
+                    version = "${project.version}"
+
+                    pom {
+                        developers {
+                            developer {
+                                id.set("taotaozn")
+                                name.set("chriswoodcn")
+                                email.set("chriswoodcn@aliyun.com")
+                            }
+                        }
+                    }
+
+                    from(components["java"])
+                }
+            }
+            repositories {
+                val releasesRepoUrl = uri(project.ext["publishReleasesRepoUrl"] as String)
+                val snapshotsRepoUrl = uri(project.ext["publishSnapshotsRepoUrl"] as String)
+                maven {
+                    url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                    credentials {
+                        username = project.ext["publishUser"] as String
+                        password = project.ext["publishPass"] as String
+                    }
+                }
+            }
+        }
+
+        dependencies {
+            compileOnly("org.slf4j:slf4j-api")
+            testImplementation(kotlin("test"))
+        }
+    }
 }
 
 /**
