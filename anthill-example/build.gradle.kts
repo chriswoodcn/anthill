@@ -26,19 +26,19 @@ task("my_task") {
 }
 
 dependencies {
-//    kapt("com.mybatis-flex:mybatis-flex-processor:1.7.9")
+    kapt("com.mybatis-flex:mybatis-flex-processor:1.7.9")
 
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-jpa")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mybatisflex")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring-doc")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mongo")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mail")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mybatisflex")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-spring-doc")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mongo")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mail")))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

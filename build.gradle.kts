@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
     `maven-publish`
+    kotlin("kapt") version "1.9.22"
 }
 val pLibs = libs
 allprojects {
@@ -33,9 +34,15 @@ subprojects {
             jvmTarget = "17"
         }
     }
-
+    if (project.projectDir.name.equals("anthill-example")) {
+        apply {
+            plugin("kotlin-kapt")
+        }
+    }
     if (project.projectDir.name.startsWith("anthill-infrastructure-")) {
-        apply(plugin = "maven-publish")
+        apply {
+            plugin("maven-publish")
+        }
 
         publishing {
             publications {

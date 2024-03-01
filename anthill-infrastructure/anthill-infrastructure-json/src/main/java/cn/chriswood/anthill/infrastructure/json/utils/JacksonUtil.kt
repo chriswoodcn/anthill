@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.json.utils
 
 import cn.chriswood.anthill.infrastructure.json.support.BigNumberSerializer
+import cn.chriswood.anthill.infrastructure.json.support.TranslationSerializerModifier
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.type.TypeReference
@@ -53,6 +54,7 @@ object JacksonUtil {
 
     object DefaultJacksonConfigurationsApplier : ApplyJacksonConfigurations {
         override fun apply(builder: Jackson2ObjectMapperBuilder) {
+            builder.serializers()
             builder.serializationInclusion(JsonInclude.Include.ALWAYS)
             builder.failOnUnknownProperties(false)
             builder.failOnEmptyBeans(false)
@@ -63,6 +65,13 @@ object JacksonUtil {
             builder.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             builder.simpleDateFormat(dateTimeFormat)
             builder.timeZone(TimeZone.getDefault())
+
+            builder.postConfigurer {
+                it.setSerializerFactory(
+                    it.serializerFactory
+                        .withSerializerModifier(TranslationSerializerModifier())
+                )
+            }
         }
     }
 
@@ -130,7 +139,7 @@ object JacksonUtil {
     init {
         val builder = Jackson2ObjectMapperBuilder()
         jackson2ObjectMapperBuilderCustomizer().customize(builder)
-        objectMapper = builder.build<ObjectMapper>()
+        objectMapper = builder.build()
     }
 
     fun bean2string(o: Any?): String? {

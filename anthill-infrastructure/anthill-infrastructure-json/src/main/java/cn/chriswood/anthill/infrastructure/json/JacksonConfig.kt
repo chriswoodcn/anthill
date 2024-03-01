@@ -1,6 +1,8 @@
 package cn.chriswood.anthill.infrastructure.json
 
+import cn.chriswood.anthill.infrastructure.json.support.TranslateWorkerManager
 import cn.chriswood.anthill.infrastructure.json.utils.JacksonUtil
+import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -24,5 +26,10 @@ class JacksonConfig {
     fun customizer(): Jackson2ObjectMapperBuilderCustomizer {
         log.debug(">>>>>>>>>> init JacksonConfig >>>>>>>>>>")
         return JacksonUtil.jackson2ObjectMapperBuilderCustomizer()
+    }
+
+    @PostConstruct
+    fun init() {
+        TranslateWorkerManager.initPool()
     }
 }
