@@ -7,17 +7,17 @@ enum class UserType(var code: String) {
     /**
      * 系统用户
      */
-    SYS_USER("sys_user"),
+    SYS_USER("SYS_USER"),
 
     /**
      * 普通用户
      */
-    APP_USER("app_user"),
+    APP_USER("APP_USER"),
 
     /**
      * 未知类型
      */
-    UNKNOWN("unknown");
+    UNKNOWN("UNKNOWN");
 
     companion object {
         fun getEnumByCode(code: String): UserType {

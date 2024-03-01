@@ -4,6 +4,7 @@ import cn.chriswood.anthill.infrastructure.web.annotation.support.CacheKeys
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.chriswood.anthill.infrastructure.json.utils.JacksonUtil
 import cn.chriswood.anthill.infrastructure.redis.utils.RedisUtil
+import cn.chriswood.anthill.infrastructure.web.annotation.support.AspectUtil
 import cn.chriswood.anthill.infrastructure.web.base.R
 import cn.chriswood.anthill.infrastructure.web.exception.InfrastructureWebExceptionEnum
 import cn.chriswood.anthill.infrastructure.web.utils.ServletUtil
@@ -63,7 +64,7 @@ class RepeatLimitAspect {
         pointcut = "@annotation(repeatSubmit)",
         returning = "result"
     )
-    fun doAfterReturning(joinPoint: JoinPoint, repeatSubmit: RepeatLimit, result: Any) {
+    fun doAfterReturning(joinPoint: JoinPoint, repeatSubmit: RepeatLimit, result: Any?) {
         if (result is R<*>) {
             try {
                 // 成功则不删除redis数据 保证在有效时间内无法重复提交
@@ -86,35 +87,10 @@ class RepeatLimitAspect {
             return params.toString()
         }
         for (o in paramsArray) {
-            if (ObjectUtil.isNotNull(o) && !isFilterObject(o)) {
+            if (ObjectUtil.isNotNull(o) && !AspectUtil.isFilterObject(o)) {
                 params.add(JacksonUtil.bean2string(o))
             }
         }
         return params.toString()
-    }
-
-    /**
-     * 判断是否需要过滤的对象。
-     *
-     * @param o 对象信息。
-     * @return 如果是需要过滤的对象，则返回true；否则返回false。
-     */
-    private fun isFilterObject(o: Any): Boolean {
-        val clazz: Class<*> = o.javaClass
-        if (clazz.isArray) {
-            return clazz.componentType.isAssignableFrom(MultipartFile::class.java)
-        } else if (MutableCollection::class.java.isAssignableFrom(clazz)) {
-            val collection = o as Collection<*>
-            for (value in collection) {
-                return value is MultipartFile
-            }
-        } else if (MutableMap::class.java.isAssignableFrom(clazz)) {
-            val map = o as Map<*, *>
-            for (value in map.values) {
-                return value is MultipartFile
-            }
-        }
-        return (o is MultipartFile || o is HttpServletRequest || o is HttpServletResponse
-            || o is BindingResult)
     }
 }

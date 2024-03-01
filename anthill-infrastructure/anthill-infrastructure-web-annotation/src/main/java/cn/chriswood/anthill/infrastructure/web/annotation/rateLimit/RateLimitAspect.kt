@@ -67,7 +67,7 @@ class RateLimitAspect {
         }
     }
 
-    fun getCombineKey(rateLimit: RateLimit, point: JoinPoint): String {
+    private fun getCombineKey(rateLimit: RateLimit, point: JoinPoint): String {
         var key: String = rateLimit.key
         // 获取方法(通过方法签名来获取)
         val signature = point.signature as MethodSignature

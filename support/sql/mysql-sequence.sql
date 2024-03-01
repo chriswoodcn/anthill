@@ -1,4 +1,4 @@
--- ############一张表只管一个sequence 借助auto_increment主键
+-- ############一张表只管一个sequence 借助auto_increment主键自增逻辑
 -- 创建保存sequence的表
 create table `t_user_id_sequence`
 (
@@ -25,7 +25,7 @@ select user_id_seq_func() from dual;
 
 
 -- ############一张表管理多个sequence 借助name主键区分 start_value记录当前值 increment_value记录步长
-create table anthill_sequence
+create table anthill_custom_sequence
 (
     name varchar(50) not null primary key,
     start_value bigint not null,
@@ -34,18 +34,18 @@ create table anthill_sequence
 
 set global log_bin_trust_function_creators=1;
 
+DROP FUNCTION IF EXISTS nextVal;
+
 delimiter &&
 create function nextVal(str varchar(50)) returns bigint
 begin
     declare i bigint;
-    set i=(select start_value from anthill_sequence where name=str);
-    update anthill_sequence set start_value=i+increment_value where name=str;
+    set i=(select start_value from anthill_custom_sequence where name=str);
+    update anthill_custom_sequence set start_value=i+increment_value where name=str;
     return i;
 end &&
 
 delimiter ;
 
-DROP FUNCTION IF EXISTS nextVal;
-
-insert into anthill_sequence values('test',1,1);
+insert into anthill_custom_sequence values('test',1,1);
 select nextVal('test') from dual;
