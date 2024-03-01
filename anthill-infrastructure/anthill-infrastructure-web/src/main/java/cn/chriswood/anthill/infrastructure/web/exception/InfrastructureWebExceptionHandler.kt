@@ -60,7 +60,7 @@ class InfrastructureWebExceptionHandler {
         val requestURI = request.requestURI
         log.error("BindException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
         val collect = e.allErrors.stream().map { it.defaultMessage!! }.collect(Collectors.toList())
-        val message: String = StringUtil.join(collect, ',')
+        val message: String = StringUtil.joinChar(collect, ',')
         return R.fail(message)
     }
 

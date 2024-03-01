@@ -14,20 +14,21 @@ import kotlin.math.max
 object StringUtil {
     const val SEPARATOR = ","
     const val EMPTY = StringUtils.EMPTY
-    val join: (List<String>, Char) -> String = StringUtils::join
+    val joinChar: (Iterable<String>, Char) -> String = StringUtils::join
+    val join: (Iterable<String>, String) -> String = StringUtils::join
     val split: (String, Char) -> Array<String> = StringUtils::split
     val repeat: (Char, Int) -> String = StringUtils::repeat
     val rightPad: (String, Int, Char) -> String = StringUtils::rightPad
     val isNotBlank: (String?) -> Boolean = StringUtils::isNotBlank
     val isBlank: (String?) -> Boolean = StringUtils::isBlank
     val endsWithAny: (file: String?, ends: Array<String?>) -> Boolean = StringUtils::endsWithAny
-
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault
     val isEmpty: (str: String?) -> Boolean = StrUtil::isEmpty
     val trimToEmpty: (str: String) -> String = StringUtils::trimToEmpty
     val containsAny: (String?, String?) -> Boolean = StringUtils::containsAny
     val startsWith: (String?, String?) -> Boolean = StringUtils::startsWith
     val endsWith: (String?, String?) -> Boolean = StringUtils::endsWith
+    val equalsAnyIgnoreCase: (String?, Array<String?>?) -> Boolean = StringUtils::equalsAnyIgnoreCase
 
     fun isNotEmpty(str: String?): Boolean {
         return !isEmpty(str)
