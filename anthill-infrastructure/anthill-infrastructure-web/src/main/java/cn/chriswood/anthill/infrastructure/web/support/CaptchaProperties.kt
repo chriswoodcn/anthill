@@ -7,8 +7,7 @@ data class CaptchaProperties(
     /**
      * 开关
      */
-    var enable: Boolean? = null,
-
+    val enabled: Boolean?,
     /**
      * 验证码类型
      */

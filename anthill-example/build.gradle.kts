@@ -25,6 +25,12 @@ task("my_task") {
 
 }
 
+tasks.create("bootRunMainClassName") {
+    doLast {
+        springBoot.mainClass.get()
+    }
+}
+
 dependencies {
     kapt("com.mybatis-flex:mybatis-flex-processor:1.7.9")
 

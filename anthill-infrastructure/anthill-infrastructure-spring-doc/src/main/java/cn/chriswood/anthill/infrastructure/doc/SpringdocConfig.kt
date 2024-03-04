@@ -47,8 +47,7 @@ class SpringdocConfig(
     fun openApi(): OpenAPI {
         val openApi = OpenAPI()
         // 文档基本信息
-        val infoProperties: SwaggerProperties.InfoProperties? = swaggerProperties.info
-        val info: Info = convertInfo(infoProperties)
+        val info: Info = convertInfo(swaggerProperties)
         openApi.info(info)
         // 扩展文档信息
         openApi.externalDocs(swaggerProperties.externalDocs)
@@ -70,7 +69,7 @@ class SpringdocConfig(
         return openApi
     }
 
-    private fun convertInfo(infoProperties: SwaggerProperties.InfoProperties?): Info {
+    private fun convertInfo(infoProperties: SwaggerProperties?): Info {
         val info = Info()
         info.title = infoProperties?.title
         info.description = infoProperties?.description

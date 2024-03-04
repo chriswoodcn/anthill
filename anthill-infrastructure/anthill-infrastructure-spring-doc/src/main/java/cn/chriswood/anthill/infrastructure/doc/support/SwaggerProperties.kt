@@ -12,15 +12,41 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 @ConfigurationProperties("anthill.swagger")
 data class SwaggerProperties(
     /**
-     * 文档基本信息
+     * 开关
+     */
+    val enabled: Boolean?,
+
+    /**
+     * 标题
+     */
+    val title: String? = null,
+
+    /**
+     * 描述
+     */
+    val description: String? = null,
+
+    /**
+     * 版本
+     */
+    val version: String? = null,
+
+    /**
+     * 联系人信息
      */
     @NestedConfigurationProperty
-    var info: InfoProperties? = null,
+    val contact: Contact? = null,
+
+    /**
+     * 许可证
+     */
+    @NestedConfigurationProperty
+    val license: License? = null,
+
 
     /**
      * 扩展文档地址
      */
-    @NestedConfigurationProperty
     val externalDocs: ExternalDocumentation? = null,
 
     /**
@@ -31,41 +57,10 @@ data class SwaggerProperties(
     /**
      * 路径
      */
-    @NestedConfigurationProperty
     val paths: Paths? = null,
 
     /**
      * 组件
      */
-    @NestedConfigurationProperty
     val components: Components? = null,
-) {
-    data class InfoProperties(
-        /**
-         * 标题
-         */
-        val title: String? = null,
-
-        /**
-         * 描述
-         */
-        val description: String? = null,
-
-        /**
-         * 联系人信息
-         */
-        @NestedConfigurationProperty
-        val contact: Contact? = null,
-
-        /**
-         * 许可证
-         */
-        @NestedConfigurationProperty
-        val license: License? = null,
-
-        /**
-         * 版本
-         */
-        val version: String? = null,
-    )
-}
+)

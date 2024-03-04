@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Bean
     matchIfMissing = true
 )
 class XssFilterConfig(
-    val xssProperties: XssProperties
+    val xssProperties: XssProperties,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -35,7 +35,6 @@ class XssFilterConfig(
         registration.order = FilterRegistrationBean.HIGHEST_PRECEDENCE
         val initParameters: MutableMap<String, String> = HashMap()
         initParameters["excludes"] = xssProperties.excludes!!
-        initParameters["enabled"] = xssProperties.enabled!!
         registration.setInitParameters(initParameters)
         log.debug(">>>>>>>>>> init XssFilterConfig >>>>>>>>>>")
         return registration

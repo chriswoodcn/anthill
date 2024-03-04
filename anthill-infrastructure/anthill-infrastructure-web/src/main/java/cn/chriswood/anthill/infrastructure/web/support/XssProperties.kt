@@ -5,9 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties("anthill.web.xss")
 data class XssProperties(
     /**
-     * 过滤开关
+     * 开关
      */
-    val enabled: String?,
+    val enabled: Boolean?,
     /**
      * 排除链接（多个用逗号分隔）
      */

@@ -110,13 +110,12 @@ anthill:
         - /actuator
         - /actuator/**
   swagger:
-    info:
-      title: ${anthill.application.name}
-      version: ${anthill.application.version}
-      description: 'anthill-example'
-      contact:
-        name: chriswoodcn
-        email: chriswoodcn@aliyun.com
+    title: ${anthill.application.name}
+    version: ${anthill.application.version}
+    description: 'anthill-example'
+    contact:
+      name: chriswoodcn
+      email: chriswoodcn@aliyun.com
 
 mybatis-flex:
   datasource:
