@@ -6,5 +6,4 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP")
     compileOnly("org.jetbrains.kotlin:kotlin-reflect")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 }

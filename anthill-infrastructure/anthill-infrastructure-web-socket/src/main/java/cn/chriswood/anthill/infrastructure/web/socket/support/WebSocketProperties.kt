@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties("anthill.web.socket")
 data class WebSocketProperties(
     /**
-     * 是否开启
+     * 开关
      */
     private var enabled: Boolean = false,
 

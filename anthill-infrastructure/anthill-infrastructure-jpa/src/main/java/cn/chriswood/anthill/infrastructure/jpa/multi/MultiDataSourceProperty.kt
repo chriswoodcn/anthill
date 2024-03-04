@@ -4,13 +4,37 @@ import com.zaxxer.hikari.HikariConfig
 import org.springframework.util.Assert
 
 data class MultiDataSourceProperty(
+    /**
+     * driver class name
+     */
     val driver: String,
+    /**
+     * db url
+     */
     val url: String,
+    /**
+     * db username
+     */
     val username: String,
+    /**
+     * db password
+     */
     val password: String,
+    /**
+     * 扫描的包名
+     */
     val packageScan: String,
+    /**
+     * db init query
+     */
     val query: String,
+    /**
+     * db dialect class
+     */
     val dialect: String,
+    /**
+     * HikariConfig
+     */
     var hikari: HikariConfig = HikariConfig()
 ) {
     /**

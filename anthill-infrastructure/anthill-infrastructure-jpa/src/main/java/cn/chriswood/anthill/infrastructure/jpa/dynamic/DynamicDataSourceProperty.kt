@@ -2,11 +2,29 @@ package cn.chriswood.anthill.infrastructure.jpa.dynamic
 
 import com.zaxxer.hikari.HikariConfig
 data class DynamicDataSourceProperty(
+    /**
+     * driver class name
+     */
     val driver: String,
+    /**
+     * db url
+     */
     val url: String,
+    /**
+     * db username
+     */
     val username: String,
+    /**
+     * db password
+     */
     val password: String,
+    /**
+     * db init query
+     */
     val query: String?,
+    /**
+     * HikariConfig
+     */
     var hikari: HikariConfig = HikariConfig()
 ) {
     /**

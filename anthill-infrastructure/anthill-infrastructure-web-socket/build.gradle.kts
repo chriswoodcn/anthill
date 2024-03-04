@@ -6,5 +6,4 @@ dependencies {
     compileOnly(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
     compileOnly("org.springframework.boot:spring-boot-starter-websocket")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 }

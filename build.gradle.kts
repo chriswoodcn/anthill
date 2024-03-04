@@ -41,6 +41,7 @@ subprojects {
     }
     if (project.projectDir.name.startsWith("anthill-infrastructure-")) {
         apply {
+            plugin("kotlin-kapt")
             plugin("maven-publish")
         }
 
@@ -78,6 +79,8 @@ subprojects {
         }
 
         dependencies {
+            annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+            kapt("org.springframework.boot:spring-boot-configuration-processor")
             compileOnly("org.slf4j:slf4j-api")
             testImplementation(kotlin("test"))
         }
