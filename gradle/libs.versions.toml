@@ -1,8 +1,8 @@
 #在versions代码块中，定义用于保存依赖项和插件版本的变量。
 #您可以在后续代码块（libraries和plugins代码块）中使用这些变量
 [versions]
-anthill-group="cn.chriswood.anthill"
-anthill-version="1.0.1-SNAPSHOT"
+anthill-group = "cn.chriswood.anthill"
+anthill-version = "1.0.1-SNAPSHOT"
 lib_hutool = "5.8.16"
 lib_spring_doc = "2.3.0"
 lib_redisson = "3.27.0"
@@ -11,6 +11,8 @@ lib_sms4j = "3.1.1"
 lib_anthill_infrastructure = "1.0.0-SNAPSHOT"
 lib_mail_angus = "2.0.2"
 lib_mail_api = "2.1.2"
+lib_aliyun_core = "4.6.1"
+lib_aliyun_sts = "3.1.2"
 plugin_spring_boot = "3.2.3"
 plugin_spring_dependency = "1.1.4"
 plugin_kotlin = "1.9.22"
@@ -27,6 +29,8 @@ satoken-spring-boot-starter = { group = "cn.dev33", name = "sa-token-spring-boot
 sms4j-spring-boot-starter = { group = "org.dromara.sms4j", name = "sms4j-spring-boot-starter", version.ref = "lib_sms4j" }
 mail_angus = { group = "org.eclipse.angus", name = "jakarta.mail", version.ref = "lib_mail_angus" }
 mail_api = { group = "jakarta.mail", name = "jakarta.mail-api", version.ref = "lib_mail_api" }
+aliyun_core = { module = "com.aliyun:aliyun-java-sdk-core", version.ref = "lib_aliyun_core" }
+aliyun_sts = { module = "com.aliyun:aliyun-java-sdk-sts", version.ref = "lib_aliyun_sts" }
 #anthill
 anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
 anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
@@ -46,6 +50,7 @@ spring-redisson = ["redisson", "redisson-spring-boot-starter"]
 spring-satoken = ["satoken-spring-boot-starter", "satoken-jwt"]
 spring-sms4j = ["sms4j-spring-boot-starter"]
 spring-mail = ["mail_angus", "mail_api"]
+aliyun = ["aliyun_core", "aliyun_sts"]
 anthill = [
     "anthill-core",
     "anthill-json",
