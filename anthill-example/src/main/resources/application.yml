@@ -181,7 +181,7 @@ spring:
       # 是否开启ssl
       ssl.enabled: false
     mongodb:
-      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin&ssl=false&w=majority&timezone=Asia%2FShanghai
+      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
 
 #  datasource:
 #    url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC

@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Bean
     prefix = "anthill.redisson",
     name = ["enabled"],
     havingValue = "true",
-    matchIfMissing = true
 )
 class RedisConfig(
     private val redissonProperties: RedissonProperties
