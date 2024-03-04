@@ -15,6 +15,7 @@ import org.springframework.validation.BindException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.servlet.resource.NoResourceFoundException
 import java.util.stream.Collectors
 
 @ConditionalOnWebApplication
@@ -33,6 +34,9 @@ class InfrastructureWebExceptionHandler {
     fun handleException(e: Exception, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("Exception >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
+        if (e !is NoResourceFoundException) {
+            e.printStackTrace()
+        }
         return R.fail(HttpStatus.NOT_FOUND, e.message)
     }
 

@@ -37,7 +37,7 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
         log.debug(">>>>>>>>>> init MailAccount >>>>>>>>>>")
         val binder = Binder.get(environment)
         val accountPropertiesList =
-            binder.bindOrCreate(MAIL_ACCPUNT_PREFIX, Bindable.listOf(MailAccountProperties::class.java))
+            binder.bindOrCreate(MAIL_ACCPUNT_PREFIX, Bindable.listOf(MailAccountProperty::class.java))
         if (!accountPropertiesList.isNullOrEmpty()) {
             accountPropertiesList.forEach {
                 injectMailAccountBean(it, registry)
@@ -45,7 +45,7 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
         }
     }
 
-    private fun injectMailAccountBean(it: MailAccountProperties?, registry: BeanDefinitionRegistry) {
+    private fun injectMailAccountBean(it: MailAccountProperty?, registry: BeanDefinitionRegistry) {
         if (it == null || it.user.isEmpty()) return
         val mailAccountBeanDefinition = BeanDefinitionBuilder
             .genericBeanDefinition(EnhanceMailAccount::class.java) {

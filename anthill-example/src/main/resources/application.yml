@@ -25,6 +25,21 @@ anthill:
         ssl-enable: true
         starttls-enable: true
         limit-count: 100
+  aliyun-oss-sts:
+    enabled: true
+    oss:
+      primary:
+        region-id: cn-shanghai
+        access-key-id: LTAI5tKRbaqLrwNnPQJ1YD9o
+        access-key-secret: Xoi1LmITzzT5EuhvVAGhhOnjHPedQ5
+        role-arn: acs:ram::1202131695471902:role/ramosslexgo
+        role-session-name: anthill-example
+      cn-shanghai:
+        region-id: cn-shanghai
+        access-key-id: LTAI5tKRbaqLrwNnPQJ1YD9o
+        access-key-secret: Xoi1LmITzzT5EuhvVAGhhOnjHPedQ5
+        role-arn: acs:ram::1202131695471902:role/ramosslexgo
+        role-session-name: anthill-example
   #  jpa:
   #    enabled: true
   #    type: multi
@@ -147,9 +162,9 @@ spring:
   #              drop_tables: false
   #        format_sql: true
   data:
-#    jpa:
-#      repositories:
-#        bootstrap-mode: DEFERRED #jpa启动模式优化
+    #    jpa:
+    #      repositories:
+    #        bootstrap-mode: DEFERRED #jpa启动模式优化
     redis:
       repositories:
         enabled: false

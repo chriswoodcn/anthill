@@ -20,13 +20,14 @@ import java.time.LocalDate
  *
  */
 object MailPool {
+
     private val log = LoggerFactory.getLogger(javaClass)
 
     private val mailAccounts: MutableCollection<EnhanceMailAccount> = mutableListOf()
 
-    private var hasFetch = false
+    private var hasFetchBeans = false
 
-    private var availableEnhanceMailAccount: ThreadLocal<EnhanceMailAccount?> = ThreadLocal.withInitial(null)
+    private var availableEnhanceMailAccount = ThreadLocal<EnhanceMailAccount>()
 
     init {
         init()
@@ -35,7 +36,7 @@ object MailPool {
     private fun init() {
         val beansOfType = SpringUtil.getBeansOfType(EnhanceMailAccount::class.java)
         addMailAccounts(beansOfType.values)
-        hasFetch = true
+        hasFetchBeans = true
         log.debug(">>>>>>>>>> MailPool fetch enhanceMailAccount size:${mailAccounts.size}>>>>>>>>>>")
     }
 
@@ -60,7 +61,7 @@ object MailPool {
     }
 
     fun getOneAvailableMailAccount(): MailPool {
-        if (!hasFetch && mailAccounts.isEmpty()) {
+        if (!hasFetchBeans && mailAccounts.isEmpty()) {
             init()
         }
         log.debug("[MailPool] [getOneAvailableMailAccount] mailAccounts.size: {}, mailAccounts.users: {}",

@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.mail.support
 
-data class MailAccountProperties(
+data class MailAccountProperty(
     /**
      * SMTP服务器域名
      */

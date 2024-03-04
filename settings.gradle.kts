@@ -13,4 +13,5 @@ rootDir.listFiles()?.filter {
     }
 }
 include("anthill-example")
-
+include("anthill-infrastructure:anthill-infrastructure-web-alicloud-oss-sts")
+findProject(":anthill-infrastructure:anthill-infrastructure-web-alicloud-oss-sts")?.name = "anthill-infrastructure-web-alicloud-oss-sts"

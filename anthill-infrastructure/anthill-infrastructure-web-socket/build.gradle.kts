@@ -1,5 +1,4 @@
 dependencies {
-    api(libs.bundles.spring.satoken)
     compileOnly(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     compileOnly(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
     compileOnly(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))

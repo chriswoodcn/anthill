@@ -10,7 +10,6 @@ import java.nio.charset.Charset
 import java.util.*
 
 class MailAccount : Serializable {
-
     companion object {
         @Serial
         private val serialVersionUID = -6937313421815719204L

@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "anthill.mail")
 data class MailProperties(
     val enabled: Boolean?,
-    val account: List<MailAccountProperties>?,
+    val account: List<MailAccountProperty>?,
 )
