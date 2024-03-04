@@ -1,9 +1,9 @@
 package cn.chriswood.anthill.infrastructure.web.base
 
-data class R<T>(
-    var code: Int,
-    var msg: String,
-    var data: T?
+open class R<T>(
+    open var code: Int,
+    open var msg: String,
+    open var data: T?
 ) {
     companion object {
         private const val SUCCESS = "SUCCESS"
