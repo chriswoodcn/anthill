@@ -18,16 +18,14 @@ object OssStsPool {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val DEFAULT_KEY = "primary"
+    const val DEFAULT_KEY = "primary"
 
     private var hasFetchBeans = false
 
     private val ossStsDefinitions: MutableMap<String, OssStsProperty> = mutableMapOf()
-
     init {
         init()
     }
-
     private fun init() {
         val ossStsProperties = SpringUtil.getBean(OssStsProperties::class.java) ?: null
         if (null != ossStsProperties && !ossStsProperties.oss.isNullOrEmpty()) {
@@ -59,13 +57,19 @@ object OssStsPool {
         }
         var ossStsProperty: OssStsProperty? = ossStsDefinitions[key]
         if (null == ossStsProperty) log.warn("[OssStsPool] ossStsDefinitions.$key is empty")
-        ossStsProperty = ossStsDefinitions[DEFAULT_KEY]
-        if (null == ossStsProperty) log.warn("[OssStsPool] ossStsDefinitions.$DEFAULT_KEY is empty")
+        if (key != DEFAULT_KEY) {
+            ossStsProperty = ossStsDefinitions[DEFAULT_KEY]
+            if (null == ossStsProperty) log.warn("[OssStsPool] ossStsDefinitions.$DEFAULT_KEY is empty")
+        }
         return ossStsProperty
     }
 
-    fun getSts(key: String): AssumeRoleResponse? {
-        val stsProperty = getAvailableOssStsProperty(key) ?: return null
+    fun getSts(key: String?): AssumeRoleResponse? {
+        var realKey = DEFAULT_KEY
+        if (!key.isNullOrBlank()) {
+            realKey = key
+        }
+        val stsProperty = getAvailableOssStsProperty(realKey) ?: return null
         //构建一个阿里云客户端，用于发起请求。
         //构建阿里云客户端时需要设置AccessKey ID和AccessKey Secret。
         val profile: DefaultProfile = DefaultProfile
