@@ -13,3 +13,4 @@ rootDir.listFiles()?.filter {
     }
 }
 include("anthill-example")
+include("anthill-reactive-example")

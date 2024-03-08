@@ -5,10 +5,10 @@ import cn.chriswood.anthill.infrastructure.json.utils.JacksonUtil
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Primary
 
 @AutoConfiguration
 @ConditionalOnProperty(
@@ -22,7 +22,8 @@ class JacksonConfig {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    @ConditionalOnMissingBean(Jackson2ObjectMapperBuilderCustomizer::class)
+    @Primary
+//    @ConditionalOnMissingBean(Jackson2ObjectMapperBuilderCustomizer::class)
     fun customizer(): Jackson2ObjectMapperBuilderCustomizer {
         log.debug(">>>>>>>>>> init JacksonConfig >>>>>>>>>>")
         return JacksonUtil.jackson2ObjectMapperBuilderCustomizer()

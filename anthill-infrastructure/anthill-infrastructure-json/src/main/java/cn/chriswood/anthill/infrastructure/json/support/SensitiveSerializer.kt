@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.BeansException
 
-class SensitiveSerializer : JsonSerializer<String>(), ContextualSerializer {
+class SensitiveSerializer : JsonSerializer<String?>(), ContextualSerializer {
 
     private val log = LoggerFactory.getLogger(javaClass)
     private var strategy: SensitiveStrategy? = null
