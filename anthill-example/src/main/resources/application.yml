@@ -30,15 +30,15 @@ anthill:
     oss:
       primary:
         region-id: cn-shanghai
-        access-key-id: LTAI5tKRbaqLrwNnPQJ1YD9o
-        access-key-secret: Xoi1LmITzzT5EuhvVAGhhOnjHPedQ5
-        role-arn: acs:ram::1202131695471902:role/ramosslexgo
+        access-key-id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        access-key-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        role-arn: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-session-name: anthill-example
       cn-shanghai:
         region-id: cn-shanghai
-        access-key-id: LTAI5tKRbaqLrwNnPQJ1YD9o
-        access-key-secret: Xoi1LmITzzT5EuhvVAGhhOnjHPedQ5
-        role-arn: acs:ram::1202131695471902:role/ramosslexgo
+        access-key-id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        access-key-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        role-arn: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-session-name: anthill-example
   #  jpa:
   #    enabled: true
