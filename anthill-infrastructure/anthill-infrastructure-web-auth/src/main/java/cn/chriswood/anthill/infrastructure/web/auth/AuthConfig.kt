@@ -36,7 +36,7 @@ class AuthConfig(
             SaRouter
                 // 获取所有的web路径
                 .match("/**")
-                .notMatch(authProperties.excludes ?: emptyList())
+                .notMatch(authProperties.excludes)
                 // 对未排除的路径进行检查
                 .check(SaFunction {
                     StpUtil.checkLogin()
@@ -49,7 +49,7 @@ class AuthConfig(
         // 注册路由拦截器，自定义验证规则
         registry.addInterceptor(saInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns(authProperties.excludes ?: emptyList())
+            .excludePathPatterns(authProperties.excludes)
 
         log.debug(">>>>>>>>>> init AuthConfig >>>>>>>>>>")
     }

@@ -11,5 +11,5 @@ data class AuthProperties(
     /**
      * 需要排除鉴权的路径
      */
-    val excludes: List<String> = emptyList(),
+    val excludes: List<String?> = emptyList(),
 )
