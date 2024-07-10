@@ -31,6 +31,7 @@ object AuthHelper {
         StpUtil.getTokenSession()[LOGIN_USER_KEY] = authUser
     }
 
+
     /**
      * 获取用户(多级缓存)
      */
@@ -46,12 +47,16 @@ object AuthHelper {
             }) as AuthUser?
     }
 
+    fun getToken(): String {
+        return StpUtil.getTokenValue()
+    }
+
     fun getUserType(): UserType? {
         val loginUser: AuthUser = getAuthUser() ?: return null
         return UserType.getEnumByCode(loginUser.userType)
     }
 
-    fun getUserId(): Long? {
+    fun getUserId(): String? {
         val loginUser: AuthUser = getAuthUser() ?: return null
         return loginUser.userId
     }

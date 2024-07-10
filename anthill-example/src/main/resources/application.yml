@@ -3,7 +3,7 @@ anthill:
     name: anthill-example
     version: 1.1.0-SNAPSHOT
   mongo:
-    enabled: true
+    enabled: false
     type: single
   mail:
     account:
@@ -40,22 +40,22 @@ anthill:
         access-key-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-arn: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-session-name: anthill-example
-  #  jpa:
-  #    enabled: true
-  #    type: multi
-  #    dynamic:
-  #      primary:
-  #        driver: com.mysql.cj.jdbc.Driver
-  #        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-  #        username: root
-  #        password: rootroot
-  #        query: SELECT 1 FROM DUAL
-  #      slave:
-  #        driver: com.mysql.cj.jdbc.Driver
-  #        url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-  #        username: root
-  #        password: TAOtao88888888
-  #        query: SELECT 1 FROM DUAL
+  jpa:
+    enabled: true
+    type: dynamic
+    dynamic:
+      primary:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: rootroot
+        query: SELECT 1 FROM DUAL
+  #        slave:
+  #          driver: com.mysql.cj.jdbc.Driver
+  #          url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+  #          username: root
+  #          password: TAOtao88888888
+  #          query: SELECT 1 FROM DUAL
   #    multi:
   #      primary:
   #        driver: com.mysql.cj.jdbc.Driver
@@ -117,18 +117,18 @@ anthill:
       name: chriswoodcn
       email: chriswoodcn@aliyun.com
 
-mybatis-flex:
-  datasource:
-    ds1:
-      type: hikari
-      url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-      username: root
-      password: rootroot
-    ds2:
-      type: hikari
-      url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-      username: root
-      password: rootroot
+#mybatis-flex:
+#  datasource:
+#    ds1:
+#      type: hikari
+#      url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#      username: root
+#      password: rootroot
+#    ds2:
+#      type: hikari
+#      url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+#      username: root
+#      password: rootroot
 
 logging:
   level:
@@ -137,7 +137,8 @@ logging:
   config: classpath:logback-spring.xml
   charset:
     file: UTF-8
-
+server:
+  port: 8081
 spring:
   # 资源信息
   messages:
@@ -172,15 +173,15 @@ spring:
       # 端口，默认为6379
       port: 6379
       # 数据库索引
-      database: 0
+      database: 2
       # 密码(如没有密码请注释掉)
-      # password:
+      password: 123456
       # 连接超时时间
       timeout: 10s
       # 是否开启ssl
       ssl.enabled: false
-    mongodb:
-      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
+#    mongodb:
+#      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
 
 #  datasource:
 #    url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
@@ -190,7 +191,7 @@ spring:
 
 
 springdoc:
-  default-flat-param-object: true
+#  default-flat-param-object: true
   swagger-ui:
     enabled: true
     path: /swagger-ui.html

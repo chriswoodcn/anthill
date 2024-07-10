@@ -1,17 +1,50 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+allprojects {
+    repositories {
+        mavenLocal()
+        maven {
+            name = "aliyun-public"; url = uri("https://maven.aliyun.com/repository/public/")
+        }
+        maven {
+            name = "aliyun-central"; url = uri("https://maven.aliyun.com/repository/central")
+        }
+        maven {
+            credentials {
+                username = "6142af9089e55adfe52511c8"
+                password = "xqX8T6Ik8kOS"
+            }
+            url = uri("https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
+        }
+        maven {
+            credentials {
+                username = "6142af9089e55adfe52511c8"
+                password = "xqX8T6Ik8kOS"
+            }
+            url = uri("https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+        }
+        mavenCentral()
+    }
+    buildscript {
+        repositories {
+            maven { name = "aliyun-gradle-plugin"; url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+            maven { name = "M2"; url = uri("https://plugins.gradle.org/m2/") }
+        }
+    }
+    project.ext["publishReleasesRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/"
+    project.ext["publishSnapshotsRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/"
+    project.ext["publishUser"] = "6142af9089e55adfe52511c8"
+    project.ext["publishPass"] = "xqX8T6Ik8kOS"
+}
 println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
 val groupValue = libs.versions.anthill.group.get()
 val versionValue = libs.versions.anthill.version.get()
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
     `maven-publish`
-    kotlin("kapt") version "1.9.22"
+    kotlin("kapt") version "1.9.24"
 }
 val pLibs = libs
 allprojects {
@@ -26,14 +59,26 @@ subprojects {
         plugin(pLibs.plugins.kotlin.spring.get().pluginId)
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_17
+//    java.sourceCompatibility = JavaVersion.VERSION_17
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = "17"
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjsr305=strict")
+        }
+    }
+
+//    tasks.withType<KotlinCompile> {
+//        kotlinOptions {
+//            freeCompilerArgs += "-Xjsr305=strict"
+//            jvmTarget = "17"
+//        }
+//    }
+
     if (project.projectDir.name.equals("anthill-example")) {
         apply {
             plugin("kotlin-kapt")

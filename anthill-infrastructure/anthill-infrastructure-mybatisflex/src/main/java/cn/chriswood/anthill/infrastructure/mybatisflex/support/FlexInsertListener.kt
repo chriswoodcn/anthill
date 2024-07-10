@@ -9,8 +9,8 @@ class FlexInsertListener : InsertListener {
         if (entity is Create) {
             entity.createTime = LocalDateTime.now()
         }
-        if (entity is CreateBy){
-            entity.createBy = AuthHelper.getUserId()
+        if (entity is CreateBy) {
+            entity.createBy = AuthHelper.getUserId()?.toLong()
         }
     }
 }

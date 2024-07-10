@@ -3,7 +3,6 @@ package cn.chriswood.anthill.infrastructure.web.exception
 import cn.chriswood.anthill.infrastructure.core.constants.HttpStatus
 import cn.chriswood.anthill.infrastructure.core.exception.BaseException
 import cn.chriswood.anthill.infrastructure.core.exception.InfrastructureException
-import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.chriswood.anthill.infrastructure.web.base.R
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
@@ -16,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.resource.NoResourceFoundException
-import java.util.stream.Collectors
 
 @ConditionalOnWebApplication
 @RestControllerAdvice
@@ -63,9 +61,11 @@ class InfrastructureWebExceptionHandler {
     fun handleBindException(e: BindException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("BindException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
-        val collect = e.allErrors.stream().map { it.defaultMessage!! }.collect(Collectors.toList())
-        val message: String = StringUtil.joinChar(collect, ',')
-        return R.fail(message)
+        log.error("${e.bindingResult.fieldErrors}")
+        val message = e.bindingResult.fieldErrors.map {
+            "${it.field} ${it.defaultMessage ?: "invalid"}"
+        }
+        return R.fail(message.joinToString(";"))
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -75,7 +75,10 @@ class InfrastructureWebExceptionHandler {
     ): R<Void> {
         val requestURI = request.requestURI
         log.error("MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
-        val message = e.bindingResult.fieldError!!.defaultMessage!!
-        return R.fail(message)
+        log.error("${e.bindingResult.fieldErrors}")
+        val message = e.bindingResult.fieldErrors.map {
+            "${it.field} ${it.defaultMessage ?: "invalid"}"
+        }
+        return R.fail(message.joinToString(";"))
     }
 }

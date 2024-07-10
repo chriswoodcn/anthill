@@ -8,7 +8,7 @@ class SaPermissionImpl : StpInterface {
         val userType = AuthHelper.getUserType()
         if (userType === UserType.SYS_USER) {
             val loginUser = AuthHelper.getAuthUser() ?: return mutableListOf()
-            return loginUser.menuPermission.toMutableList()
+            return loginUser.permissions.toMutableList()
         } else if (userType === UserType.APP_USER) {
             // 其他端 自行根据业务编写
         }
@@ -19,7 +19,7 @@ class SaPermissionImpl : StpInterface {
         val userType = AuthHelper.getUserType()
         if (userType === UserType.SYS_USER) {
             val loginUser = AuthHelper.getAuthUser() ?: return mutableListOf()
-            return loginUser.rolePermission.toMutableList()
+            return loginUser.roles.toMutableList()
         } else if (userType === UserType.APP_USER) {
             // 其他端 自行根据业务编写
         }

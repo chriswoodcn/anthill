@@ -2,20 +2,20 @@
 #您可以在后续代码块（libraries和plugins代码块）中使用这些变量
 [versions]
 anthill-group = "cn.chriswood.anthill"
-anthill-version = "1.1.1"
-lib_hutool = "5.8.16"
-lib_spring_doc = "2.3.0"
-lib_redisson = "3.27.0"
+anthill-version = "1.2.7-SNAPSHOT"
+lib_hutool = "5.8.29"
+lib_spring_doc = "2.4.0"
+lib_redisson = "3.31.0"
 lib_satoken = "1.37.0"
 lib_sms4j = "3.1.1"
-lib_anthill_infrastructure = "1.0.0-SNAPSHOT"
+lib_anthill_infrastructure = "1.2.7"
 lib_mail_angus = "2.0.2"
 lib_mail_api = "2.1.2"
-lib_aliyun_core = "4.6.1"
+lib_aliyun_core = "4.7.0"
 lib_aliyun_sts = "3.1.2"
-plugin_spring_boot = "3.2.3"
-plugin_spring_dependency = "1.1.4"
-plugin_kotlin = "1.9.22"
+plugin_spring_boot = "3.2.7"
+plugin_spring_dependency = "1.1.5"
+plugin_kotlin = "1.9.24"
 
 #在libraries代码块中，定义依赖项
 [libraries]

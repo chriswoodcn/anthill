@@ -11,7 +11,7 @@ class FlexUpdateListener : UpdateListener {
             entity.updateTime = LocalDateTime.now()
         }
         if (entity is UpdateBy) {
-            entity.updateBy = AuthHelper.getUserId()
+            entity.updateBy = AuthHelper.getUserId()?.toLong()
         }
     }
 }
