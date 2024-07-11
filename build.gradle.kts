@@ -29,11 +29,14 @@ allprojects {
             maven { name = "M2"; url = uri("https://plugins.gradle.org/m2/") }
         }
     }
-    project.ext["publishReleasesRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/"
-    project.ext["publishSnapshotsRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/"
-    project.ext["publishUser"] = findProperty("ali.user") as String
-    project.ext["publishPass"] = findProperty("ali.pass") as String
+    ext {
+        set("publishReleasesRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
+        set("publishSnapshotsRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+        set("publishUser", findProperty("ali.user") as String)
+        set("publishPass", findProperty("ali.pass") as String)
+    }
 }
+
 println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
 val groupValue = libs.versions.anthill.group.get()
 val versionValue = libs.versions.anthill.version.get()
