@@ -9,15 +9,15 @@ allprojects {
         }
         maven {
             credentials {
-                username = "6142af9089e55adfe52511c8"
-                password = "xqX8T6Ik8kOS"
+                username = findProperty("ali.user") as String
+                password = findProperty("ali.pass") as String
             }
             url = uri("https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
         }
         maven {
             credentials {
-                username = "6142af9089e55adfe52511c8"
-                password = "xqX8T6Ik8kOS"
+                username = findProperty("ali.user") as String
+                password = findProperty("ali.pass") as String
             }
             url = uri("https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
         }
@@ -31,8 +31,8 @@ allprojects {
     }
     project.ext["publishReleasesRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/"
     project.ext["publishSnapshotsRepoUrl"] = "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/"
-    project.ext["publishUser"] = "6142af9089e55adfe52511c8"
-    project.ext["publishPass"] = "xqX8T6Ik8kOS"
+    project.ext["publishUser"] = findProperty("ali.user") as String
+    project.ext["publishPass"] = findProperty("ali.pass") as String
 }
 println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
 val groupValue = libs.versions.anthill.group.get()
