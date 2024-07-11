@@ -1,4 +1,10 @@
 allprojects {
+    ext {
+        set("publishReleasesRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
+        set("publishSnapshotsRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+        set("publishUser", findProperty("ali.user") as String)
+        set("publishPass", findProperty("ali.pass") as String)
+    }
     repositories {
         mavenLocal()
         maven {
@@ -9,17 +15,17 @@ allprojects {
         }
         maven {
             credentials {
-                username = findProperty("ali.user") as String
-                password = findProperty("ali.pass") as String
+                username = project.ext["publishUser"] as String
+                password = project.ext["publishPass"] as String
             }
-            url = uri("https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
+            url = uri(project.ext["publishReleasesRepoUrl"] as String)
         }
         maven {
             credentials {
-                username = findProperty("ali.user") as String
-                password = findProperty("ali.pass") as String
+                username = project.ext["publishUser"] as String
+                password = project.ext["publishPass"] as String
             }
-            url = uri("https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
+            url = uri(project.ext["publishSnapshotsRepoUrl"] as String)
         }
         mavenCentral()
     }
@@ -29,17 +35,9 @@ allprojects {
             maven { name = "M2"; url = uri("https://plugins.gradle.org/m2/") }
         }
     }
-    ext {
-        set("publishReleasesRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
-        set("publishSnapshotsRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
-        set("publishUser", findProperty("ali.user") as String)
-        set("publishPass", findProperty("ali.pass") as String)
-    }
+    group = findProperty("anthill.group") as String
+    version = findProperty("anthill.version") as String
 }
-
-println("gradle构建生命周期>>>>>>>>>>     文件=root.build.gradle     阶段=configuration phase")
-val groupValue = libs.versions.anthill.group.get()
-val versionValue = libs.versions.anthill.version.get()
 
 plugins {
     alias(libs.plugins.spring.boot)
@@ -49,11 +47,8 @@ plugins {
     `maven-publish`
     kotlin("kapt") version "1.9.24"
 }
+
 val pLibs = libs
-allprojects {
-    group = groupValue
-    version = versionValue
-}
 subprojects {
     apply {
         plugin(pLibs.plugins.spring.boot.get().pluginId)
@@ -61,8 +56,6 @@ subprojects {
         plugin(pLibs.plugins.kotlin.jvm.get().pluginId)
         plugin(pLibs.plugins.kotlin.spring.get().pluginId)
     }
-
-//    java.sourceCompatibility = JavaVersion.VERSION_17
 
     java {
         toolchain {
@@ -74,13 +67,6 @@ subprojects {
             freeCompilerArgs.addAll("-Xjsr305=strict")
         }
     }
-
-//    tasks.withType<KotlinCompile> {
-//        kotlinOptions {
-//            freeCompilerArgs += "-Xjsr305=strict"
-//            jvmTarget = "17"
-//        }
-//    }
 
     if (project.projectDir.name.equals("anthill-example")) {
         apply {
