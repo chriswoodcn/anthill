@@ -44,8 +44,10 @@ plugins {
     alias(libs.plugins.spring.dependency)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kotlin.allopen)  //解决final问题
+    alias(libs.plugins.kotlin.noarg) //解决空构造函数问题
+    alias(libs.plugins.kotlin.kapt)
     `maven-publish`
-    kotlin("kapt") version "1.9.24"
 }
 
 val pLibs = libs
@@ -55,6 +57,14 @@ subprojects {
         plugin(pLibs.plugins.spring.dependency.get().pluginId)
         plugin(pLibs.plugins.kotlin.jvm.get().pluginId)
         plugin(pLibs.plugins.kotlin.spring.get().pluginId)
+        plugin(pLibs.plugins.kotlin.allopen.get().pluginId)
+        plugin(pLibs.plugins.kotlin.noarg.get().pluginId)
+    }
+    noArg {
+        annotation("cn.chriswood.anthill.infrastructure.core.annotation.NoArgs")
+    }
+    allOpen {
+        annotation("cn.chriswood.anthill.infrastructure.core.annotation.AllOpen")
     }
 
     java {
@@ -70,12 +80,13 @@ subprojects {
 
     if (project.projectDir.name.equals("anthill-example")) {
         apply {
-            plugin("kotlin-kapt")
+            plugin(pLibs.plugins.kotlin.kapt.get().pluginId)
         }
+
     }
     if (project.projectDir.name.startsWith("anthill-infrastructure-")) {
         apply {
-            plugin("kotlin-kapt")
+            plugin(pLibs.plugins.kotlin.kapt.get().pluginId)
             plugin("maven-publish")
         }
 

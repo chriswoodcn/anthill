@@ -1,5 +1,10 @@
 package cn.chriswood.anthill.infrastructure.web.base
 
+import cn.chriswood.anthill.infrastructure.core.annotation.AllOpen
+import cn.chriswood.anthill.infrastructure.core.annotation.NoArgs
+
+@NoArgs
+@AllOpen
 open class R<T>(
     open var code: Int,
     open var msg: String,

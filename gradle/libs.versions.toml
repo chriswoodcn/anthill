@@ -68,5 +68,8 @@ spring-boot = { id = "org.springframework.boot", version.ref = "plugin_spring_bo
 spring-dependency = { id = "io.spring.dependency-management", version.ref = "plugin_spring_dependency" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugin_kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "plugin_kotlin" }
+kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "plugin_kotlin" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "plugin_kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "plugin_kotlin" }
 
 
