@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.core.utils
 
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -12,10 +13,10 @@ object BeanUtil {
         val instance = kClass.objectInstance ?: declaredConstructor.newInstance()
         val sourceFields = source::class.memberProperties
         val targetFields = instance::class.memberProperties
-        val targetFieldInvokes: MutableMap<String, KMutableProperty1<out T, *>> = mutableMapOf()
+        val targetFieldInvokes: MutableMap<String, KProperty1<out T, *>> = mutableMapOf()
         targetFields.forEach {
             it.isAccessible = true
-            targetFieldInvokes[it.name] = it as KMutableProperty1<out T, *>
+            targetFieldInvokes[it.name] = it
         }
         if (targetFieldInvokes.isEmpty()) return instance
         sourceFields.forEach() {
@@ -24,7 +25,12 @@ object BeanUtil {
             val fieldValue = it.getter.call(source)
             if (fieldValue != null && targetFieldInvokes.keys.contains(fieldName)) {
                 val invoke = targetFieldInvokes[it.name]
-                invoke?.setter?.call(instance, fieldValue)
+                try {
+                    val kp = invoke as KMutableProperty1<*, *>
+                    kp.setter.call(instance, fieldValue)
+                } catch (_: Exception) {
+
+                }
             }
         }
         return instance
