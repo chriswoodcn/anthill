@@ -2,14 +2,15 @@ package cn.chriswood.anthill.infrastructure.web.auth.support
 
 import cn.chriswood.anthill.infrastructure.core.enums.UserType
 import cn.dev33.satoken.context.SaHolder
+import cn.dev33.satoken.exception.NotLoginException
 import cn.dev33.satoken.stp.SaLoginModel
 import cn.dev33.satoken.stp.StpUtil
 import cn.hutool.core.util.ObjectUtil
 import java.util.function.Supplier
 
 object AuthHelper {
-    val LOGIN_USER_KEY = "loginUser"
-    val USER_KEY = "userId"
+    const val LOGIN_USER_KEY = "loginUser"
+    const val USER_KEY = "userId"
 
     /**
      * 登录系统 基于 设备类型
@@ -18,7 +19,7 @@ object AuthHelper {
      * @param authUser 登录用户信息
      * @param saLoginModel     配置参数
      */
-    fun login(authUser: AuthUser<*>, saLoginModel: SaLoginModel) {
+    fun <T> login(authUser: AuthUser<T>, saLoginModel: SaLoginModel) {
         val storage = SaHolder.getStorage()
         storage[LOGIN_USER_KEY] = authUser
         val model = ObjectUtil.defaultIfNull(saLoginModel, SaLoginModel())
@@ -31,11 +32,7 @@ object AuthHelper {
         StpUtil.getTokenSession()[LOGIN_USER_KEY] = authUser
     }
 
-
-    /**
-     * 获取用户(多级缓存)
-     */
-    fun getAuthUser(): AuthUser<*>? {
+    private fun getStoreUser(): Any? {
         return getStorageIfAbsentSet(
             LOGIN_USER_KEY,
             Supplier getStorageIfAbsentSet@{
@@ -44,20 +41,28 @@ object AuthHelper {
                     return@getStorageIfAbsentSet null
                 }
                 session[LOGIN_USER_KEY]
-            }) as AuthUser<*>?
+            })
+    }
+
+    /**
+     * 获取用户(多级缓存)
+     */
+    fun getAuthUser(): AuthUser<*> {
+        val getObj = getStoreUser() ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
+        return getObj as AuthUser<*>
     }
 
     fun getToken(): String {
-        return StpUtil.getTokenValue()
+        return StpUtil.getTokenValue() ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
     }
 
-    fun getUserType(): UserType? {
-        val loginUser: AuthUser<*> = getAuthUser() ?: return null
+    fun getUserType(): UserType {
+        val loginUser: AuthUser<*> = getAuthUser()
         return UserType.getEnumByCode(loginUser.userType)
     }
 
-    fun getUserId(): String? {
-        val loginUser: AuthUser<*> = getAuthUser() ?: return null
+    fun getUserId(): String {
+        val loginUser: AuthUser<*> = getAuthUser()
         return loginUser.userId
     }
 
@@ -70,12 +75,12 @@ object AuthHelper {
     }
 
     fun getUsername(): String? {
-        val loginUser: AuthUser<*> = getAuthUser() ?: return null
+        val loginUser: AuthUser<*> = getAuthUser()
         return loginUser.username
     }
 
     fun isLogin(): Boolean {
-        return getAuthUser() != null
+        return getStoreUser() != null
     }
 
     private fun getStorageIfAbsentSet(key: String, handle: Supplier<Any?>): Any? {
