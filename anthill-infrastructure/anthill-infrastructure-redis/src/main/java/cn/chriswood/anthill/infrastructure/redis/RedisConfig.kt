@@ -58,7 +58,7 @@ class RedisConfig(
             if (null != singleServerConfig) {
                 // 使用单机模式
                 config.useSingleServer() //设置redis key前缀
-                    .setNameMapper(KeyPrefixHandler())
+                    .setNameMapper(KeyPrefixHandler(redissonProperties.keyPrefix))
                     .setTimeout(singleServerConfig.timeout)
                     .setClientName(singleServerConfig.clientName)
                     .setIdleConnectionTimeout(singleServerConfig.idleConnectionTimeout)
@@ -71,7 +71,7 @@ class RedisConfig(
                 redissonProperties.clusterServersConfig
             if (null != clusterServersConfig) {
                 config.useClusterServers() //设置redis key前缀
-                    .setNameMapper(KeyPrefixHandler())
+                    .setNameMapper(KeyPrefixHandler(redissonProperties.keyPrefix))
                     .setTimeout(clusterServersConfig.timeout)
                     .setClientName(clusterServersConfig.clientName)
                     .setIdleConnectionTimeout(clusterServersConfig.idleConnectionTimeout)

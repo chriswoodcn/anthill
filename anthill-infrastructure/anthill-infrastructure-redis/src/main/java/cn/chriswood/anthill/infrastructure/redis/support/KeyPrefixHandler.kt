@@ -2,16 +2,11 @@ package cn.chriswood.anthill.infrastructure.redis.support
 
 import org.redisson.api.NameMapper
 
-class KeyPrefixHandler : NameMapper {
-    private val keyPrefix: String? = null
+class KeyPrefixHandler(keyPrefix: String?) : NameMapper {
+    private var keyPrefix: String? = null
         get() {
-            return if (field.isNullOrBlank()) "" else "$field:"
+            return if (field.isNullOrBlank()) "app:" else "$field:"
         }
-
-//    fun KeyPrefixHandler(keyPrefix: String?) {
-//        //前缀为空 则返回空前缀
-//        this.keyPrefix = if (StringUtil.isBlank(keyPrefix)) "" else "$keyPrefix:"
-//    }
 
     /**
      * 增加前缀

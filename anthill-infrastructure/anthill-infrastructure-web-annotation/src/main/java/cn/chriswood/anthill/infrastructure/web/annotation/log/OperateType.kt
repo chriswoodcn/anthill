@@ -1,53 +1,53 @@
 package cn.chriswood.anthill.infrastructure.web.annotation.log
 
-enum class OperateType {
+enum class OperateType(code: String) {
     /**
      * 其他
      */
-    OTHER,
+    OTHER("0"),
 
     /**
      * 新增
      */
-    INSERT,
+    INSERT("1"),
 
     /**
      * 修改
      */
-    UPDATE,
+    UPDATE("2"),
 
     /**
      * 删除
      */
-    DELETE,
+    DELETE("3"),
 
     /**
      * 授权
      */
-    GRANT,
+    GRANT("4"),
 
     /**
      * 导出
      */
-    EXPORT,
+    EXPORT("5"),
 
     /**
      * 导入
      */
-    IMPORT,
+    IMPORT("6"),
 
     /**
      * 强退
      */
-    FORCE,
+    FORCE("7"),
 
     /**
      * 生成代码
      */
-    GENCODE,
+    GENCODE("8"),
 
     /**
      * 清空数据
      */
-    CLEAN,
+    CLEAN("9"),
 }
