@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.auth.support
 
-interface AuthUser {
+interface AuthUser<T> {
     /**
      * 用户类型
      */
@@ -25,6 +25,11 @@ interface AuthUser {
      * 用户名
      */
     var username: String?
+
+    /**
+     * 用户数据体
+     */
+    var instance: T
 
     fun getAuthLabel(): String {
         return "$userType:$userId"

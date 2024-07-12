@@ -18,7 +18,7 @@ object AuthHelper {
      * @param authUser 登录用户信息
      * @param saLoginModel     配置参数
      */
-    fun login(authUser: AuthUser, saLoginModel: SaLoginModel) {
+    fun login(authUser: AuthUser<*>, saLoginModel: SaLoginModel) {
         val storage = SaHolder.getStorage()
         storage[LOGIN_USER_KEY] = authUser
         val model = ObjectUtil.defaultIfNull(saLoginModel, SaLoginModel())
@@ -35,7 +35,7 @@ object AuthHelper {
     /**
      * 获取用户(多级缓存)
      */
-    fun getAuthUser(): AuthUser? {
+    fun getAuthUser(): AuthUser<*>? {
         return getStorageIfAbsentSet(
             LOGIN_USER_KEY,
             Supplier getStorageIfAbsentSet@{
@@ -44,7 +44,7 @@ object AuthHelper {
                     return@getStorageIfAbsentSet null
                 }
                 session[LOGIN_USER_KEY]
-            }) as AuthUser?
+            }) as AuthUser<*>?
     }
 
     fun getToken(): String {
@@ -52,12 +52,12 @@ object AuthHelper {
     }
 
     fun getUserType(): UserType? {
-        val loginUser: AuthUser = getAuthUser() ?: return null
+        val loginUser: AuthUser<*> = getAuthUser() ?: return null
         return UserType.getEnumByCode(loginUser.userType)
     }
 
     fun getUserId(): String? {
-        val loginUser: AuthUser = getAuthUser() ?: return null
+        val loginUser: AuthUser<*> = getAuthUser() ?: return null
         return loginUser.userId
     }
 
@@ -70,7 +70,7 @@ object AuthHelper {
     }
 
     fun getUsername(): String? {
-        val loginUser: AuthUser = getAuthUser() ?: return null
+        val loginUser: AuthUser<*> = getAuthUser() ?: return null
         return loginUser.username
     }
 
