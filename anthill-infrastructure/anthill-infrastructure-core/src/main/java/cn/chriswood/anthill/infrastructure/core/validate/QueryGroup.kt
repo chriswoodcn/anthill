@@ -1,3 +1,5 @@
 package cn.chriswood.anthill.infrastructure.core.validate
 
-interface QueryGroup
+import jakarta.validation.groups.Default
+
+interface QueryGroup : Default

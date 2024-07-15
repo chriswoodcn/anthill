@@ -1,3 +1,5 @@
 package cn.chriswood.anthill.infrastructure.core.validate
 
-interface AddGroup
+import jakarta.validation.groups.Default
+
+interface AddGroup : Default
