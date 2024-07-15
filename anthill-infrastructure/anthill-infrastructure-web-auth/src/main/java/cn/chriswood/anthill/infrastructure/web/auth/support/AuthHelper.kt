@@ -32,6 +32,10 @@ object AuthHelper {
         StpUtil.getTokenSession()[LOGIN_USER_KEY] = authUser
     }
 
+    fun logout() {
+        if (isLogin()) StpUtil.logout()
+    }
+
     private fun getStoreUser(): Any? {
         return getStorageIfAbsentSet(
             LOGIN_USER_KEY,
