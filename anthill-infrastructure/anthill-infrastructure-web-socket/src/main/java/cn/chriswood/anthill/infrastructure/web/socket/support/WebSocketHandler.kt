@@ -20,7 +20,7 @@ class WebSocketHandler : AbstractWebSocketHandler() {
      * 连接建立后
      */
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        val loginUser: AuthUser = session.attributes[WebSocketConstants.LOGIN_USER_KEY] as AuthUser
+        val loginUser: AuthUser<*> = session.attributes[WebSocketConstants.LOGIN_USER_KEY] as AuthUser<*>
         WebSocketSessionHolder.addSession(
             "${loginUser.userType}:${loginUser.userId}",
             session
@@ -37,7 +37,7 @@ class WebSocketHandler : AbstractWebSocketHandler() {
      * 连接关闭后
      */
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        val loginUser: AuthUser = session.attributes[WebSocketConstants.LOGIN_USER_KEY] as AuthUser
+        val loginUser: AuthUser<*> = session.attributes[WebSocketConstants.LOGIN_USER_KEY] as AuthUser<*>
         WebSocketSessionHolder.removeSession("${loginUser.userType}:${loginUser.userId}")
         log.debug(
             "[WebSocketHandler] [afterConnectionClosed] sessionId: {},userId:{},userType:{}",

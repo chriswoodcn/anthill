@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+
 @AutoConfiguration
 @AutoConfigureAfter(JacksonConfig::class)
 @ConditionalOnProperty(
