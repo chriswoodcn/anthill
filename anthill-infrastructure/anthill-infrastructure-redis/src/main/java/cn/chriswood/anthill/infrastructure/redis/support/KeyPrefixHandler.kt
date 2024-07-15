@@ -2,10 +2,10 @@ package cn.chriswood.anthill.infrastructure.redis.support
 
 import org.redisson.api.NameMapper
 
-class KeyPrefixHandler(keyPrefix: String?) : NameMapper {
-    private var keyPrefix: String? = null
+class KeyPrefixHandler(private val keyPrefix: String?) : NameMapper {
+    private val delegateKeyPrefix: String
         get() {
-            return if (field.isNullOrBlank()) "app:" else "$field:"
+            return if (keyPrefix.isNullOrBlank()) "app:" else "$keyPrefix:"
         }
 
     /**
@@ -15,8 +15,8 @@ class KeyPrefixHandler(keyPrefix: String?) : NameMapper {
         if (name.isNullOrBlank()) {
             return null
         }
-        return if (keyPrefix.isNullOrBlank() && !name.startsWith(keyPrefix!!)) {
-            keyPrefix + name
+        return if (!name.startsWith(delegateKeyPrefix)) {
+            delegateKeyPrefix + name
         } else name
     }
 
@@ -27,8 +27,8 @@ class KeyPrefixHandler(keyPrefix: String?) : NameMapper {
         if (name.isNullOrBlank()) {
             return null
         }
-        return if (keyPrefix.isNullOrBlank() && name.startsWith(keyPrefix!!)) {
-            name.substring(keyPrefix!!.length)
+        return if (name.startsWith(delegateKeyPrefix)) {
+            name.substring(delegateKeyPrefix.length)
         } else name
     }
 }
