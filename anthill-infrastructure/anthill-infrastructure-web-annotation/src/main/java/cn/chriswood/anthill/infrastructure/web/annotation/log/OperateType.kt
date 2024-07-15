@@ -22,32 +22,22 @@ enum class OperateType(code: String) {
     DELETE("3"),
 
     /**
-     * 授权
-     */
-    GRANT("4"),
-
-    /**
      * 导出
      */
-    EXPORT("5"),
+    EXPORT("4"),
 
     /**
      * 导入
      */
-    IMPORT("6"),
+    IMPORT("5"),
 
     /**
      * 强退
      */
-    FORCE("7"),
-
-    /**
-     * 生成代码
-     */
-    GENCODE("8"),
+    FORCE("6"),
 
     /**
      * 清空数据
      */
-    CLEAN("9"),
+    CLEAN("7"),
 }

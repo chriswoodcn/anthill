@@ -10,6 +10,6 @@ annotation class Log(
     val module: String = "SYSTEM",
     val operate: OperateType = OperateType.OTHER,
     val user: UserType = UserType.UNKNOWN,
-    val appender: KClass<out LogAppender> = StandardLogAppender::class,
+    val appender: KClass<out LogAppender>,
     val message: String = ""
 )
