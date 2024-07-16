@@ -11,9 +11,11 @@ lib_mail_angus = "2.0.2"
 lib_mail_api = "2.1.2"
 lib_aliyun_core = "4.7.0"
 lib_aliyun_sts = "3.1.2"
+lib_nashorn_js = "15.4"
 plugin_spring_boot = "3.2.7"
 plugin_spring_dependency = "1.1.5"
 plugin_kotlin = "1.9.24"
+
 
 #在libraries代码块中，定义依赖项
 [libraries]
@@ -29,6 +31,7 @@ mail_angus = { group = "org.eclipse.angus", name = "jakarta.mail", version.ref =
 mail_api = { group = "jakarta.mail", name = "jakarta.mail-api", version.ref = "lib_mail_api" }
 aliyun_core = { module = "com.aliyun:aliyun-java-sdk-core", version.ref = "lib_aliyun_core" }
 aliyun_sts = { module = "com.aliyun:aliyun-java-sdk-sts", version.ref = "lib_aliyun_sts" }
+nashorn_js = { module = "org.openjdk.nashorn:nashorn-core", version.ref = "lib_nashorn_js" }
 #anthill
 anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
 anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
@@ -61,6 +64,7 @@ anthill = [
     "anthill-web-annotation",
     "anthill-web-socket",
 ]
+nashorn-js = ["nashorn_js"]
 
 #在plugins代码块中，定义插件
 [plugins]

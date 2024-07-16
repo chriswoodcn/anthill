@@ -2,13 +2,11 @@ package cn.chriswood.anthill.infrastructure.core.validate
 
 import cn.hutool.core.util.ObjectUtil
 import cn.hutool.core.util.ReflectUtil
-import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 
 object ValidationUtil {
-    private val log = LoggerFactory.getLogger(javaClass)
     fun replaceValue(scriptStr: String, `object`: Any?): String {
         var script = scriptStr
         val pattern = Pattern.compile("(?<=\\{)(.+?)(?=\\})")
@@ -32,13 +30,11 @@ object ValidationUtil {
     }
 
     fun executeDynamicScript(scriptStr: String): Boolean {
-        val manager = ScriptEngineManager()
-        val se = manager.getEngineByName("javascript")
+        val se = ScriptEngineManager().getEngineByName("nashorn")
         return try {
             val eval = se.eval(scriptStr)
             eval as Boolean
         } catch (e: ScriptException) {
-            log.error("ValidationUtil executeDynamicScript error: {}", e.message)
             false
         }
     }

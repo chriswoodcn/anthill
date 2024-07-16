@@ -13,10 +13,11 @@ import java.util.stream.Collectors
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.TYPE)
+@Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @MustBeDocumented
 @Constraint(validatedBy = [RequiredOnCondition.RequiredOnConditionValidator::class])
 annotation class RequiredOnCondition(
+    val message: String = "{Validation.NotBlank}",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 ) {

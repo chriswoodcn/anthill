@@ -47,7 +47,7 @@ object HttpRequestUtil {
         return EndpointType.getEnumByCode(getEndpoint())
     }
 
-    private fun getHeaderIgnoreCase(request: HttpServletRequest, nameIgnoreCase: String?): String? {
+    fun getHeaderIgnoreCase(request: HttpServletRequest, nameIgnoreCase: String?): String? {
         val names = request.headerNames
         var name: String?
         while (names.hasMoreElements()) {
