@@ -18,7 +18,7 @@ object ValidationUtil {
                 "'${getConditionValue(conditionName, `object`)}'"
             )
         }
-        return scriptStr
+        return script
     }
 
     fun getConditionValue(conditionName: String, `object`: Any?): Any {

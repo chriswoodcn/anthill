@@ -13,6 +13,7 @@ import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.validation.BindException
 import org.springframework.validation.FieldError
+import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -63,9 +64,10 @@ class InfrastructureWebExceptionHandler {
     @ExceptionHandler(BindException::class)
     fun handleBindException(e: BindException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
-        log.error("BindException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
-        log.error("${e.bindingResult.fieldErrors}")
-        val validationMessages = genValidationMessages(e.bindingResult.fieldErrors)
+        log.error("BindException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.bindingResult.allErrors)
+        val allErrors = e.bindingResult.allErrors
+        log.error("$allErrors")
+        val validationMessages = genValidationMessages(allErrors)
         return R.fail(validationMessages)
     }
 
@@ -75,17 +77,19 @@ class InfrastructureWebExceptionHandler {
         request: HttpServletRequest
     ): R<Void> {
         val requestURI = request.requestURI
-        log.error("MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
-        log.error("${e.bindingResult.fieldErrors}")
-        val validationMessages = genValidationMessages(e.bindingResult.fieldErrors)
+        log.error("MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.bindingResult.allErrors)
+        val allErrors = e.bindingResult.allErrors
+        log.error("$allErrors")
+        val validationMessages = genValidationMessages(allErrors)
         return R.fail(validationMessages)
     }
 
-    private fun genValidationMessages(fieldErrors: List<FieldError>): String {
+    private fun genValidationMessages(allErrors: List<ObjectError>): String {
         val lang = HttpRequestUtil.getLang()
-        val message = fieldErrors.map {
-            log.error(
-                """
+        val message = allErrors.map {
+            if (it is FieldError) {
+                log.trace(
+                    """
                 genValidationMessages
                 field: ${it.field}
                 defaultMessage: ${it.defaultMessage}
@@ -93,25 +97,22 @@ class InfrastructureWebExceptionHandler {
                 codes: ${it.codes}
                 codes[0]: ${it.codes?.get(0)}
                  """.trimIndent()
-            )
-//            if (!it.code.isNullOrBlank()) {
-//                val messageByLang = if (it.arguments.isNullOrEmpty())
-//                    I18nMessageUtil.messageByLang(lang, it.code!!)
-//                else I18nMessageUtil.messageByLang(lang, it.code!!, *it.arguments!!)
-//                if (messageByLang.isNullOrBlank()) null else "${it.field} $messageByLang"
-//            } else if (!it.codes.isNullOrEmpty()) {
-//                log.error("genValidationMessages codes: ${it.codes}")
-//                val messageList = mutableListOf<String>()
-//                it.codes!!.forEach { c ->
-//                    val messageByLang = if (it.arguments.isNullOrEmpty())
-//                        I18nMessageUtil.messageByLang(lang, c)
-//                    else I18nMessageUtil.messageByLang(lang, c, *it.arguments!!)
-//                    if (!messageByLang.isNullOrBlank()) messageList + messageByLang
-//                }
-//                if (messageList.isEmpty()) null else "${it.field} ${messageList.joinToString(",")}"
-//            } else
-//
-            "${it.field} ${it.defaultMessage ?: "invalid"}"
+                )
+                "${it.field} ${it.defaultMessage ?: "invalid"}"
+            } else {
+                log.trace(
+                    """
+                genValidationMessages
+                defaultMessage: ${it.defaultMessage}
+                code: ${it.code}
+                codes: ${it.codes}
+                codes[0]: ${it.codes?.get(0)}
+                 """.trimIndent()
+                )
+
+                it.defaultMessage ?: "${it.objectName} invalid"
+            }
+
         }
         return message.joinToString(";")
     }
