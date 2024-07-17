@@ -2,6 +2,7 @@ package cn.chriswood.anthill.infrastructure.core.validate
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
+import jakarta.validation.Constraint
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import jakarta.validation.Payload
@@ -9,6 +10,7 @@ import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
+@Constraint(validatedBy = [PhoneNumber.PhoneNumberValidator::class])
 @MustBeDocumented
 annotation class PhoneNumber(
     val message: String = "{Validation.Invalid}",
