@@ -84,7 +84,25 @@ object AuthHelper {
     }
 
     fun isLogin(): Boolean {
-        return getStoreUser() != null
+        return StpUtil.isLogin()
+    }
+
+    fun isLogin(loginId: Any): Boolean {
+        return StpUtil.isLogin(loginId)
+    }
+
+    fun <T> refreshUser(loginId: Any, data: AuthUser<T>) {
+        val myLoginId = StpUtil.getLoginId()
+        if (myLoginId == loginId) {
+            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
+            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
+        }
+        if (isLogin(loginId)) {
+            StpUtil.switchTo(loginId)
+            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
+            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
+            StpUtil.switchTo(myLoginId)
+        }
     }
 
     private fun getStorageIfAbsentSet(key: String, handle: Supplier<Any?>): Any? {
