@@ -48,6 +48,11 @@ object AuthHelper {
             })
     }
 
+    fun <T> getTypedAuthUser(): AuthUser<T> {
+        val getObj = getStoreUser() ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
+        return getObj as AuthUser<T>
+    }
+
     /**
      * 获取用户(多级缓存)
      */
