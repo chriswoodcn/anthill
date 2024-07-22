@@ -1,0 +1,44 @@
+#在versions代码块中，定义用于保存依赖项和插件版本的变量。
+#您可以在后续代码块（libraries和plugins代码块）中使用这些变量
+[versions]
+lib_anthill_infrastructure = "1.2.7-SNAPSHOT"
+plugin_spring_boot = "3.2.7"
+plugin_spring_dependency = "1.1.5"
+plugin_kotlin = "1.9.24"
+lib_mysql_driver = "8.0.33"
+lib_querydsl = "5.0.0"
+
+#在libraries代码块中，定义依赖项
+[libraries]
+#anthill
+anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
+anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
+anthill-jpa = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-jpa", version.ref = "lib_anthill_infrastructure" }
+anthill-redis = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-redis", version.ref = "lib_anthill_infrastructure" }
+anthill-spring-doc = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-spring-doc", version.ref = "lib_anthill_infrastructure" }
+anthill-web = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web", version.ref = "lib_anthill_infrastructure" }
+anthill-web-auth = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-web-auth", version.ref = "lib_anthill_infrastructure" }
+mysql-driver = { group = "com.mysql", name = "mysql-connector-j", version.ref = "lib_mysql_driver" }
+querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa", version.ref = "lib_querydsl" }
+querydsl-apt = { group = "com.querydsl", name = "querydsl-apt", version.ref = "lib_querydsl" }
+#将多个需要同时引入的依赖定义为一个组，使用时直接引入组
+[bundles]
+anthill = [
+    "anthill-core",
+    "anthill-json",
+    "anthill-jpa",
+    "anthill-redis",
+    "anthill-spring-doc",
+    "anthill-web",
+    "anthill-web-auth",
+]
+
+#在plugins代码块中，定义插件
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "plugin_spring_boot" }
+spring-dependency = { id = "io.spring.dependency-management", version.ref = "plugin_spring_dependency" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugin_kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "plugin_kotlin" }
+
+
+

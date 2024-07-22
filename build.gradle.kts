@@ -35,8 +35,8 @@ allprojects {
             maven { name = "M2"; url = uri("https://plugins.gradle.org/m2/") }
         }
     }
-    group = findProperty("anthill.group") as String
-    version = findProperty("anthill.version") as String
+    group = findProperty("app.group") as String
+    version = findProperty("app.version") as String
 }
 
 plugins {

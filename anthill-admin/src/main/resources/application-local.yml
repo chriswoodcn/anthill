@@ -1,0 +1,26 @@
+configurations:
+  FLYWAY_ENABLE: true
+  PRIMARY_DRIVER: com.mysql.cj.jdbc.Driver
+  PRIMARY_DB_URL: jdbc:mysql://192.168.1.188:3307/bmm?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  PRIMARY_DB_USERNAME: root
+  PRIMARY_DB_PASSWORD: rootroot
+  PRIMARY_DB_INIT_QUERY: SELECT 1 FROM DUAL
+  #  https://github.com/hibernate/hibernate-orm/tree/main/hibernate-core/src/main/java/org/hibernate/dialect
+  PRIMARY_DB_DIALECT: org.hibernate.dialect.MySQLDialect
+  PRIMARY_PACKAGE_SCAN: com.taotao.bmm.app.persistence.mes
+  SHOW_SQL: true
+  REDIS_HOST: 127.0.0.1
+  REDIS_DB: 1
+  REDIS_PORT: 6379
+  REDIS_PASSWORD: 123456
+
+
+logging:
+  level:
+    com.taotao.bmm: INFO
+    org.springframework: INFO
+    cn.chriswood.anthill: DEBUG
+    # 开启hibernate数据绑定sql的日志
+    org.hibernate.orm.jdbc.bind: TRACE
+#    org.hibernate.stat: DEBUG
+#    org.hibernate.type: TRACE
