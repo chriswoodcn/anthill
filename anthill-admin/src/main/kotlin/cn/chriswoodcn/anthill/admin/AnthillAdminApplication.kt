@@ -1,4 +1,4 @@
-package cn.chriswoodcn.anthill.dmin
+package cn.chriswoodcn.anthill.admin
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

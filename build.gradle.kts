@@ -111,15 +111,15 @@ subprojects {
                 }
             }
             repositories {
-//                val releasesRepoUrl = uri(project.ext["publishReleasesRepoUrl"] as String)
-//                val snapshotsRepoUrl = uri(project.ext["publishSnapshotsRepoUrl"] as String)
-//                maven {
-//                    url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-//                    credentials {
-//                        username = project.ext["publishUser"] as String
-//                        password = project.ext["publishPass"] as String
-//                    }
-//                }
+                val releasesRepoUrl = uri(project.ext["publishReleasesRepoUrl"] as String)
+                val snapshotsRepoUrl = uri(project.ext["publishSnapshotsRepoUrl"] as String)
+                maven {
+                    url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                    credentials {
+                        username = project.ext["publishUser"] as String
+                        password = project.ext["publishPass"] as String
+                    }
+                }
                 mavenLocal()
             }
         }

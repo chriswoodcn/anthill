@@ -146,15 +146,11 @@ springdoc:
     - group: COMMON
       display-name: COMMON
       packages-to-scan:
-        - com.taotao.bmm.business.common
+        - cn.chriswood.anthill.admin.business.common
     - group: BACKEND
       display-name: BACKEND
       packages-to-scan:
-        - com.taotao.bmm.business.backend
-    - group: APP
-      display-name: APP
-      packages-to-scan:
-        - com.taotao.bmm.business.APP
+        - cn.chriswood.anthill.admin.business.backend
 
 # actuator ??/actuator/health/liveness /actuator/health/readiness
 # ref https://docs.spring.io/spring-boot/docs/3.2.0/reference/htmlsingle/#actuator.endpoints.kubernetes-probes

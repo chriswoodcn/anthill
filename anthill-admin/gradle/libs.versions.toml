@@ -1,12 +1,12 @@
 #在versions代码块中，定义用于保存依赖项和插件版本的变量。
 #您可以在后续代码块（libraries和plugins代码块）中使用这些变量
 [versions]
-lib_anthill_infrastructure = "1.2.7-SNAPSHOT"
-plugin_spring_boot = "3.2.7"
-plugin_spring_dependency = "1.1.5"
+lib_anthill_infrastructure = "1.2.8-SNAPSHOT"
+plugin_spring_boot = "3.2.8"
+plugin_spring_dependency = "1.1.6"
 plugin_kotlin = "1.9.24"
 lib_mysql_driver = "8.0.33"
-lib_querydsl = "5.0.0"
+lib_querydsl = "5.1.0"
 
 #在libraries代码块中，定义依赖项
 [libraries]

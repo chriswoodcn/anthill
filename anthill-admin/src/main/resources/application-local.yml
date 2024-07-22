@@ -7,7 +7,7 @@ configurations:
   PRIMARY_DB_INIT_QUERY: SELECT 1 FROM DUAL
   #  https://github.com/hibernate/hibernate-orm/tree/main/hibernate-core/src/main/java/org/hibernate/dialect
   PRIMARY_DB_DIALECT: org.hibernate.dialect.MySQLDialect
-  PRIMARY_PACKAGE_SCAN: com.taotao.bmm.app.persistence.mes
+  PRIMARY_PACKAGE_SCAN: cn.chriswood.anthill.admin.persistence.system
   SHOW_SQL: true
   REDIS_HOST: 127.0.0.1
   REDIS_DB: 1

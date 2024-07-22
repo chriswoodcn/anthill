@@ -13,20 +13,20 @@ allprojects {
         maven {
             name = "aliyun-central"; url = uri("https://maven.aliyun.com/repository/central")
         }
-//        maven {
-//            credentials {
-//                username = project.ext["publishUser"] as String
-//                password = project.ext["publishPass"] as String
-//            }
-//            url = uri(project.ext["publishReleasesRepoUrl"] as String)
-//        }
-//        maven {
-//            credentials {
-//                username = project.ext["publishUser"] as String
-//                password = project.ext["publishPass"] as String
-//            }
-//            url = uri(project.ext["publishSnapshotsRepoUrl"] as String)
-//        }
+        maven {
+            credentials {
+                username = project.ext["publishUser"] as String
+                password = project.ext["publishPass"] as String
+            }
+            url = uri(project.ext["publishReleasesRepoUrl"] as String)
+        }
+        maven {
+            credentials {
+                username = project.ext["publishUser"] as String
+                password = project.ext["publishPass"] as String
+            }
+            url = uri(project.ext["publishSnapshotsRepoUrl"] as String)
+        }
         mavenCentral()
     }
     buildscript {
