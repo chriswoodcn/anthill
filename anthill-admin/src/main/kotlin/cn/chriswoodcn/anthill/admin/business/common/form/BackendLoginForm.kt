@@ -13,4 +13,8 @@ class BackendLoginForm {
     @field:Schema(requiredMode = RequiredMode.REQUIRED)
     @field:NotBlank(message = "{Validation.NotBlank}")
     lateinit var password: String
+
+    @field:Schema(requiredMode = RequiredMode.REQUIRED, defaultValue = "WEB")
+    @field:NotBlank(message = "{Validation.NotBlank}")
+    lateinit var device: String
 }

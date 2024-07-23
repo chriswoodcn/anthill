@@ -10,11 +10,14 @@ import com.taotao.bmm.business.common.vo.SysMenuVo
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/backend")
 @Tag(name = "v1-backend-登录接口")
+@Validated
 class SysLoginController(
     private val sysLoginService: SysLoginService
 ) {
@@ -34,8 +37,12 @@ class SysLoginController(
 
     @Operation(summary = "登出")
     @GetMapping("/logout")
-    fun logout(): R<Unit> {
-        AuthHelper.logout()
+    fun logout(
+        @RequestParam(defaultValue = "WEB")
+        @NotBlank(message = "{Validation.NotBlank}")
+        device: String
+    ): R<Unit> {
+        AuthHelper.logout(device)
         return R.ok()
     }
 

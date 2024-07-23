@@ -36,6 +36,10 @@ object AuthHelper {
         if (isLogin()) StpUtil.logout()
     }
 
+    fun logout(device: String) {
+        if (isLogin()) StpUtil.logout(StpUtil.getLoginId(), device)
+    }
+
     private fun getStoreUser(): Any? {
         return getStorageIfAbsentSet(
             LOGIN_USER_KEY,

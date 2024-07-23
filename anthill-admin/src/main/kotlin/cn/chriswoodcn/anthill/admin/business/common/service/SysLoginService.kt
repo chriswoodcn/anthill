@@ -43,7 +43,7 @@ class SysLoginService(
             setOf(Constants.PERMISSION_ADMIN)
         } else genPermissions(genRoles)
         return BackendLoginVo(
-            genToken(userEntity),
+            genToken(userEntity, form.device),
             BeanUtil.copyBean(userEntity),
             genRoles, genPermissions
         )
@@ -72,8 +72,9 @@ class SysLoginService(
         )
     }
 
-    fun genToken(userEntity: SysUserEntity): String {
+    fun genToken(userEntity: SysUserEntity, device: String): String {
         val saLoginModel = SaLoginModel()
+            .setDevice(device)
             .setIsWriteHeader(false)
         AuthHelper.login(genAuthUserBo(userEntity), saLoginModel)
         return AuthHelper.getToken()
