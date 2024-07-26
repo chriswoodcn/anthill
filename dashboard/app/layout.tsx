@@ -9,6 +9,8 @@ import { detectLanguage, getServerTranslations } from "@/i18n/server";
 import { I18nProvider } from "@/i18n/i18n-context";
 // custom
 import { withBasePath } from "@/lib";
+import ComposedProvider from "@/components/ComposedProvider";
+import configuraton, { PrimaryColors } from "@/configuration.mjs";
 
 export async function generateMetadata() {
   const { t } = await getServerTranslations();
@@ -32,7 +34,17 @@ export default async function RootLayout({
       </head>
       <body>
         <I18nProvider language={lng}>
-          <MantineProvider>{children}</MantineProvider>
+          <MantineProvider
+            theme={{
+              primaryColor: "anthill-primary",
+              fontFamily: configuraton.FontFamily.join(","),
+              colors: {
+                "anthill-primary": PrimaryColors as any,
+              },
+            }}
+          >
+            <ComposedProvider>{children}</ComposedProvider>
+          </MantineProvider>
         </I18nProvider>
       </body>
     </html>

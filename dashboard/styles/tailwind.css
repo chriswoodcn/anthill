@@ -1,6 +1,81 @@
+@import "./animate.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
+  /* 滚动条美化 */
+  ::-webkit-scrollbar {
+    @apply w-1 h-1;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+
+  .dark::-webkit-scrollbar-thumb,
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 rounded-full;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-white-8 dark:bg-black-8 font-nunito;
+  }
+}
+/* screen_loader */
+.anthill-screen_loader-instance {
+  @apply space-x-2 flex items-center;
+}
+.anthill-screen_loader-instance span {
+  @apply w-2 sm:w-4 inline-block bg-primary rounded-lg;
+  animation: screen_loader 1.2s ease infinite;
+}
+.anthill-screen_loader-instance span:nth-child(1) {
+  animation-delay: 0s;
+}
+.anthill-screen_loader-instance span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.anthill-screen_loader-instance span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.anthill-screen_loader-instance span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+.anthill-screen_loader-instance span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+.anthill-screen_loader-instance span:nth-child(6) {
+  animation-delay: 1s;
+}
+@keyframes screen_loader {
+  0%,
+  100% {
+    height: 20px;
+    @apply bg-primary-8;
+  }
+  50% {
+    height: 60px;
+    @apply bg-primary-2;
+  }
+}
+@media (min-width: 640px) {
+  @keyframes screen_loader {
+    0%,
+    100% {
+      height: 40px;
+      @apply bg-primary-8;
+    }
+    50% {
+      height: 120px;
+      @apply bg-primary-2;
+    }
+  }
 }
