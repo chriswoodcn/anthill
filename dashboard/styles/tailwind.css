@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 @layer components {
-  /* 滚动条美化 */
+  /* #region 滚动条美化*/
   ::-webkit-scrollbar {
     @apply w-1 h-1;
   }
@@ -28,7 +28,221 @@
   body {
     @apply bg-white-8 dark:bg-black-8 font-nunito;
   }
+  /* #endregion */
+
+  /* #region Buttons*/
+  .btn {
+    @apply relative flex items-center justify-center rounded-md border font-semibold shadow-lg outline-none transition duration-300 hover:shadow-none px-3 sm:px-5 py-1 sm:py-2 text-sm;
+  }
+  button[disabled] {
+    @apply cursor-not-allowed opacity-60;
+  }
+  .btn-lg {
+    @apply px-7 py-2.5 text-base;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+  .btn-click:active {
+    @apply opacity-60;
+  }
+
+  .btn-primary {
+    @apply border-primary bg-primary text-white shadow-primary/60;
+  }
+  .btn-outline-primary {
+    @apply border-primary text-primary shadow-none hover:bg-primary hover:text-white;
+  }
+
+  .btn-secondary {
+    @apply border-secondary bg-secondary text-white shadow-secondary/60;
+  }
+  .btn-outline-secondary {
+    @apply border-secondary text-secondary shadow-none hover:bg-secondary hover:text-white;
+  }
+
+  .btn-success {
+    @apply border-success bg-success text-white shadow-success/60;
+  }
+  .btn-outline-success {
+    @apply border-success text-success shadow-none hover:bg-success hover:text-white;
+  }
+
+  .btn-danger {
+    @apply border-danger bg-danger text-white shadow-danger/60;
+  }
+  .btn-outline-danger {
+    @apply border-danger text-danger shadow-none hover:bg-danger hover:text-white;
+  }
+
+  .btn-warning {
+    @apply border-warning bg-warning text-white shadow-warning/60;
+  }
+  .btn-outline-warning {
+    @apply border-warning text-warning shadow-none hover:bg-warning hover:text-white;
+  }
+
+  .btn-info {
+    @apply border-info bg-info text-white shadow-info/60;
+  }
+  .btn-outline-info {
+    @apply border-info text-info shadow-none hover:bg-info hover:text-white;
+  }
+
+  .btn-dark {
+    @apply border-dark bg-dark text-white shadow-dark/60;
+  }
+
+  .btn-outline-dark {
+    @apply border-dark text-dark shadow-none hover:bg-dark hover:text-white;
+  }
+
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary  to-[#EF1262] hover:from-[#EF1262]  hover:to-primary  text-white;
+  }
+
+  /* #endregion */
+
+  /* #region form表单*/
+  .form-required {
+    @apply after:content-['*'] after:ml-0.5 after:text-red-500;
+  }
+  .form-input,
+  .form-textarea,
+  .form-select,
+  .form-multiselect {
+    @apply w-full rounded-md border border-white/70 bg-white px-4 py-2 text-sm text-black !outline-none focus:border-primary focus:ring-transparent dark:border-black-8 dark:bg-black-7 dark:text-white-4 dark:focus:border-primary;
+  }
+
+  .form-input-lg,
+  .form-textarea-lg,
+  .form-select-lg,
+  .form-multiselect-lg {
+    @apply py-2.5 text-base;
+  }
+  .form-input-sm,
+  .form-textarea-sm,
+  .form-select-sm,
+  .form-multiselect-sm {
+    @apply py-1.5 text-xs;
+  }
+  form label {
+    @apply mb-1.5 block;
+  }
+  form label span {
+    @apply font-normal;
+  }
+  [dir="rtl"] select {
+    background-position: left 0.5rem center;
+  }
+  .has-error .tree-check-box,
+  .has-error .mantine-TextInput-input,
+  .has-error .mantine-Textarea-input,
+  .has-error .form-input,
+  .has-error .form-textarea,
+  .has-error .form-select,
+  .has-error .form-multiselect,
+  .has-error .multiselect__tags {
+    @apply border-danger  text-danger placeholder-danger focus:border-danger;
+  }
+  .has-error .form-label,
+  .has-error .form-help,
+  .has-error .form-icon,
+  .has-error .multiselect__placeholder {
+    @apply text-danger;
+  }
+  .has-error .multiselect__input {
+    @apply bg-white-9 !placeholder-danger/70;
+  }
+  .has-error .multiselect__tags:hover,
+  .has-error .form-checkbox {
+    @apply border-danger;
+  }
+
+  .has-success .form-input,
+  .has-success .form-textarea,
+  .has-success .form-select,
+  .has-success .form-multiselect,
+  .has-success .multiselect__tags {
+    @apply border-success text-success placeholder-success last:focus:border-success;
+  }
+  .has-success .form-label,
+  .has-success .form-help,
+  .has-success .form-icon,
+  .has-success .multiselect__placeholder {
+    @apply text-success;
+  }
+  .has-success .multiselect__input {
+    @apply bg-[#F7ECF0] !placeholder-success/70;
+  }
+  .has-success .multiselect__tags:hover {
+    @apply border-success;
+  }
+
+  /* checkbox & radio */
+  .form-radio,
+  .form-checkbox {
+    @apply h-5 w-5 cursor-pointer rounded border-2 border-white/70 bg-transparent text-primary !shadow-none !outline-none !ring-0 !ring-offset-0 checked:bg-[length:90%_90%] disabled:cursor-not-allowed disabled:bg-white-4 ltr:mr-1.5 rtl:ml-1.5
+        dark:border-[#253b5c] dark:checked:border-transparent dark:disabled:bg-[#1b2e4b];
+  }
+
+  .form-checkbox.outline-primary:checked {
+    @apply border-primary bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%234361ee' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-secondary:checked {
+    @apply border-secondary bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%23805dca' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-success:checked {
+    @apply border-success bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%2300ab55' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-danger:checked {
+    @apply border-danger bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%23e7515a' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-warning:checked {
+    @apply border-warning bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%23e2a03f' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-info:checked {
+    @apply border-info bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%232196f3' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+  .form-checkbox.outline-dark:checked {
+    @apply border-black-5 bg-transparent;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%233b3f5c' xmlns='http://www.w3.org/2000/svg'><path d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/></svg>");
+  }
+
+  .form-radio {
+    @apply rounded-full;
+  }
+
+  .form-radio.outline-primary:checked {
+    @apply border-primary bg-transparent bg-none;
+  }
+  .form-radio.outline-secondary:checked {
+    @apply border-secondary bg-transparent bg-none;
+  }
+  .form-radio.outline-success:checked {
+    @apply border-success bg-transparent bg-none;
+  }
+  .form-radio.outline-danger:checked {
+    @apply border-danger bg-transparent bg-none;
+  }
+  .form-radio.outline-warning:checked {
+    @apply border-warning bg-transparent bg-none;
+  }
+  .form-radio.outline-info:checked {
+    @apply border-info bg-transparent bg-none;
+  }
+  .form-radio.outline-dark:checked {
+    @apply border-dark bg-transparent bg-none;
+  }
+  /* #endregion */
 }
+
 /* screen_loader */
 .anthill-screen_loader-instance {
   @apply space-x-2 flex items-center;

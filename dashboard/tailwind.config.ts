@@ -1,6 +1,10 @@
+/** @type {import('tailwindcss').Config} */
 import { Config } from "tailwindcss";
 import { withBasePath, } from "./lib";
 import configuraton, { BlackColors, mixBlack, mixWhite, PrimaryColors, WhiteColors } from './configuration.mjs';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+
 const levelDefault = configuraton.Colors.DefaultLevel
 const config: Config = {
   darkMode: ["selector", "data-mantine-color-scheme"],
@@ -98,7 +102,30 @@ const config: Config = {
         "black-gray": mixWhite('#000000', 0.05)
       }
     },
+    //@ts-ignore
+    typography: ({ theme }) => ({
+      DEFAULT: {
+        css: {
+          '--tw-prose-invert-headings': theme('colors.white'),
+          '--tw-prose-invert-links': theme('colors.black'),
+          h1: { fontSize: '40px', marginBottom: '0.5rem', marginTop: 0 },
+          h2: { fontSize: '32px', marginBottom: '0.5rem', marginTop: 0 },
+          h3: { fontSize: '28px', marginBottom: '0.5rem', marginTop: 0 },
+          h4: { fontSize: '24px', marginBottom: '0.5rem', marginTop: 0 },
+          h5: { fontSize: '20px', marginBottom: '0.5rem', marginTop: 0 },
+          h6: { fontSize: '16px', marginBottom: '0.5rem', marginTop: 0 },
+          p: { marginBottom: '0.5rem' },
+          li: { margin: 0 },
+          img: { margin: 0 },
+        },
+      },
+    }),
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
+    require('@tailwindcss/typography'),
+  ],
 };
 export default config;

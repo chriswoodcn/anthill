@@ -9,7 +9,7 @@ import { detectLanguage, getServerTranslations } from "@/i18n/server";
 import { I18nProvider } from "@/i18n/i18n-context";
 // custom
 import { withBasePath } from "@/lib";
-import ComposedProvider from "@/components/ComposedProvider";
+import ComposedProvider from "@/components/compose/ComposedProvider";
 import configuraton, { PrimaryColors } from "@/configuration.mjs";
 
 export async function generateMetadata() {
