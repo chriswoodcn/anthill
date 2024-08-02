@@ -1,5 +1,5 @@
 cn.chriswood.anthill.infrastructure.web.WebConfig
-cn.chriswood.anthill.infrastructure.web.WebCorsMvcConfig
+cn.chriswood.anthill.infrastructure.web.WebCorsFilterConfig
 cn.chriswood.anthill.infrastructure.web.WebInvokeMvcConfig
 cn.chriswood.anthill.infrastructure.web.WebLocaleMvcConfig
 cn.chriswood.anthill.infrastructure.web.RepeatableFilterConfig
