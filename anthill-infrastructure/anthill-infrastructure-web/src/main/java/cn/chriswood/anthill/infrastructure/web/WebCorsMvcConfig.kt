@@ -25,8 +25,9 @@ class WebCorsMvcConfig : WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOriginPatterns("*")
             .allowCredentials(true)
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .maxAge(3600);
+            .allowedHeaders("*") // 允许的请求头类型
+            .allowedMethods("*") // 允许的请求方法类型
+            .maxAge(3600)
         log.debug(">>>>>>>>>> init WebCorsMvcConfig >>>>>>>>>>")
     }
 }
