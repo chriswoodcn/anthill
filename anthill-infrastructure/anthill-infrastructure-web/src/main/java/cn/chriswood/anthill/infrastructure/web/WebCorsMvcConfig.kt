@@ -25,7 +25,8 @@ class WebCorsMvcConfig : WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOriginPatterns("*")
             .allowCredentials(true)
-            .maxAge(3600)
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .maxAge(3600);
         log.debug(">>>>>>>>>> init WebCorsMvcConfig >>>>>>>>>>")
     }
 }
