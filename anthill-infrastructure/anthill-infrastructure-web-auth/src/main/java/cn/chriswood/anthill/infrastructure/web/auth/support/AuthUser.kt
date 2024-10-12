@@ -27,6 +27,11 @@ interface AuthUser<T> {
     var username: String?
 
     /**
+     * 登录设备
+     */
+    var device: String?
+
+    /**
      * 用户数据体
      */
     var instance: T

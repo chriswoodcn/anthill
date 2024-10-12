@@ -1,5 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.auth
 
+import StpKit
 import cn.chriswood.anthill.infrastructure.web.auth.support.AuthProperties
 import cn.dev33.satoken.`fun`.SaFunction
 import cn.dev33.satoken.interceptor.SaInterceptor
@@ -31,15 +32,36 @@ class AuthConfig(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         val saInterceptor = SaInterceptor {
-            // val allUrlHandler: AllUrlHandler = SpringUtil.getBean(AllUrlHandler::class.java)
-            // 登录验证 -- 排除多个路径
+
             SaRouter
                 // 获取所有的web路径
                 .match("/**")
                 .notMatch(authProperties.excludes)
                 // 对未排除的路径进行检查
                 .check(SaFunction {
-                    StpUtil.checkLogin()
+                    StpKit.Default.checkLogin()
+                    if (log.isDebugEnabled) {
+                        log.info("剩余有效时间: {}", StpUtil.getTokenTimeout());
+                        log.info("临时有效时间: {}", StpUtil.getTokenActiveTimeout());
+                    }
+                })
+
+            SaRouter
+                // 获取所有的web路径
+                .match("/backend/**")
+                // 对未排除的路径进行检查
+                .check(SaFunction {
+                    StpKit.SysUser.checkLogin()
+                    if (log.isDebugEnabled) {
+                        log.info("剩余有效时间: {}", StpUtil.getTokenTimeout());
+                        log.info("临时有效时间: {}", StpUtil.getTokenActiveTimeout());
+                    }
+                })
+
+            SaRouter.match("/app/**")
+                // 对未排除的路径进行检查
+                .check(SaFunction {
+                    StpKit.AppUser.checkLogin()
                     if (log.isDebugEnabled) {
                         log.info("剩余有效时间: {}", StpUtil.getTokenTimeout());
                         log.info("临时有效时间: {}", StpUtil.getTokenActiveTimeout());

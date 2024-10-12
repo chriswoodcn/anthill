@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web.annotation.log
 
-enum class OperateType(code: String) {
+enum class OperateType(val code: String) {
     /**
      * 其他
      */

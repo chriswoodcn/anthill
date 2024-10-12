@@ -1,6 +1,8 @@
 package cn.chriswood.anthill.infrastructure.core.utils
 
 import cn.hutool.core.convert.Convert
+import cn.hutool.core.net.NetUtil
+import cn.hutool.core.util.ArrayUtil
 import cn.hutool.extra.servlet.JakartaServletUtil
 import cn.hutool.http.HttpStatus
 import jakarta.servlet.ServletRequest
@@ -89,21 +91,21 @@ object ServletUtil {
     /**
      * 获取request
      */
-    private fun getRequest(): HttpServletRequest? {
+    fun getRequest(): HttpServletRequest? {
         return getRequestAttributes()?.request
     }
 
     /**
      * 获取response
      */
-    private fun getResponse(): HttpServletResponse? {
+    fun getResponse(): HttpServletResponse? {
         return getRequestAttributes()?.response
     }
 
     /**
      * 获取session
      */
-    private fun getSession(): HttpSession? {
+    fun getSession(): HttpSession? {
         return getRequest()?.session
     }
 
@@ -192,4 +194,33 @@ object ServletUtil {
         return URLDecoder.decode(str, StandardCharsets.UTF_8)
     }
 
+    fun getClientIP(request: HttpServletRequest, vararg otherHeaderNames: String): String {
+        var headers = arrayOf(
+            "X-Forwarded-For",
+            "X-Real-IP",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_X_FORWARDED_FOR"
+        )
+        if (ArrayUtil.isNotEmpty(otherHeaderNames)) {
+            headers = headers.plus(otherHeaderNames)
+        }
+        return getClientIPByHeader(request, *headers)
+    }
+
+    private fun getClientIPByHeader(request: HttpServletRequest, vararg headerNames: String): String {
+        val var3: Array<out String> = headerNames
+        val var4 = headerNames.size
+        var ip: String?
+        for (var5 in 0..<var4) {
+            val header = var3[var5]
+            ip = request.getHeader(header)
+            if (!NetUtil.isUnknown(ip)) {
+                return NetUtil.getMultistageReverseProxyIp(ip)
+            }
+        }
+        ip = request.remoteAddr
+        return NetUtil.getMultistageReverseProxyIp(ip)
+    }
 }

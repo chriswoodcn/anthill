@@ -13,22 +13,15 @@ import org.springframework.stereotype.Component
 class StandardLogAppender : LogAppender {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
     override fun print(joinPoint: JoinPoint, annotation: Log, e: Exception?, res: Any?) {
-        if (e == null)
-            log.debug(
-                "[MODULE:{}] [USER:{}] [OPERATE:{}] res:{}",
-                annotation.module,
-                annotation.user,
-                annotation.operate.name,
-                res
-            )
-        else
-            log.error(
-                "[MODULE:{}] [USER:{}] [OPERATE:{}] error:{}",
-                annotation.module,
-                annotation.user,
-                annotation.operate.name,
-                e.message
-            )
+        log.debug(
+            "[MODULE:{}] [USER:{}] [OPERATE:{}] error:{} res:{}",
+            annotation.module,
+            annotation.user,
+            annotation.operate.name,
+            e,
+            res
+        )
     }
 }
