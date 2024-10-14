@@ -4,7 +4,7 @@
 lib_hutool = "5.8.29"
 lib_spring_doc = "2.4.0"
 lib_redisson = "3.31.0"
-lib_satoken = "1.37.0"
+lib_satoken = "1.39.0"
 lib_sms4j = "3.1.1"
 lib_anthill_infrastructure = "1.2.7"
 lib_mail_angus = "2.0.2"

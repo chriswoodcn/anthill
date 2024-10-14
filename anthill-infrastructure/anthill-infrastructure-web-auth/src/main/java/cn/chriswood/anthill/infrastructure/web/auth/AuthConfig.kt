@@ -35,20 +35,7 @@ class AuthConfig(
 
             SaRouter
                 // 获取所有的web路径
-                .match("/**")
-                .notMatch(authProperties.excludes)
-                // 对未排除的路径进行检查
-                .check(SaFunction {
-                    StpKit.Default.checkLogin()
-                    if (log.isDebugEnabled) {
-                        log.info("剩余有效时间: {}", StpUtil.getTokenTimeout());
-                        log.info("临时有效时间: {}", StpUtil.getTokenActiveTimeout());
-                    }
-                })
-
-            SaRouter
-                // 获取所有的web路径
-                .match("/backend/**")
+                .match(authProperties.sysUserCheckPath)
                 // 对未排除的路径进行检查
                 .check(SaFunction {
                     StpKit.SysUser.checkLogin()
@@ -58,7 +45,7 @@ class AuthConfig(
                     }
                 })
 
-            SaRouter.match("/app/**")
+            SaRouter.match(authProperties.appUserCheckPath)
                 // 对未排除的路径进行检查
                 .check(SaFunction {
                     StpKit.AppUser.checkLogin()

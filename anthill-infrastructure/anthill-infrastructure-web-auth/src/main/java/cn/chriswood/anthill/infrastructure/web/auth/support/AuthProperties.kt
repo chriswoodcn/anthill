@@ -8,6 +8,17 @@ data class AuthProperties(
      * 开关
      */
     val enabled: Boolean?,
+
+    /**
+     * 系统用户登录检查路径
+     */
+    val sysUserCheckPath: String = "/backend/**",
+
+    /**
+     * APP用户登录检查路径
+     */
+    val appUserCheckPath: String = "/app/**",
+
     /**
      * 需要排除鉴权的路径
      */
