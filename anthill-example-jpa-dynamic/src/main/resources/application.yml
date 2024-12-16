@@ -1,0 +1,86 @@
+anthill:
+  application:
+    name: anthill-example-jpa-dynamic
+    version: 0.0.1-SNAPSHOT
+  jpa:
+    enabled: true
+    type: dynamic
+    dynamic:
+      primary:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.2.188:3307/anthill_example_jpa?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: rootroot
+        query: SELECT 1 FROM DUAL
+      slave1:
+        driver: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.2.188:3307/anthill_example_jpa_slave?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+        username: root
+        password: rootroot
+        query: SELECT 1 FROM DUAL
+  web:
+    xss:
+      enabled: false
+    auth:
+      excludes:
+        - /
+        # \u9759\u6001\u8D44\u6E90
+        - /*.html
+        - /**/*.html
+        - /**/*.css
+        - /**/*.js
+        # \u516C\u5171\u8DEF\u5F84
+        - /favicon.ico
+        # swagger \u6587\u6863\u914D\u7F6E
+        - /*/api-docs
+        - /*/api-docs/**
+        # actuator \u76D1\u63A7\u914D\u7F6E
+        - /actuator
+        - /actuator/**
+  swagger:
+    title: ${anthill.application.name}
+    version: ${anthill.application.version}
+    description: ${anthill.application.name}
+    contact:
+      name: chriswoodcn
+      email: chriswoodcn@aliyun.com
+
+logging:
+  level:
+    cn.chriswood.anthill: debug
+  config: classpath:logback-spring.xml
+  charset:
+    file: UTF-8
+server:
+  port: 8081
+spring:
+  # \u8D44\u6E90\u4FE1\u606F
+  messages:
+    # \u56FD\u9645\u5316\u8D44\u6E90\u6587\u4EF6\u8DEF\u5F84
+    basename: i18n/messages
+  #    fix sa-token SpringBoot 3.x \u8DEF\u7531\u62E6\u622A\u9274\u6743\u62A5\u9519
+  #    No more pattern data allowed after {*...} or ** pattern element
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+springdoc:
+  #  default-flat-param-object: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: basic
+      display-name: basic
+      packages-to-scan:
+        - cn.chriswood.anthill.example.jpa.dynamic.modules.basic
+    - group: demo
+      display-name: demo
+      packages-to-scan:
+        - cn.chriswood.anthill.example.jpa.dynamic.modules.demo
+
+

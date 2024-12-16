@@ -16,7 +16,7 @@ class WebLocaleMvcConfig : WebMvcConfigurer {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @Bean
+    @Bean(name = ["anthillLocaleResolver"])
     fun localeResolver(): LocaleResolver {
         return WebLocaleResolver()
     }

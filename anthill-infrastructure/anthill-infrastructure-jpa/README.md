@@ -49,7 +49,7 @@ anthill:
         password: rootroot
         query: SELECT 1 FROM DUAL
         dialect: org.hibernate.dialect.MySQLDialect  #多数据源需要配置数据库方言
-        package-scan: cn.chriswood.anthill.example.persistence.other  #多数据源需要制定扫描包名
+        package-scan: cn.chriswood.anthill.example.persistence.secondarydary  #多数据源需要制定扫描包名
 
 #使用多数据源  还需在应用主入口加上下面的注解
 #@SpringBootApplication(exclude = [DataSourceAutoConfiguration::class]) 排除自动数据源的注入

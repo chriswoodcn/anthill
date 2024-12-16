@@ -12,5 +12,6 @@ rootDir.listFiles()?.filter {
         findProject(":anthill-infrastructure:${pit.name}")?.name = pit.name
     }
 }
-include("anthill-example")
-include("anthill-reactive-example")
+include("anthill-example-jpa-multi")
+include("anthill-example-jpa-dynamic")
+//include("anthill-reactive-example")

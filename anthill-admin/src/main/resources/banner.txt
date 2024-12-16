@@ -1,9 +1,0 @@
-Application Name: ${anthill.application.name}
-Application Version: ${anthill.application.version}
-Spring Boot Version: ${spring-boot.version}
-___________               ___________               ___________
-\__    ___/____    ____   \__    ___/____    ____   \__    ___/___   ____
-  |    |  \__  \  /  _ \    |    |  \__  \  /  _ \    |    |_/ __ \_/ ___\
-  |    |   / __ \(  <_> )   |    |   / __ \(  <_> )   |    |\  ___/\  \___
-  |____|  (____  /\____/    |____|  (____  /\____/    |____| \___  >\___  >
-               \/                        \/                      \/     \/
