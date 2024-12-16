@@ -18,7 +18,6 @@ class DemoController(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-
     @Operation(summary = "请求jpa数据")
     @GetMapping("/list_primary")
     @DDS

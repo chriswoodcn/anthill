@@ -14,4 +14,5 @@ rootDir.listFiles()?.filter {
 }
 include("anthill-example-jpa-multi")
 include("anthill-example-jpa-dynamic")
+include("anthill-example-flex")
 //include("anthill-reactive-example")

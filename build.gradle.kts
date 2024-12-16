@@ -74,11 +74,14 @@ subprojects {
     }
     kotlin {
         compilerOptions {
-            freeCompilerArgs.addAll("-Xjsr305=strict")
+            freeCompilerArgs.addAll(
+                "-Xjsr305=strict",
+                "-Xjvm-default=all"
+            )
         }
     }
 
-    if (project.projectDir.name.equals("anthill-example")) {
+    if (project.projectDir.name.startsWith("anthill-example-")) {
         apply {
             plugin(pLibs.plugins.kotlin.kapt.get().pluginId)
         }

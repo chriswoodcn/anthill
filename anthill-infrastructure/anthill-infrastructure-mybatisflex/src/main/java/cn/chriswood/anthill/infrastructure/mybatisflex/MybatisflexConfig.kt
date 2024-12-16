@@ -9,7 +9,6 @@ import com.mybatisflex.spring.boot.MyBatisFlexCustomizer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 
-
 @AutoConfiguration
 class MybatisflexConfig : MyBatisFlexCustomizer {
 
