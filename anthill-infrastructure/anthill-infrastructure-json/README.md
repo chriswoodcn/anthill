@@ -17,7 +17,7 @@ org.springframework.boot:spring-boot-autoconfigure:$springboot_version
 
 ~~~yml
 anthill:
-  jackson:
-    enabled: true #默认开启自定义Jackson配置
+    jackson:
+        enabled: true #默认开启自定义Jackson配置
 ~~~
 
