@@ -22,8 +22,8 @@ class MybatisflexConfig : MyBatisFlexCustomizer {
         AuditManager.setAuditEnable(true)
         //设置 SQL 审计收集器
         AuditManager.setMessageCollector { auditMessage: AuditMessage ->
-            log.info(
-                "[mybatis-flex-sql] >>>>>>>>>> {},{}ms", auditMessage.getFullSql(), auditMessage.elapsedTime
+            log.debug(
+                "[flex-sql spend {}ms] >>>>>>>>>> {} ", auditMessage.elapsedTime, auditMessage.getFullSql(),
             )
         }
     }

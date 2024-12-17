@@ -32,7 +32,7 @@ tasks.create("bootRunMainClassName") {
 }
 
 dependencies {
-    kapt("com.mybatis-flex:mybatis-flex-processor:1.9.9")
+//    kapt("com.mybatis-flex:mybatis-flex-processor:1.9.9")
 
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
