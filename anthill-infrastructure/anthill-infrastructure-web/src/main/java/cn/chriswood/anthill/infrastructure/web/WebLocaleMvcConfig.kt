@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web
 
-import cn.chriswood.anthill.infrastructure.json.JacksonConfig
+import cn.chriswood.anthill.infrastructure.json.JsonConfig
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @AutoConfiguration
-@AutoConfigureAfter(JacksonConfig::class)
+@AutoConfigureAfter(JsonConfig::class)
 class WebLocaleMvcConfig : WebMvcConfigurer {
 
     private val log = LoggerFactory.getLogger(javaClass)

@@ -1,13 +1,9 @@
 package cn.chriswood.anthill.infrastructure.json.utils
 
 import cn.chriswood.anthill.infrastructure.json.support.BigNumberSerializer
-import cn.chriswood.anthill.infrastructure.json.support.TranslationSerializerModifier
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -18,16 +14,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-
 
 object JacksonUtil {
 
@@ -36,44 +28,18 @@ object JacksonUtil {
     /**
      * 默认日期时间格式
      */
-    private const val dateTimeFormat = "yyyy-MM-dd HH:mm:ss"
+    const val dateTimeFormat = "yyyy-MM-dd HH:mm:ss"
 
     /**
      * 默认日期格式
      */
-    private const val dateFormat = "yyyy-MM-dd"
+    const val dateFormat = "yyyy-MM-dd"
 
     /**
      * 默认时间格式
      */
-    private const val timeFormat = "HH:mm:ss"
+    const val timeFormat = "HH:mm:ss"
 
-    interface ApplyJacksonConfigurations {
-        fun apply(builder: Jackson2ObjectMapperBuilder)
-    }
-
-    object DefaultJacksonConfigurationsApplier : ApplyJacksonConfigurations {
-        override fun apply(builder: Jackson2ObjectMapperBuilder) {
-            builder.serializers()
-            builder.serializationInclusion(JsonInclude.Include.ALWAYS)
-            builder.failOnUnknownProperties(false)
-            builder.failOnEmptyBeans(false)
-            //关闭一些序列化特性
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            builder.featuresToDisable(SerializationFeature.FAIL_ON_SELF_REFERENCES)
-            //关闭一些反序列化特性
-            builder.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            builder.simpleDateFormat(dateTimeFormat)
-            builder.timeZone(TimeZone.getDefault())
-
-            builder.postConfigurer {
-                it.setSerializerFactory(
-                    it.serializerFactory
-                        .withSerializerModifier(TranslationSerializerModifier())
-                )
-            }
-        }
-    }
 
     fun buildJavaTimeModule(): SimpleModule {
         // JSR 310日期时间处理
@@ -121,25 +87,14 @@ object JacksonUtil {
         return bigNumberModule
     }
 
-    fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
-        //        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"))
-        return jackson2ObjectMapperBuilderCustomizer(null)
-    }
-
-    fun jackson2ObjectMapperBuilderCustomizer(applier: ApplyJacksonConfigurations?): Jackson2ObjectMapperBuilderCustomizer {
-        return Jackson2ObjectMapperBuilderCustomizer { builder: Jackson2ObjectMapperBuilder ->
-            //builder配置
-            builder.modules(buildJavaTimeModule(), buildBigNumberModule())
-            applier?.apply(builder) ?: DefaultJacksonConfigurationsApplier.apply(builder)
-        }
-    }
-
     var objectMapper: ObjectMapper
 
     init {
-        val builder = Jackson2ObjectMapperBuilder()
-        jackson2ObjectMapperBuilderCustomizer().customize(builder)
-        objectMapper = builder.build()
+        objectMapper = ObjectMapper().registerModules(buildJavaTimeModule(), buildBigNumberModule())
+    }
+
+    fun replaceObjectMapper(om: ObjectMapper) {
+        objectMapper = om
     }
 
     fun bean2string(o: Any?): String? {

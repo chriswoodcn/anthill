@@ -35,7 +35,7 @@ class TranslateSerializer : JsonSerializer<Any?>(), ContextualSerializer {
         if (property != null) {
             val annotation = property.getAnnotation(Translate::class.java) ?: null
             if (annotation != null) {
-                this.annotation = annotation;
+                this.annotation = annotation
                 return this
             }
         }

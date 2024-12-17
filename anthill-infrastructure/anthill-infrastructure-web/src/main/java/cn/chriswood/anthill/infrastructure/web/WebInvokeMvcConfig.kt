@@ -1,6 +1,6 @@
 package cn.chriswood.anthill.infrastructure.web
 
-import cn.chriswood.anthill.infrastructure.json.JacksonConfig
+import cn.chriswood.anthill.infrastructure.json.JsonConfig
 import cn.chriswood.anthill.infrastructure.web.support.WebInvokeTimeInterceptor
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @AutoConfiguration
-@AutoConfigureAfter(JacksonConfig::class)
+@AutoConfigureAfter(JsonConfig::class)
 @ConditionalOnProperty(
     prefix = "anthill.web.invoke",
     name = ["enabled"],

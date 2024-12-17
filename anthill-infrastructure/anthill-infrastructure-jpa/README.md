@@ -2,27 +2,40 @@
 
 提供框架jpa动态数据源和多数据源配置支持
 
+## 需要依赖的包
+
+查看当前anthill的springboot版本 $springboot_version
+查看当前anthill的kotlin版本 $kotlin_version
+
+```
+org.springframework.boot:spring-boot-starter-data-jpa:$springboot_version
+org.springframework.boot:spring-boot-starter-aop:$springboot_version
+com.zaxxer:HikariCP(版本根据当前springboot版本的dependency_version)
+org.springframework.boot:spring-boot-autoconfigure:$springboot_version
+org.jetbrains.kotlin:kotlin-reflect:$kotlin_version
+```
+
 ## Configurations
 
 ~~~yml
 ---
 anthill:
-  jpa:
-    enabled: true #开启jpa
-    type: dynamic #动态数据源
-    dynamic:
-      primary: #主数据源必须primary
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
-      slave:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
+    jpa:
+        enabled: true #开启jpa
+        type: dynamic #动态数据源
+        dynamic:
+            primary: #主数据源必须primary
+                driver: com.mysql.cj.jdbc.Driver
+                url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+                username: root
+                password: rootroot
+                query: SELECT 1 FROM DUAL
+            slave:
+                driver: com.mysql.cj.jdbc.Driver
+                url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+                username: root
+                password: rootroot
+                query: SELECT 1 FROM DUAL
 
 #使用动态数据源  还需在应用主入口加上下面的注解
 #@SpringBootApplication(exclude = [DataSourceAutoConfiguration::class]) 排除自动数据源的注入
@@ -31,25 +44,25 @@ anthill:
 
 ---
 anthill:
-  jpa:
-    type: multi #多数据源
-    multi:
-      primary:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
-        dialect: org.hibernate.dialect.MySQLDialect  #多数据源需要配置数据库方言
-        package-scan: cn.chriswood.anthill.example.persistence.primary  #多数据源需要制定扫描包名
-      second:
-        driver: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-        username: root
-        password: rootroot
-        query: SELECT 1 FROM DUAL
-        dialect: org.hibernate.dialect.MySQLDialect  #多数据源需要配置数据库方言
-        package-scan: cn.chriswood.anthill.example.persistence.secondarydary  #多数据源需要制定扫描包名
+    jpa:
+        type: multi #多数据源
+        multi:
+            primary:
+                driver: com.mysql.cj.jdbc.Driver
+                url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+                username: root
+                password: rootroot
+                query: SELECT 1 FROM DUAL
+                dialect: org.hibernate.dialect.MySQLDialect  #多数据源需要配置数据库方言
+                package-scan: cn.chriswood.anthill.example.persistence.primary  #多数据源需要制定扫描包名
+            second:
+                driver: com.mysql.cj.jdbc.Driver
+                url: jdbc:mysql://127.0.0.1:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
+                username: root
+                password: rootroot
+                query: SELECT 1 FROM DUAL
+                dialect: org.hibernate.dialect.MySQLDialect  #多数据源需要配置数据库方言
+                package-scan: cn.chriswood.anthill.example.persistence.secondarydary  #多数据源需要制定扫描包名
 
 #使用多数据源  还需在应用主入口加上下面的注解
 #@SpringBootApplication(exclude = [DataSourceAutoConfiguration::class]) 排除自动数据源的注入

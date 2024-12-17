@@ -2,14 +2,15 @@
 
 提供框架web鉴权支持，基于satoken jwt redis
 
-## Module Dependencies
+## 需要依赖的包
 
-~~~
-1.anthill-infrastructure-core
-2.anthill-infrastructure-json
-3.anthill-infrastructure-redis
-4.anthill-infrastructure-web
-~~~
+查看当前anthill的springboot版本 $springboot_version
+查看当前anthill的kotlin版本 $kotlin_version
+
+```
+org.springframework.boot:spring-boot-autoconfigure:$springboot_version
+org.springframework.boot:spring-boot-starter-web:$springboot_version
+```
 
 ## Configurations
 

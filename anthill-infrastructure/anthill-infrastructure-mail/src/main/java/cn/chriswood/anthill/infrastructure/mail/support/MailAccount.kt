@@ -92,7 +92,7 @@ class MailAccount : Serializable {
     /**
      * 发送方，遵循RFC-822标准
      */
-    var from: String? = null
+    lateinit var from: String
 
     fun setFrom(from: String): MailAccount {
         this.from = from

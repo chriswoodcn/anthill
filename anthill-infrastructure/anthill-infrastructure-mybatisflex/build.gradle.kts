@@ -5,7 +5,6 @@ dependencies {
     // mybatis-flex官方文档   https://mybatis-flex.com/zh/intro/what-is-mybatisflex.html
     api("com.mybatis-flex:mybatis-flex-spring-boot3-starter:1.9.9")
     api("com.zaxxer:HikariCP")
-    compileOnly("org.springframework:spring-web")
     compileOnly("org.springframework.boot:spring-boot-starter-aop")
     compileOnly("org.jetbrains.kotlin:kotlin-reflect")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
