@@ -23,7 +23,7 @@ object MailPool {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val mailAccounts: MutableCollection<EnhanceMailAccount> = mutableListOf()
+    private val mailAccounts: MutableMap<String, EnhanceMailAccount> = mutableMapOf()
 
     private var hasFetchBeans = false
 
@@ -41,36 +41,35 @@ object MailPool {
     }
 
     fun addMailAccount(account: EnhanceMailAccount) {
-        if (mailAccounts.isNotEmpty()) {
-            val exists = mailAccounts.map { it.mailAccount.user!! }
-            if (account.mailAccount.user !in exists) mailAccounts + account
-        } else {
-            mailAccounts + account
-        }
+        mailAccounts[account.mailAccount.from] = account
     }
 
     fun addMailAccounts(accounts: Collection<EnhanceMailAccount>) {
-        if (mailAccounts.isNotEmpty()) {
-            val exists = mailAccounts.map { it.mailAccount.user!! }
-            accounts.forEach {
-                if (it.mailAccount.user !in exists) mailAccounts + it
-            }
-        } else {
-            mailAccounts.addAll(accounts)
+        accounts.forEach {
+            mailAccounts[it.mailAccount.from] = it
         }
     }
 
-    fun getOneAvailableMailAccount(): MailPool {
+    fun getAvailableMailAccount(key: String?): MailPool {
         if (!hasFetchBeans && mailAccounts.isEmpty()) {
             init()
         }
-        log.debug("[MailPool] [getOneAvailableMailAccount] mailAccounts.size: {}, mailAccounts.users: {}",
+        log.debug(
+            "[MailPool] [getOneAvailableMailAccount] mailAccounts.size: {}, mailAccounts.keys: {}",
             mailAccounts.size,
-            mailAccounts.map { it.mailAccount.user!! })
+            mailAccounts.keys
+        )
         if (mailAccounts.isEmpty()) {
             throw MailException("mail account pool is empty")
         }
-        val filtered = mailAccounts.filter {
+        if (!key.isNullOrBlank()) {
+            val account = mailAccounts[key]
+            if (account != null) {
+                this.availableEnhanceMailAccount.set(account)
+                return this
+            }
+        }
+        val filtered = mailAccounts.values.filter {
             !(it.sendCount >= it.limitCount && it.limitCount != -1)
         }
         val sorted = filtered.sortedBy { it.sendCount }

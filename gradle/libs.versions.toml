@@ -13,9 +13,9 @@ lib_aliyun_core = "4.7.0"
 lib_aliyun_sts = "3.1.2"
 lib_nashorn_js = "15.4"
 lib_phonenumber = "8.13.40"
-plugin_spring_boot = "3.2.8"
+plugin_spring_boot = "3.2.12"
 plugin_spring_dependency = "1.1.6"
-plugin_kotlin = "1.9.24"
+plugin_kotlin = "1.9.25"
 
 
 #在libraries代码块中，定义依赖项

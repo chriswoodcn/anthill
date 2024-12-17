@@ -2,11 +2,14 @@
 
 提供框架sms短信服务支持
 
-## Module Dependencies
+## 需要依赖的包
 
-~~~
-1.anthill-infrastructure-redis 非必需
-~~~
+查看当前anthill的springboot版本 $springboot_version
+查看当前anthill的kotlin版本 $kotlin_version
+
+```
+org.springframework.boot:spring-boot-autoconfigure:$springboot_version
+```
 
 ## Configurations
 

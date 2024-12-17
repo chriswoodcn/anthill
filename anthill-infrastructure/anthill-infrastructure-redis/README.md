@@ -2,12 +2,14 @@
 
 提供框架redis支持，底层依赖redisson
 
-## Module Dependencies
+## 需要依赖的包
 
-~~~
-1.anthill-infrastructure-core
-2.anthill-infrastructure-json
-~~~
+查看当前anthill的springboot版本 $springboot_version
+查看当前anthill的kotlin版本 $kotlin_version
+
+```
+org.springframework.boot:spring-boot-autoconfigure:$springboot_version
+```
 
 ## Configurations
 
