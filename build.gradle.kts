@@ -1,42 +1,50 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 allprojects {
-    ext {
-        set("publishReleasesRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-release-8bpQtr/")
-        set("publishSnapshotsRepoUrl", "https://packages.aliyun.com/maven/repository/2138380-snapshot-3ojMOB/")
-        set("publishUser", findProperty("ali.user") as String)
-        set("publishPass", findProperty("ali.pass") as String)
-    }
+    val aliUsername: String by extra.properties
+    val aliPassword: String by extra.properties
+    val aliReleasesUrl: String by extra.properties
+    val aliSnapshotUrl: String by extra.properties
+    val appGroup : String by extra.properties
+    val appVersion : String by extra.properties
     repositories {
         mavenLocal()
         maven {
-            name = "aliyun-public"; url = uri("https://maven.aliyun.com/repository/public/")
-        }
-        maven {
-            name = "aliyun-central"; url = uri("https://maven.aliyun.com/repository/central")
+            credentials {
+                username = aliUsername
+                password = aliPassword
+            }
+            url = uri(aliReleasesUrl)
         }
         maven {
             credentials {
-                username = project.ext["publishUser"] as String
-                password = project.ext["publishPass"] as String
+                username = aliUsername
+                password = aliPassword
             }
-            url = uri(project.ext["publishReleasesRepoUrl"] as String)
+            url = uri(aliSnapshotUrl)
         }
-        maven {
-            credentials {
-                username = project.ext["publishUser"] as String
-                password = project.ext["publishPass"] as String
-            }
-            url = uri(project.ext["publishSnapshotsRepoUrl"] as String)
-        }
-        mavenCentral()
     }
     buildscript {
         repositories {
-            maven { name = "aliyun-gradle-plugin"; url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
-            maven { name = "M2"; url = uri("https://plugins.gradle.org/m2/") }
+            mavenLocal()
+            maven {
+                credentials {
+                    username = aliUsername
+                    password = aliPassword
+                }
+                url = uri(aliReleasesUrl)
+            }
+            maven {
+                credentials {
+                    username = aliUsername
+                    password = aliPassword
+                }
+                url = uri(aliSnapshotUrl)
+            }
         }
     }
-    group = findProperty("app.group") as String
-    version = findProperty("app.version") as String
+    group = appGroup
+    version = appVersion
 }
 
 plugins {
@@ -52,6 +60,14 @@ plugins {
 
 val pLibs = libs
 subprojects {
+
+    val aliUsername: String by extra.properties
+    val aliPassword: String by extra.properties
+    val aliReleasesUrl: String by extra.properties
+    val aliSnapshotUrl: String by extra.properties
+    val appGroup : String by extra.properties
+    val appVersion : String by extra.properties
+
     apply {
         plugin(pLibs.plugins.spring.boot.get().pluginId)
         plugin(pLibs.plugins.spring.dependency.get().pluginId)
@@ -67,17 +83,12 @@ subprojects {
         annotation("cn.chriswood.anthill.infrastructure.core.annotation.AllOpen")
     }
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
-    kotlin {
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                "-Xjsr305=strict",
-                "-Xjvm-default=all"
-            )
+    java.sourceCompatibility = JavaVersion.VERSION_17
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
+            jvmTarget = "17"
         }
     }
 
@@ -114,13 +125,11 @@ subprojects {
                 }
             }
             repositories {
-                val releasesRepoUrl = uri(project.ext["publishReleasesRepoUrl"] as String)
-                val snapshotsRepoUrl = uri(project.ext["publishSnapshotsRepoUrl"] as String)
                 maven {
-                    url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                    url = if (version.toString().endsWith("SNAPSHOT")) uri(aliSnapshotUrl) else uri(aliReleasesUrl)
                     credentials {
-                        username = project.ext["publishUser"] as String
-                        password = project.ext["publishPass"] as String
+                        username = aliUsername
+                        password = aliPassword
                     }
                 }
                 mavenLocal()

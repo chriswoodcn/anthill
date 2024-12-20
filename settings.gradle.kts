@@ -1,4 +1,5 @@
-rootProject.name = "anthill"
+val appName: String by extra.properties
+rootProject.name = appName
 
 println("gradle构建生命周期>>>>>>>>>>     文件=settings.gradle     阶段=initialization phase")
 rootDir.listFiles()?.filter {
