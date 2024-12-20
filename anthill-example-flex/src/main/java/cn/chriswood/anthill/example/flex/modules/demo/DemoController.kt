@@ -3,6 +3,7 @@ package cn.chriswood.anthill.example.flex.modules.demo
 import cn.chriswood.anthill.example.mybatisflex.dto.TUserDs1Dto
 import cn.chriswood.anthill.example.mybatisflex.dto.TUserDs2Dto
 import cn.chriswood.anthill.infrastructure.web.base.R
+import com.mybatisflex.core.query.QueryChain
 import com.mybatisflex.kotlin.extensions.db.query
 import com.mybatisflex.kotlin.extensions.kproperty.eq
 import io.swagger.v3.oas.annotations.Operation
@@ -35,6 +36,17 @@ class DemoController {
         val accountList: List<TUserDs2Dto> = query {
             where(TUserDs1Dto::userId.eq(1))
         }
-        return R.ok(accountList)
+        val one = QueryChain
+            .of(TUserDs2Dto::class.java)
+            .select(
+                TUserDs2Dto::userId,
+                TUserDs2Dto::username
+            )
+            .leftJoin(TUserDs1Dto::class.java)
+            .on(TUserDs2Dto::userId.eq(TUserDs1Dto::userId))
+            .where(TUserDs1Dto::userId.eq(1))
+            .limit(0, 1)
+            .one()
+        return R.ok(listOf(one))
     }
 }

@@ -1,10 +1,30 @@
 anthill:
   application:
-    name: anthill-example-flex
+    name: anthill-example-jpa-multi
     version: 0.0.1-SNAPSHOT
   mongo:
     enabled: false
     type: single
+  mail:
+    account:
+      - host: hwsmtp.exmail.qq.com
+        port: 465
+        user: project-dev@taotaozn.com
+        pass: TAOtao0519@
+        auth: true
+        from: project-dev@taotaozn.com
+        ssl-enable: true
+        starttls-enable: true
+        limit-count: 200
+      - host: smtp.gmail.com
+        port: 465
+        user: taochenzn@gmail.com
+        pass: uhvjsorhtnqmpish
+        auth: true
+        from: taochenzn@gmail.com
+        ssl-enable: true
+        starttls-enable: true
+        limit-count: 100
   aliyun-oss-sts:
     enabled: true
     oss:
@@ -20,40 +40,23 @@ anthill:
         access-key-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-arn: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         role-session-name: anthill-example
-  #  redisson:
-  #    enabled: true
-  #    keyPrefix: ${anthill.application.name}
-  #    # \u5355\u8282\u70B9\u914D\u7F6E
-  #    singleServerConfig:
-  #      # \u5BA2\u6237\u7AEF\u540D\u79F0
-  #      clientName: ${anthill.application.name}
-  #      # \u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5\u6570
-  #      connectionMinimumIdleSize: 8
-  #      # \u8FDE\u63A5\u6C60\u5927\u5C0F
-  #      connectionPoolSize: 32
-  #      # \u8FDE\u63A5\u7A7A\u95F2\u8D85\u65F6\uFF0C\u5355\u4F4D\uFF1A\u6BEB\u79D2
-  #      idleConnectionTimeout: 10000
-  #      # \u547D\u4EE4\u7B49\u5F85\u8D85\u65F6\uFF0C\u5355\u4F4D\uFF1A\u6BEB\u79D2
-  #      timeout: 3000
-  #      # \u53D1\u5E03\u548C\u8BA2\u9605\u8FDE\u63A5\u6C60\u5927\u5C0F
-  #      subscriptionConnectionPoolSize: 50
   web:
     xss:
       enabled: false
     auth:
       excludes:
         - /
-        # \u9759\u6001\u8D44\u6E90
+        # 静态资源
         - /*.html
         - /**/*.html
         - /**/*.css
         - /**/*.js
-        # \u516C\u5171\u8DEF\u5F84
+        # 公共路径
         - /favicon.ico
-        # swagger \u6587\u6863\u914D\u7F6E
+        # swagger 文档配置
         - /*/api-docs
         - /*/api-docs/**
-        # actuator \u76D1\u63A7\u914D\u7F6E
+        # actuator 监控配置
         - /actuator
         - /actuator/**
   swagger:
@@ -87,55 +90,32 @@ logging:
 server:
   port: 8081
 spring:
-  # \u8D44\u6E90\u4FE1\u606F
+  # 资源信息
   messages:
-    # \u56FD\u9645\u5316\u8D44\u6E90\u6587\u4EF6\u8DEF\u5F84
+    # 国际化资源文件路径
     basename: i18n/messages
-  #    fix sa-token SpringBoot 3.x \u8DEF\u7531\u62E6\u622A\u9274\u6743\u62A5\u9519
+  #    fix sa-token SpringBoot 3.x 路由拦截鉴权报错
   #    No more pattern data allowed after {*...} or ** pattern element
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-    #  jpa:
-    #    show-sql: true
-    #    properties:
-    #      hibernate:
-    #        hbm2ddl:
-    #          auto: none
-    #        query:
-    #          mutation_strategy:
-    #            global_temporary:
-    #              create_tables: false
-    #              drop_tables: false
-    #        format_sql: true
-    #  data:
-    #    jpa:
-    #      repositories:
-    #        bootstrap-mode: DEFERRED #jpa\u542F\u52A8\u6A21\u5F0F\u4F18\u5316
 #    redis:
 #      repositories:
 #        enabled: false
-#      # \u5730\u5740
+#      # 地址
 #      host: localhost
-#      # \u7AEF\u53E3\uFF0C\u9ED8\u8BA4\u4E3A6379
+#      # 端口，默认为6379
 #      port: 6379
-#      # \u6570\u636E\u5E93\u7D22\u5F15
+#      # 数据库索引
 #      database: 2
-#      # \u5BC6\u7801(\u5982\u6CA1\u6709\u5BC6\u7801\u8BF7\u6CE8\u91CA\u6389)
+#      # 密码(如没有密码请注释掉)
 #      password: 123456
-#      # \u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4
+#      # 连接超时时间
 #      timeout: 10s
-#      # \u662F\u5426\u5F00\u542Fssl
+#      # 是否开启ssl
 #      ssl.enabled: false
 #    mongodb:
 #      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
-
-#  datasource:
-#    url: jdbc:mysql://192.168.1.188:3306/tec?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-#    username: root
-#    password: rootroot
-#    type: com.zaxxer.hikari.HikariDataSource
-
 
 springdoc:
   #  default-flat-param-object: true
@@ -150,11 +130,10 @@ springdoc:
     - group: basic
       display-name: basic
       packages-to-scan:
-        - cn.chriswood.anthill.example.flex.modules.basic
+        - cn.chriswood.anthill.example.jpa.multi.modules.basic
     - group: demo
       display-name: demo
       packages-to-scan:
-        - cn.chriswood.anthill.example.flex.modules.demo
-
+        - cn.chriswood.anthill.example.jpa.multi.modules.demo
 
 
