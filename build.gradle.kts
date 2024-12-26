@@ -125,13 +125,13 @@ subprojects {
                 }
             }
             repositories {
-                maven {
-                    url = if (version.toString().endsWith("SNAPSHOT")) uri(aliSnapshotUrl) else uri(aliReleasesUrl)
-                    credentials {
-                        username = aliUsername
-                        password = aliPassword
-                    }
-                }
+//                maven {
+//                    url = if (version.toString().endsWith("SNAPSHOT")) uri(aliSnapshotUrl) else uri(aliReleasesUrl)
+//                    credentials {
+//                        username = aliUsername
+//                        password = aliPassword
+//                    }
+//                }
                 mavenLocal()
             }
         }

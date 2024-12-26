@@ -11,5 +11,5 @@ data class MailProperties(
     /**
      * 内置邮箱账号
      */
-    val account: List<MailAccountProperty>?,
+    val account: List<MailAccountProperty?>?,
 )

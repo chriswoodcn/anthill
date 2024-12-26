@@ -5,3 +5,5 @@ cn.chriswood.anthill.infrastructure.web.WebLocaleMvcConfig
 cn.chriswood.anthill.infrastructure.web.RepeatableFilterConfig
 cn.chriswood.anthill.infrastructure.web.XssFilterConfig
 cn.chriswood.anthill.infrastructure.web.exception.InfrastructureWebExceptionHandler
+cn.chriswood.anthill.infrastructure.web.CaptchaConfig
+cn.chriswood.anthill.infrastructure.web.WebJacksonConfig

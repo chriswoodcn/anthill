@@ -1,5 +1,6 @@
 package cn.chriswood.anthill.infrastructure.redis.utils
 
+import cn.chriswood.anthill.infrastructure.core.config.ApplicationConfig
 import cn.hutool.extra.spring.SpringUtil
 import org.redisson.api.*
 import java.time.Duration
@@ -9,10 +10,14 @@ import java.util.stream.Stream
 
 object RedisUtil {
 
-    val CLIENT: RedissonClient = SpringUtil.getBean(RedissonClient::class.java)
+    private val Client: RedissonClient = SpringUtil.getBean(RedissonClient::class.java)
+    var KeyResolver: (String?) -> String = {
+        val config = SpringUtil.getBean(ApplicationConfig::class.java)
+        "${config.name}:${it}"
+    }
 
     fun getClient(): RedissonClient {
-        return CLIENT
+        return Client
     }
 
     /**
@@ -25,7 +30,8 @@ object RedisUtil {
      * @return -1 表示失败
      */
     fun rateLimit(key: String, rateType: RateType, rate: Int, rateInterval: Int): Long {
-        val rateLimiter: RRateLimiter = CLIENT.getRateLimiter(key)
+        val finalKey = KeyResolver(key)
+        val rateLimiter: RRateLimiter = Client.getRateLimiter(finalKey)
         rateLimiter.trySetRate(rateType, rate.toLong(), rateInterval.toLong(), RateIntervalUnit.SECONDS)
         return if (rateLimiter.tryAcquire()) {
             rateLimiter.availablePermits()
@@ -42,13 +48,15 @@ object RedisUtil {
      * @param consumer   自定义处理
      */
     fun <T> publish(channelKey: String, msg: T, consumer: Consumer<T>) {
-        val topic: RTopic = CLIENT.getTopic(channelKey)
+        val finalKey = KeyResolver(channelKey)
+        val topic: RTopic = Client.getTopic(finalKey)
         topic.publish(msg)
         consumer.accept(msg)
     }
 
     fun <T> publish(channelKey: String, msg: T) {
-        val topic: RTopic = CLIENT.getTopic(channelKey)
+        val finalKey = KeyResolver(channelKey)
+        val topic: RTopic = Client.getTopic(finalKey)
         topic.publish(msg)
     }
 
@@ -60,7 +68,8 @@ object RedisUtil {
      * @param consumer   自定义处理
      */
     fun <T> subscribe(channelKey: String, clazz: Class<T>, consumer: Consumer<T>) {
-        val topic: RTopic = CLIENT.getTopic(channelKey)
+        val finalKey = KeyResolver(channelKey)
+        val topic: RTopic = Client.getTopic(finalKey)
         topic.addListener(clazz) { _: CharSequence, msg: T ->
             consumer.accept(
                 msg
@@ -76,7 +85,8 @@ object RedisUtil {
      * @param value 缓存的值
      */
     fun <T> setCacheObject(key: String, value: T) {
-        setCacheObjectSaveTtl(key, value, false)
+        val finalKey = KeyResolver(key)
+        setCacheObjectSaveTtl(finalKey, value, false)
     }
 
     /**
@@ -88,13 +98,14 @@ object RedisUtil {
      * @since Redis 6.X 以上使用 setAndKeepTTL 兼容 5.X 方案
      */
     fun <T> setCacheObjectSaveTtl(key: String, value: T, isSaveTtl: Boolean) {
-        val bucket: RBucket<T> = CLIENT.getBucket<T>(key)
+        val finalKey = KeyResolver(key)
+        val bucket: RBucket<T> = Client.getBucket(finalKey)
         if (isSaveTtl) {
             try {
                 bucket.setAndKeepTTL(value)
             } catch (e: Exception) {
                 val timeToLive = bucket.remainTimeToLive()
-                setCacheObjectTtl(key, value, Duration.ofMillis(timeToLive))
+                setCacheObjectTtl(finalKey, value, Duration.ofMillis(timeToLive))
             }
         } else {
             bucket.set(value)
@@ -109,8 +120,9 @@ object RedisUtil {
      * @param duration 时间
      */
     fun <T> setCacheObjectTtl(key: String, value: T, duration: Duration) {
-        val batch: RBatch = CLIENT.createBatch()
-        val bucket = batch.getBucket<T>(key)
+        val finalKey = KeyResolver(key)
+        val batch: RBatch = Client.createBatch()
+        val bucket = batch.getBucket<T>(finalKey)
         bucket.setAsync(value)
         bucket.expireAsync(duration)
         batch.execute()
@@ -124,7 +136,8 @@ object RedisUtil {
      * @return set成功或失败
      */
     fun <T> setObjectIfAbsent(key: String, value: T, duration: Duration?): Boolean {
-        val bucket: RBucket<T> = CLIENT.getBucket(key)
+        val finalKey = KeyResolver(key)
+        val bucket: RBucket<T> = Client.getBucket(finalKey)
         return bucket.setIfAbsent(value, duration)
     }
 
@@ -136,7 +149,8 @@ object RedisUtil {
      * @return set成功或失败
      */
     fun <T> setObjectIfExists(key: String, value: T, duration: Duration?): Boolean {
-        val bucket: RBucket<T> = CLIENT.getBucket(key)
+        val finalKey = KeyResolver(key)
+        val bucket: RBucket<T> = Client.getBucket(finalKey)
         return bucket.setIfExists(value, duration)
     }
 
@@ -150,7 +164,8 @@ object RedisUtil {
      * @param listener 监听器配置
      */
     fun <T> addObjectListener(key: String, listener: ObjectListener) {
-        val result: RBucket<T> = CLIENT.getBucket(key)
+        val finalKey = KeyResolver(key)
+        val result: RBucket<T> = Client.getBucket(finalKey)
         result.addListener(listener)
     }
 
@@ -162,7 +177,8 @@ object RedisUtil {
      * @return true=设置成功；false=设置失败
      */
     fun expire(key: String, timeout: Long): Boolean {
-        return expireDuration(key, Duration.ofSeconds(timeout))
+        val finalKey = KeyResolver(key)
+        return expireDuration(finalKey, Duration.ofSeconds(timeout))
     }
 
     /**
@@ -173,7 +189,8 @@ object RedisUtil {
      * @return true=设置成功；false=设置失败
      */
     fun expireDuration(key: String, duration: Duration?): Boolean {
-        val rBucket: RBucket<*> = CLIENT.getBucket<Any>(key)
+        val finalKey = KeyResolver(key)
+        val rBucket: RBucket<*> = Client.getBucket<Any>(finalKey)
         return rBucket.expire(duration)
     }
 
@@ -184,7 +201,8 @@ object RedisUtil {
      * @return 缓存键值对应的数据
      */
     fun <T> getCacheObject(key: String): T {
-        val rBucket: RBucket<T> = CLIENT.getBucket(key)
+        val finalKey = KeyResolver(key)
+        val rBucket: RBucket<T> = Client.getBucket(finalKey)
         return rBucket.get()
     }
 
@@ -195,7 +213,8 @@ object RedisUtil {
      * @return 剩余存活时间
      */
     fun <T> getTimeToLive(key: String): Long {
-        val rBucket: RBucket<T> = CLIENT.getBucket(key)
+        val finalKey = KeyResolver(key)
+        val rBucket: RBucket<T> = Client.getBucket(finalKey)
         return rBucket.remainTimeToLive()
     }
 
@@ -205,7 +224,8 @@ object RedisUtil {
      * @param key 缓存的键值
      */
     fun deleteObject(key: String): Boolean {
-        return CLIENT.getBucket<Any>(key).delete()
+        val finalKey = KeyResolver(key)
+        return Client.getBucket<Any>(finalKey).delete()
     }
 
     /**
@@ -214,7 +234,7 @@ object RedisUtil {
      * @param collection 多个对象
      */
     fun deleteObject(collection: Collection<Any>) {
-        val batch: RBatch = CLIENT.createBatch()
+        val batch: RBatch = Client.createBatch()
         collection.forEach {
             batch.getBucket<Any>(it.toString()).deleteAsync()
         }
@@ -227,7 +247,8 @@ object RedisUtil {
      * @param key 缓存的键值
      */
     fun isExistsObject(key: String?): Boolean {
-        return CLIENT.getBucket<Any>(key).isExists
+        val finalKey = KeyResolver(key)
+        return Client.getBucket<Any>(finalKey).isExists
     }
 
     /**
@@ -238,7 +259,8 @@ object RedisUtil {
      * @return 缓存的对象
      */
     fun <T> setCacheList(key: String, dataList: List<T>?): Boolean {
-        val rList: RList<T> = CLIENT.getList(key)
+        val finalKey = KeyResolver(key)
+        val rList: RList<T> = Client.getList(finalKey)
         return rList.addAll(dataList!!)
     }
 
@@ -250,7 +272,8 @@ object RedisUtil {
      * @return 缓存的对象
      */
     fun <T> addCacheList(key: String, data: T): Boolean {
-        val rList: RList<T> = CLIENT.getList(key)
+        val finalKey = KeyResolver(key)
+        val rList: RList<T> = Client.getList(finalKey)
         return rList.add(data)
     }
 
@@ -264,7 +287,8 @@ object RedisUtil {
      * @param listener 监听器配置
      */
     fun <T> addListListener(key: String, listener: ObjectListener?) {
-        val rList: RList<T> = CLIENT.getList(key)
+        val finalKey = KeyResolver(key)
+        val rList: RList<T> = Client.getList(finalKey)
         rList.addListener(listener)
     }
 
@@ -275,7 +299,8 @@ object RedisUtil {
      * @return 缓存键值对应的数据
      */
     fun <T> getCacheList(key: String): List<T> {
-        val rList: RList<T> = CLIENT.getList(key)
+        val finalKey = KeyResolver(key)
+        val rList: RList<T> = Client.getList(finalKey)
         return rList.readAll()
     }
 
@@ -288,7 +313,8 @@ object RedisUtil {
      * @return 缓存键值对应的数据
      */
     fun <T> getCacheListRange(key: String, form: Int, to: Int): List<T> {
-        val rList: RList<T> = CLIENT.getList(key)
+        val finalKey = KeyResolver(key)
+        val rList: RList<T> = Client.getList(finalKey)
         return rList.range(form, to)
     }
 
@@ -300,8 +326,9 @@ object RedisUtil {
      * @return 缓存数据的对象
      */
     fun <T> setCacheSet(key: String, dataSet: Set<T>?): Boolean {
+        val finalKey = KeyResolver(key)
         if (dataSet == null) return false
-        val rSet: RSet<T> = CLIENT.getSet(key)
+        val rSet: RSet<T> = Client.getSet(finalKey)
         return rSet.addAll(dataSet)
     }
 
@@ -313,7 +340,8 @@ object RedisUtil {
      * @return 缓存的对象
      */
     fun <T> addCacheSet(key: String, data: T): Boolean {
-        val rSet: RSet<T> = CLIENT.getSet(key)
+        val finalKey = KeyResolver(key)
+        val rSet: RSet<T> = Client.getSet(finalKey)
         return rSet.add(data)
     }
 
@@ -327,7 +355,8 @@ object RedisUtil {
      * @param listener 监听器配置
      */
     fun <T> addSetListener(key: String, listener: ObjectListener?) {
-        val rSet: RSet<T> = CLIENT.getSet(key)
+        val finalKey = KeyResolver(key)
+        val rSet: RSet<T> = Client.getSet(finalKey)
         rSet.addListener(listener)
     }
 
@@ -338,7 +367,8 @@ object RedisUtil {
      * @return set对象
      */
     fun <T> getCacheSet(key: String): Set<T> {
-        val rSet: RSet<T> = CLIENT.getSet(key)
+        val finalKey = KeyResolver(key)
+        val rSet: RSet<T> = Client.getSet(finalKey)
         return rSet.readAll()
     }
 
@@ -349,8 +379,9 @@ object RedisUtil {
      * @param dataMap 缓存的数据
      */
     fun <T> setCacheMap(key: String, dataMap: Map<String, T>?) {
+        val finalKey = KeyResolver(key)
         if (dataMap != null) {
-            val rMap: RMap<String, T> = CLIENT.getMap(key)
+            val rMap: RMap<String, T> = Client.getMap(finalKey)
             rMap.putAll(dataMap)
         }
     }
@@ -365,7 +396,8 @@ object RedisUtil {
      * @param listener 监听器配置
      */
     fun <T> addMapListener(key: String, listener: ObjectListener?) {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         rMap.addListener(listener)
     }
 
@@ -376,7 +408,8 @@ object RedisUtil {
      * @return map对象
      */
     fun <T> getCacheMap(key: String): Map<String, T> {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         return rMap.getAll(rMap.keys)
     }
 
@@ -387,7 +420,8 @@ object RedisUtil {
      * @return key列表
      */
     fun <T> getCacheMapKeySet(key: String): Set<String> {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         return rMap.keys
     }
 
@@ -399,7 +433,8 @@ object RedisUtil {
      * @param value 值
      */
     fun <T> setCacheMapValue(key: String, hKey: String, value: T) {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         rMap[hKey] = value
     }
 
@@ -411,7 +446,8 @@ object RedisUtil {
      * @return Hash中的对象
      */
     fun <T> getCacheMapValue(key: String, hKey: String): T? {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         return rMap[hKey]
     }
 
@@ -423,7 +459,8 @@ object RedisUtil {
      * @return Hash中的对象
      */
     fun <T> delCacheMapValue(key: String, hKey: String): T? {
-        val rMap: RMap<String, T> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<String, T> = Client.getMap(finalKey)
         return rMap.remove(hKey)
     }
 
@@ -434,8 +471,9 @@ object RedisUtil {
      * @param hKeys Hash键
      */
     fun <T> delMultiCacheMapValue(key: String, hKeys: Set<String>) {
-        val batch: RBatch = CLIENT.createBatch()
-        val rMap = batch.getMap<String, T>(key)
+        val finalKey = KeyResolver(key)
+        val batch: RBatch = Client.createBatch()
+        val rMap = batch.getMap<String, T>(finalKey)
         for (hKey in hKeys) {
             rMap.removeAsync(hKey)
         }
@@ -450,7 +488,8 @@ object RedisUtil {
      * @return Hash对象集合
      */
     fun <K, V> getMultiCacheMapValue(key: String, hKeys: Set<K>): Map<K, V> {
-        val rMap: RMap<K, V> = CLIENT.getMap(key)
+        val finalKey = KeyResolver(key)
+        val rMap: RMap<K, V> = Client.getMap(finalKey)
         return rMap.getAll(hKeys)
     }
 
@@ -461,7 +500,8 @@ object RedisUtil {
      * @param value 值
      */
     fun setAtomicValue(key: String, value: Long) {
-        val atomic: RAtomicLong = CLIENT.getAtomicLong(key)
+        val finalKey = KeyResolver(key)
+        val atomic: RAtomicLong = Client.getAtomicLong(finalKey)
         atomic.set(value)
     }
 
@@ -472,7 +512,8 @@ object RedisUtil {
      * @return 当前值
      */
     fun getAtomicValue(key: String): Long {
-        val atomic: RAtomicLong = CLIENT.getAtomicLong(key)
+        val finalKey = KeyResolver(key)
+        val atomic: RAtomicLong = Client.getAtomicLong(finalKey)
         return atomic.get()
     }
 
@@ -483,7 +524,8 @@ object RedisUtil {
      * @return 当前值
      */
     fun incrAtomicValue(key: String): Long {
-        val atomic: RAtomicLong = CLIENT.getAtomicLong(key)
+        val finalKey = KeyResolver(key)
+        val atomic: RAtomicLong = Client.getAtomicLong(finalKey)
         return atomic.incrementAndGet()
     }
 
@@ -494,7 +536,8 @@ object RedisUtil {
      * @return 当前值
      */
     fun decrAtomicValue(key: String): Long {
-        val atomic: RAtomicLong = CLIENT.getAtomicLong(key)
+        val finalKey = KeyResolver(key)
+        val atomic: RAtomicLong = Client.getAtomicLong(finalKey)
         return atomic.decrementAndGet()
     }
 
@@ -506,7 +549,7 @@ object RedisUtil {
      */
     fun keys(pattern: String): Collection<String> {
         val stream: Stream<String> =
-            CLIENT.keys.getKeysStreamByPattern(pattern)
+            Client.keys.getKeysStreamByPattern(pattern)
         return stream.collect(Collectors.toList())
     }
 
@@ -516,7 +559,7 @@ object RedisUtil {
      * @param pattern 字符串前缀
      */
     fun deleteKeys(pattern: String) {
-        CLIENT.keys.deleteByPattern(pattern)
+        Client.keys.deleteByPattern(pattern)
     }
 
     /**
@@ -525,7 +568,8 @@ object RedisUtil {
      * @param key 键
      */
     fun hasKey(key: String): Boolean {
-        val rKeys: RKeys = CLIENT.keys
-        return rKeys.countExists(key) > 0
+        val finalKey = KeyResolver(key)
+        val rKeys: RKeys = Client.keys
+        return rKeys.countExists(finalKey) > 0
     }
 }

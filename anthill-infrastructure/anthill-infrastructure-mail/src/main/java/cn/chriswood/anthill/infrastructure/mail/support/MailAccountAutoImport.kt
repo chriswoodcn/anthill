@@ -1,5 +1,6 @@
 package cn.chriswood.anthill.infrastructure.mail.support
 
+import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.hutool.core.util.StrUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
@@ -36,12 +37,19 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
     override fun registerBeanDefinitions(importingClassMetadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
         log.debug(">>>>>>>>>> init MailAccount >>>>>>>>>>")
         val binder = Binder.get(environment)
-        val accountPropertiesList =
-            binder.bindOrCreate(MAIL_ACCPUNT_PREFIX, Bindable.listOf(MailAccountProperty::class.java))
-        if (!accountPropertiesList.isNullOrEmpty()) {
-            accountPropertiesList.forEach {
-                injectMailAccountBean(it, registry)
+        val detectMailAccountListStr = environment?.getProperty(
+            MAIL_ACCPUNT_PREFIX
+        )
+        if (StringUtil.isNotBlank(detectMailAccountListStr)) {
+            val accountPropertiesList =
+                binder.bindOrCreate(MAIL_ACCPUNT_PREFIX, Bindable.listOf(MailAccountProperty::class.java))
+            if (!accountPropertiesList.isNullOrEmpty()) {
+                accountPropertiesList.forEach {
+                    injectMailAccountBean(it, registry)
+                }
             }
+        } else {
+            log.debug(">>>>>>>>>> detect not exist MailAccount >>>>>>>>>>")
         }
     }
 
@@ -62,7 +70,7 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
                 account.setTimeout(it.timeout)
                 account.setConnectionTimeout(it.connectionTimeout)
                 val enhanceMailAccount = EnhanceMailAccount(account)
-                if (it.limitCount>0) enhanceMailAccount.limitCount = it.limitCount
+                if (it.limitCount > 0) enhanceMailAccount.limitCount = it.limitCount
                 enhanceMailAccount
             }.setScope(BeanDefinition.SCOPE_PROTOTYPE).getBeanDefinition()
         val subPre = StrUtil.subPre(it.from, it.from.indexOf('@') + 1)

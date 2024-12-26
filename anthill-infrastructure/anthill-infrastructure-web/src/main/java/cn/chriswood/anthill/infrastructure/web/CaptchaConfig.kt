@@ -33,8 +33,8 @@ class CaptchaConfig {
     /**
      * 圆圈干扰验证码
      */
-    @Lazy
     @Bean
+    @Lazy
     fun circleCaptcha(): CircleCaptcha {
         val captcha = CaptchaUtil.createCircleCaptcha(width, height)
         captcha.setBackground(background)
@@ -46,8 +46,8 @@ class CaptchaConfig {
     /**
      * 线段干扰的验证码
      */
-    @Lazy
     @Bean
+    @Lazy
     fun lineCaptcha(): LineCaptcha {
         val captcha = CaptchaUtil.createLineCaptcha(width, height)
         captcha.setBackground(background)
@@ -59,8 +59,8 @@ class CaptchaConfig {
     /**
      * 扭曲干扰验证码
      */
-    @Lazy
     @Bean
+    @Lazy
     fun shearCaptcha(): ShearCaptcha {
         val captcha = CaptchaUtil.createShearCaptcha(width, height)
         captcha.setBackground(background)

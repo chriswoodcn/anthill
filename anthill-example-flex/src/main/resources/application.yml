@@ -5,26 +5,6 @@ anthill:
   mongo:
     enabled: false
     type: single
-  mail:
-    account:
-      - host: hwsmtp.exmail.qq.com
-        port: 465
-        user: project-dev@taotaozn.com
-        pass: TAOtao0519@
-        auth: true
-        from: project-dev@taotaozn.com
-        ssl-enable: true
-        starttls-enable: true
-        limit-count: 200
-      - host: smtp.gmail.com
-        port: 465
-        user: taochenzn@gmail.com
-        pass: uhvjsorhtnqmpish
-        auth: true
-        from: taochenzn@gmail.com
-        ssl-enable: true
-        starttls-enable: true
-        limit-count: 100
   aliyun-oss-sts:
     enabled: true
     oss:
@@ -42,7 +22,7 @@ anthill:
         role-session-name: anthill-example
   web:
     xss:
-      enabled: false
+      enabled: true
     auth:
       excludes:
         - /

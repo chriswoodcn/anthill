@@ -3,8 +3,8 @@ package cn.chriswood.anthill.infrastructure.core.exception
 import cn.hutool.core.util.ObjectUtil
 
 interface ExceptionAssert {
-    fun eject(vararg args: Any?)
-    fun eject(vararg args: Any?, callback: () -> Unit) {
+    fun eject(vararg args: Any?): Nothing
+    fun eject(vararg args: Any?, callback: () -> Unit): Nothing {
         callback()
         eject(*args)
     }

@@ -30,11 +30,15 @@ class XssFilterConfig(
         val registration: FilterRegistrationBean<Filter> = FilterRegistrationBean()
         registration.setDispatcherTypes(DispatcherType.REQUEST)
         registration.setFilter(XssFilter())
-        registration.addUrlPatterns(*StringUtil.split(xssProperties.urlPatterns!!, ','))
+        if (StringUtil.isNotBlank(xssProperties.urlPatterns)) {
+            registration.addUrlPatterns(*StringUtil.split(xssProperties.urlPatterns!!, ','))
+        }
         registration.setName("xssFilter")
         registration.order = FilterRegistrationBean.HIGHEST_PRECEDENCE
         val initParameters: MutableMap<String, String> = HashMap()
-        initParameters["excludes"] = xssProperties.excludes!!
+        if (StringUtil.isNotBlank(xssProperties.excludes)) {
+            initParameters["excludes"] = xssProperties.excludes!!
+        }
         registration.setInitParameters(initParameters)
         log.debug(">>>>>>>>>> init XssFilterConfig >>>>>>>>>>")
         return registration
