@@ -1,17 +1,30 @@
 package cn.chriswood.anthill.infrastructure.web
 
 import cn.chriswood.anthill.infrastructure.web.utils.HttpRequestUtil
-import cn.hutool.extra.spring.SpringUtil
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.web.servlet.HandlerInterceptor
-import org.springframework.web.servlet.LocaleResolver
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
+import org.springframework.web.servlet.support.RequestContextUtils
 
-class WebLocaleChangeInterceptor : HandlerInterceptor {
+class WebLocaleChangeInterceptor : LocaleChangeInterceptor() {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        val newLocale = HttpRequestUtil.getLocale()
-        val localeResolver = SpringUtil.getBean<LocaleResolver>("anthillLocaleResolver")
-        localeResolver.setLocale(request, response, newLocale)
+        val newLocale = HttpRequestUtil.getLocale(request)
+        val localeResolver = RequestContextUtils.getLocaleResolver(request)
+            ?: throw IllegalStateException(
+                "No LocaleResolver found: not in a DispatcherServlet request?"
+            )
+        try {
+            localeResolver.setLocale(request, response, newLocale)
+        } catch (ex: IllegalArgumentException) {
+            if (isIgnoreInvalidLocale) {
+                if (logger.isDebugEnabled) {
+                    logger.debug("Ignoring invalid locale value [" + newLocale + "]: " + ex.message)
+                }
+            } else {
+                throw ex
+            }
+        }
+        // Proceed in any case.
         return true
     }
 }

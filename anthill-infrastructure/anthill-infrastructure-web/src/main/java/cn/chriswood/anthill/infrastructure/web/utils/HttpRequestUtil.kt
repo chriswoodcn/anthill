@@ -25,8 +25,20 @@ object HttpRequestUtil {
         return headerIgnoreCase
     }
 
+    fun getLang(request: HttpServletRequest): String {
+        val headerIgnoreCase = getHeaderIgnoreCase(request, LanguageTag) ?: return DefaultLang
+        if (headerIgnoreCase.indexOf('_') > -1) {
+            return headerIgnoreCase.split('_')[0]
+        }
+        return headerIgnoreCase
+    }
+
     fun getLocale(): Locale {
         return Locale(getLang())
+    }
+
+    fun getLocale(request: HttpServletRequest): Locale {
+        return Locale(getLang(request))
     }
 
     fun getDevice(): String {
