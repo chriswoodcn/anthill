@@ -12,12 +12,12 @@ data class AuthProperties(
     /**
      * 系统用户登录检查路径
      */
-    val sysUserCheckPath: String = "/backend/**",
+    val sysUserCheckPath: List<String>? = listOf("/backend/**"),
 
     /**
      * APP用户登录检查路径
      */
-    val appUserCheckPath: String = "/app/**",
+    val appUserCheckPath: List<String>? = listOf("/app/**"),
 
     /**
      * 需要排除鉴权的路径
