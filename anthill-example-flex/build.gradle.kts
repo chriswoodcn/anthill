@@ -37,7 +37,7 @@ dependencies {
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mybatisflex")))
-//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
+    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))
@@ -46,6 +46,8 @@ dependencies {
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mongo")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mail")))
 
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-aop")

@@ -7,10 +7,9 @@ import com.mybatisflex.core.query.QueryChain
 import com.mybatisflex.kotlin.extensions.db.query
 import com.mybatisflex.kotlin.extensions.kproperty.eq
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/demo")
@@ -48,5 +47,12 @@ class DemoController {
             .limit(0, 1)
             .one()
         return R.ok(listOf(one))
+    }
+
+    @Operation(summary = "校验POST数据")
+    @PostMapping("/post")
+    fun validate(@RequestBody @Valid data: PostValidateData): R<Void> {
+        log.debug("data = {}", data)
+        return R.ok()
     }
 }

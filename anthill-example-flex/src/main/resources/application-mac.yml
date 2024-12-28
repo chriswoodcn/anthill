@@ -51,18 +51,13 @@ mybatis-flex:
   datasource:
     ds1:
       type: hikari
-      url: jdbc:mysql://192.168.2.188:3307/anthill_example_jpa?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      url: jdbc:mysql://127.0.0.1:3306/anthill_example?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
       username: root
-      password: rootroot
-    ds2:
-      type: hikari
-      url: jdbc:mysql://192.168.2.188:3307/anthill_example_jpa_slave?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-      username: root
-      password: rootroot
+      password: 123456
 
 logging:
   level:
-    cn.chriswood.anthill.infrastructure: debug
+    cn.chriswood.anthill.infrastructure: trace
     org.springframework.data.jpa: debug
 
 server:
@@ -77,23 +72,22 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  profiles:
-    active: mac
-#    redis:
-#      repositories:
-#        enabled: false
-#      # 地址
-#      host: localhost
-#      # 端口，默认为6379
-#      port: 6379
-#      # 数据库索引
-#      database: 2
-#      # 密码(如没有密码请注释掉)
-#      password: 123456
-#      # 连接超时时间
-#      timeout: 10s
-#      # 是否开启ssl
-#      ssl.enabled: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+      # 地址
+      host: localhost
+      # 端口，默认为6379
+      port: 6379
+      # 数据库索引
+      database: 2
+      # 密码(如没有密码请注释掉)
+      password: 123456
+      # 连接超时时间
+      timeout: 10s
+      # 是否开启ssl
+      ssl.enabled: false
 #    mongodb:
 #      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
 
@@ -110,10 +104,10 @@ springdoc:
     - group: basic
       display-name: basic
       packages-to-scan:
-        - cn.chriswood.anthill.example.jpa.multi.modules.basic
+        - cn.chriswood.anthill.example.flex.modules.basic
     - group: demo
       display-name: demo
       packages-to-scan:
-        - cn.chriswood.anthill.example.jpa.multi.modules.demo
+        - cn.chriswood.anthill.example.flex.modules.demo
 
 

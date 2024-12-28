@@ -39,7 +39,7 @@ class InfrastructureWebExceptionHandler {
         if (e !is NoResourceFoundException) {
             e.printStackTrace()
         }
-        return R.fail(HttpStatus.NOT_FOUND, e.message)
+        return R.fail(HttpStatus.FAIL, e.message)
     }
 
     @ExceptionHandler(BaseException::class)
@@ -68,7 +68,7 @@ class InfrastructureWebExceptionHandler {
         val allErrors = e.bindingResult.allErrors
         log.error("$allErrors")
         val validationMessages = genValidationMessages(allErrors)
-        return R.fail(validationMessages)
+        return R.fail(HttpStatus.BAD_REQUEST, validationMessages)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -77,11 +77,15 @@ class InfrastructureWebExceptionHandler {
         request: HttpServletRequest
     ): R<Void> {
         val requestURI = request.requestURI
-        log.error("MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.bindingResult.allErrors)
+        log.error(
+            "MethodArgumentNotValidException >>> RequestURI[{}], MESSAGE[{}]",
+            requestURI,
+            e.bindingResult.allErrors
+        )
         val allErrors = e.bindingResult.allErrors
         log.error("$allErrors")
         val validationMessages = genValidationMessages(allErrors)
-        return R.fail(validationMessages)
+        return R.fail(HttpStatus.BAD_REQUEST, validationMessages)
     }
 
     private fun genValidationMessages(allErrors: List<ObjectError>): String {

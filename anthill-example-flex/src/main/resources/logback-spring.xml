@@ -81,7 +81,7 @@
         </filter>
     </appender>
 
-    <springProfile name="default,local">
+    <springProfile name="default,mac">
         <root level="info">
             <appender-ref ref="console"/>
         </root>

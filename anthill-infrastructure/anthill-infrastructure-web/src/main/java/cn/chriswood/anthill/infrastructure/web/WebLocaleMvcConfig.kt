@@ -16,11 +16,6 @@ class WebLocaleMvcConfig : WebMvcConfigurer {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-//    @Bean(name = ["anthillLocaleResolver"])
-//    fun localeResolver(): LocaleResolver {
-//        return WebLocaleResolver()
-//    }
-
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(WebLocaleChangeInterceptor());
         log.debug(">>>>>>>>>> init WebLocaleChangeInterceptor >>>>>>>>>>")
