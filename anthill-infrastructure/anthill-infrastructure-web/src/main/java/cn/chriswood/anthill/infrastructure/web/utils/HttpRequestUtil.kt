@@ -13,7 +13,7 @@ object HttpRequestUtil {
     const val DeviceTag = "device"
     const val EndpointTag = "endpoint"
     const val DefaultTag = "unknown"
-    private fun getRequest(): HttpServletRequest {
+    fun getRequest(): HttpServletRequest {
         return (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
     }
 

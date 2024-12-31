@@ -3,7 +3,8 @@ package cn.chriswood.anthill.infrastructure.web.annotation.log
 import cn.chriswood.anthill.infrastructure.core.enums.UserType
 import kotlin.reflect.KClass
 
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION,
+    AnnotationTarget.ANNOTATION_CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 annotation class Log(
