@@ -45,7 +45,8 @@ class AuthConfig(
                     }
                 })
 
-            SaRouter.match(authProperties.appUserCheckPath)
+            SaRouter
+                .match(authProperties.appUserCheckPath)
                 // 对未排除的路径进行检查
                 .check(SaFunction {
                     StpKit.AppUser.checkLogin()

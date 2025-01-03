@@ -7,11 +7,19 @@ import cn.dev33.satoken.stp.SaLoginModel
 import cn.dev33.satoken.stp.StpLogic
 import cn.dev33.satoken.stp.StpUtil
 import cn.hutool.core.util.ObjectUtil
+import java.io.Serializable
 import java.util.function.Supplier
 
 object AuthHelper {
     const val LOGIN_USER_KEY = "loginUser"
     const val USER_KEY = "userId"
+
+    /**
+     * 获得对应的loginId
+     */
+    fun genLoginId(userType: String, id: Serializable): String {
+        return "$userType:$id"
+    }
 
     /**
      * 登录系统 基于 设备类型
@@ -42,6 +50,14 @@ object AuthHelper {
 
     fun logout(stp: StpLogic, device: String) {
         if (isLogin(stp)) stp.logout(stp.loginId, device)
+    }
+
+    fun kickout(stp: StpLogic, loginId: String) {
+        stp.kickout(loginId)
+    }
+
+    fun kickout(stp: StpLogic, loginId: String, device: String) {
+        stp.kickout(loginId, device)
     }
 
     private fun getStoreUser(stp: StpLogic): Any? {
