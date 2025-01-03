@@ -5,10 +5,13 @@ import cn.hutool.core.net.NetUtil
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.extra.servlet.JakartaServletUtil
 import cn.hutool.http.HttpStatus
+import cn.hutool.http.HttpUtil
+import cn.hutool.json.JSONUtil
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpSession
+import org.apache.logging.log4j.util.Strings
 import org.springframework.http.MediaType
 import org.springframework.util.LinkedCaseInsensitiveMap
 import org.springframework.web.context.request.RequestContextHolder
@@ -209,6 +212,24 @@ object ServletUtil {
         return getClientIPByHeader(request, *headers)
     }
 
+    fun getIpLocation(ipv4: String?): String? {
+        if (ipv4.isNullOrBlank()) return null
+        if (checkIfInternalIp(ipv4ToByteArray(ipv4))) return "InternalIp"
+        try {
+            val rspStr: String = HttpUtil.get("https://whois.pconline.com.cn/ipJson.jsp?ip=${ipv4}&json=true", 3000)
+            if (rspStr.isBlank()) {
+                return "Unknown"
+            }
+            val obj = JSONUtil.parseObj(rspStr)
+            val region: String = obj.getStr("pro") ?: Strings.EMPTY
+            val city: String = obj.getStr("city") ?: Strings.EMPTY
+            val res = String.format("%s %s", region, city)
+            return res.ifBlank { "Unknown" }
+        } catch (e: Exception) {
+            return "Unknown"
+        }
+    }
+
     private fun getClientIPByHeader(request: HttpServletRequest, vararg headerNames: String): String {
         val var3: Array<out String> = headerNames
         val var4 = headerNames.size
@@ -221,6 +242,123 @@ object ServletUtil {
             }
         }
         ip = request.remoteAddr
-        return NetUtil.getMultistageReverseProxyIp(ip)
+        val res = NetUtil.getMultistageReverseProxyIp(ip)
+        return if ("0:0:0:0:0:0:0:1" == res) "127.0.0.1" else res
+    }
+
+    fun ipv4ToByteArray(text: String): ByteArray? {
+        if (text.isEmpty()) {
+            return null
+        }
+        val bytes = ByteArray(4)
+        val elements = text.split("\\.".toRegex()).toTypedArray()
+        try {
+            var l: Long
+            var i: Int
+            when (elements.size) {
+                1 -> {
+                    l = elements[0].toLong()
+                    if (l < 0L || l > 4294967295L) {
+                        return null
+                    }
+                    bytes[0] = (l shr 24 and 0xFFL).toInt().toByte()
+                    bytes[1] = (l and 0xFFFFFFL shr 16 and 0xFFL).toInt().toByte()
+                    bytes[2] = (l and 0xFFFFL shr 8 and 0xFFL).toInt().toByte()
+                    bytes[3] = (l and 0xFFL).toInt().toByte()
+                }
+
+                2 -> {
+                    l = elements[0].toInt().toLong()
+                    if (l < 0L || l > 255L) {
+                        return null
+                    }
+                    bytes[0] = (l and 0xFFL).toInt().toByte()
+                    l = elements[1].toInt().toLong()
+                    if (l < 0L || l > 16777215L) {
+                        return null
+                    }
+                    bytes[1] = (l shr 16 and 0xFFL).toInt().toByte()
+                    bytes[2] = (l and 0xFFFFL shr 8 and 0xFFL).toInt().toByte()
+                    bytes[3] = (l and 0xFFL).toInt().toByte()
+                }
+
+                3 -> {
+                    i = 0
+                    while (i < 2) {
+                        l = elements[i].toInt().toLong()
+                        if (l < 0L || l > 255L) {
+                            return null
+                        }
+                        bytes[i] = (l and 0xFFL).toInt().toByte()
+                        ++i
+                    }
+                    l = elements[2].toInt().toLong()
+                    if (l < 0L || l > 65535L) {
+                        return null
+                    }
+                    bytes[2] = (l shr 8 and 0xFFL).toInt().toByte()
+                    bytes[3] = (l and 0xFFL).toInt().toByte()
+                }
+
+                4 -> {
+                    i = 0
+                    while (i < 4) {
+                        l = elements[i].toInt().toLong()
+                        if (l < 0L || l > 255L) {
+                            return null
+                        }
+                        bytes[i] = (l and 0xFFL).toInt().toByte()
+                        ++i
+                    }
+                }
+
+                else -> return null
+            }
+        } catch (e: NumberFormatException) {
+            return null
+        }
+        return bytes
+    }
+
+    fun checkIfInternalIp(addr: ByteArray?): Boolean {
+        if (addr == null || addr.size < 2) {
+            return true
+        }
+        val b0 = addr[0]
+        val b1 = addr[1]
+        // 10.x.x.x/8
+        val section1: Byte = 0x0A
+        // 172.16.x.x/12
+        val section2 = 0xAC.toByte()
+        val section3 = 0x10.toByte()
+        val section4 = 0x1F.toByte()
+        // 192.168.x.x/16
+        val section5 = 0xC0.toByte()
+        val section6 = 0xA8.toByte()
+        return when (b0) {
+            section1 -> true
+            section2 -> {
+                if (b1 in section3..section4) {
+                    return true
+                }
+                when (b1) {
+                    section6 -> return true
+                }
+                false
+            }
+
+            section5 -> {
+                when (b1) {
+                    section6 -> return true
+                }
+                false
+            }
+
+            else -> false
+        }
+    }
+
+    fun getUserAgent(): String? {
+        return getRequest()?.let { getHeader(it, "User-Agent") }
     }
 }

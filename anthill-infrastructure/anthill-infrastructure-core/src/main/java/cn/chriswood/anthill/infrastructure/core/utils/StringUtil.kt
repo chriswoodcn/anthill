@@ -21,13 +21,14 @@ object StringUtil {
     val rightPad: (String, Int, Char) -> String = StringUtils::rightPad
     val isNotBlank: (String?) -> Boolean = StringUtils::isNotBlank
     val isBlank: (String?) -> Boolean = StringUtils::isBlank
-    val endsWithAny: (file: String?, ends: Array<String?>) -> Boolean = StringUtils::endsWithAny
     val blankToDefault: (str: String?, defaultValue: String?) -> String = StrUtil::blankToDefault
     val isEmpty: (str: String?) -> Boolean = StrUtil::isEmpty
     val trimToEmpty: (str: String) -> String = StringUtils::trimToEmpty
     val containsAny: (String?, String?) -> Boolean = StringUtils::containsAny
     val startsWith: (String?, String?) -> Boolean = StringUtils::startsWith
+    val startsWithAny: (String?, Array<String?>?) -> Boolean = StringUtils::startsWithAny
     val endsWith: (String?, String?) -> Boolean = StringUtils::endsWith
+    val endsWithAny: (String?, Array<String?>?) -> Boolean = StringUtils::endsWithAny
     val equalsAnyIgnoreCase: (String?, Array<String?>?) -> Boolean = StringUtils::equalsAnyIgnoreCase
 
     fun isNotEmpty(str: String?): Boolean {
