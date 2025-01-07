@@ -72,16 +72,41 @@ object AuthHelper {
             })
     }
 
+    private fun getStoreUser(stp: StpLogic, loginId: String): Any? {
+        return getStorageIfAbsentSet(
+            LOGIN_USER_KEY,
+            Supplier getStorageIfAbsentSet@{
+                val session = stp.getSessionByLoginId(loginId)
+                if (ObjectUtil.isNull(session)) {
+                    return@getStorageIfAbsentSet null
+                }
+                session[LOGIN_USER_KEY]
+            })
+    }
+
     fun <T> getTypedAuthUser(stp: StpLogic): AuthUser<T> {
         val getObj = getStoreUser(stp) ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
         return getObj as AuthUser<T>
     }
+
+    fun <T> getTypedAuthUser(stp: StpLogic, loginId: String): AuthUser<T> {
+        val getObj =
+            getStoreUser(stp, loginId) ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
+        return getObj as AuthUser<T>
+    }
+
 
     /**
      * 获取用户(多级缓存)
      */
     fun getAuthUser(stp: StpLogic): AuthUser<*> {
         val getObj = getStoreUser(stp) ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
+        return getObj as AuthUser<*>
+    }
+
+    fun getAuthUser(stp: StpLogic, loginId: String): AuthUser<*> {
+        val getObj =
+            getStoreUser(stp, loginId) ?: throw NotLoginException(NotLoginException.NOT_TOKEN_MESSAGE, null, null)
         return getObj as AuthUser<*>
     }
 
@@ -118,6 +143,13 @@ object AuthHelper {
 
     fun isLogin(stp: StpLogic, loginId: Any): Boolean {
         return stp.isLogin(loginId)
+    }
+
+    fun <T> refreshUser(stp: StpLogic, data: AuthUser<T>) {
+        if (isLogin(stp)) {
+            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
+            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
+        }
     }
 
     fun <T> refreshUser(stp: StpLogic, loginId: Any, data: AuthUser<T>) {
