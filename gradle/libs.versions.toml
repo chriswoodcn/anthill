@@ -13,6 +13,7 @@ lib_aliyun_core = "4.7.0"
 lib_aliyun_sts = "3.1.2"
 lib_nashorn_js = "15.4"
 lib_phonenumber = "8.13.40"
+lib_easyexcel = "3.3.4"
 plugin_spring_boot = "3.2.12"
 plugin_spring_dependency = "1.1.6"
 plugin_kotlin = "1.9.25"
@@ -34,6 +35,7 @@ aliyun_core = { module = "com.aliyun:aliyun-java-sdk-core", version.ref = "lib_a
 aliyun_sts = { module = "com.aliyun:aliyun-java-sdk-sts", version.ref = "lib_aliyun_sts" }
 nashorn_js = { module = "org.openjdk.nashorn:nashorn-core", version.ref = "lib_nashorn_js" }
 google-libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "lib_phonenumber" }
+easyexcel = { module = "com.alibaba:easyexcel", version.ref = "lib_easyexcel" }
 #anthill
 anthill-core = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-core", version.ref = "lib_anthill_infrastructure" }
 anthill-json = { group = "cn.chriswood.anthill", name = "anthill-infrastructure-json", version.ref = "lib_anthill_infrastructure" }
