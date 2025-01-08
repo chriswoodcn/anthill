@@ -7,7 +7,7 @@ import com.alibaba.excel.context.AnalysisContext
 import com.alibaba.excel.exception.ExcelDataConvertException
 import com.alibaba.excel.read.listener.ReadListener
 import com.alibaba.excel.util.ListUtils
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy
+import com.alibaba.excel.write.handler.WriteHandler
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -43,8 +43,7 @@ object ExcelUtil {
             // 如果要获取头的信息 配合invokeHeadMap使用
             if (exception is ExcelDataConvertException) {
                 log.error(
-                    "第{}行，第{}列解析异常，数据为:{}",
-                    exception.rowIndex, exception.columnIndex, exception.cellData
+                    "第{}行，第{}列解析异常，数据为:{}", exception.rowIndex, exception.columnIndex, exception.cellData
                 )
             }
         }
@@ -59,28 +58,84 @@ object ExcelUtil {
 
     inline fun <reified T : Any> readFromStream(
         inputStream: InputStream,
-        noinline readList: (list: List<T?>?) -> Unit
+        noinline readList: (list: List<T?>?) -> Unit,
+        noinline fail: ((Exception) -> Unit)?,
     ): Boolean {
-        EasyExcel.read(inputStream, T::class.java, UploadDataListener<T>(BATCH_SIZE, readList)).doReadAll()
-        return true
+        return try {
+            EasyExcel.read(inputStream, T::class.java, UploadDataListener<T>(BATCH_SIZE, readList)).doReadAll()
+            true
+        } catch (e: Exception) {
+            if (fail != null) fail(e)
+            false
+        }
+    }
+
+    /**
+     * 导出的数据源,分批写,减少内存开销
+     */
+    class DataSource<T>(
+        var pageNum: Int,
+        val pageSize: Int,
+        val total: Long,
+        val head: List<List<String>>?,
+        val fetchData: (Int, Int) -> List<T>?
+    ) {
+        private var finishSize: Long = 0
+        private var finished: Boolean = false
+
+        /**
+         * 是否已经导出完毕
+         */
+        fun hasFinished(): Boolean {
+            return finished
+        }
+
+        /**
+         * 获取一次数据
+         */
+        fun next(): List<T>? {
+            val tempList = fetchData(pageNum, pageSize)
+            if (tempList == null) {
+                finished = true
+                return null
+            }
+            pageNum += 1
+            finishSize += tempList.size
+            if (finishSize >= total) finished = true
+            return tempList
+        }
     }
 
     inline fun <reified T : Any> writeToStream(
         outputStream: OutputStream,
-        sheetName: String,
-        autoCloseStream: Boolean,
-        head: List<List<String>>? = null,
-        needHead: Boolean = true,
-        data: List<T>
+        dataSource: DataSource<T>,
+        vararg writeHandlers: WriteHandler,
+        noinline fail: ((Exception) -> Unit)?
     ): Boolean {
-        val excelWriterBuilder = EasyExcel.write(outputStream, T::class.java)
-            .registerWriteHandler(LongestMatchColumnWidthStyleStrategy())
-            .autoCloseStream(autoCloseStream)
-        if (head != null) {
-            excelWriterBuilder.head(head).needHead(needHead)
+        val writerBuilder = EasyExcel.write(outputStream, T::class.java).autoCloseStream(false)
+        if (writeHandlers.isNotEmpty()) {
+            writeHandlers.forEach {
+                writerBuilder.registerWriteHandler(it)
+            }
         }
-        excelWriterBuilder.sheet(sheetName).doWrite(data)
-        return true
+        if (dataSource.head != null) {
+            writerBuilder.head(dataSource.head)
+        }
+        val excelWriter = writerBuilder.build()
+        val writeSheet = EasyExcel.writerSheet().build()
+        return try {
+            while (!dataSource.hasFinished()) {
+                val nextData = dataSource.next()
+                nextData?.let {
+                    excelWriter.write(it, writeSheet)
+                }
+            }
+            true
+        } catch (e: Exception) {
+            if (fail != null) fail(e)
+            false
+        } finally {
+            excelWriter.close()
+        }
     }
-
 }
