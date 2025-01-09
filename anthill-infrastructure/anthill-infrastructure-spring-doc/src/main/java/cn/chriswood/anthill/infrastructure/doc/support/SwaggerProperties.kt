@@ -17,6 +17,11 @@ data class SwaggerProperties(
     val enabled: Boolean?,
 
     /**
+     * 是否需要支持Validation Group分组生成接口的schema
+     */
+    val enableValidationGroup: Boolean? = false,
+
+    /**
      * 标题
      */
     val title: String? = null,

@@ -37,7 +37,7 @@ dependencies {
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-core")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-json")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-mybatisflex")))
-    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
+//    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-redis")))
     implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web")))
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-auth")))
 //    implementation(project(mapOf("path" to ":anthill-infrastructure:anthill-infrastructure-web-annotation")))

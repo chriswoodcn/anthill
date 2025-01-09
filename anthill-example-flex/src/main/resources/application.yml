@@ -77,8 +77,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  profiles:
-    active: mac
+#  profiles:
+#    active: mac
 #    redis:
 #      repositories:
 #        enabled: false
@@ -98,6 +98,7 @@ spring:
 #      uri: mongodb://admin:123456@127.0.0.1:27017/scootor_test?authSource=admin
 
 springdoc:
+  remove-broken-reference-definitions: false
   #  default-flat-param-object: true
   swagger-ui:
     enabled: true

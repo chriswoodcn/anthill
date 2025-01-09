@@ -1,17 +1,22 @@
 package cn.chriswood.anthill.infrastructure.doc
 
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
+import cn.chriswood.anthill.infrastructure.doc.support.CustomSchemaConstraints
 import cn.chriswood.anthill.infrastructure.doc.support.OpenAPIServiceCustomizer
 import cn.chriswood.anthill.infrastructure.doc.support.SwaggerProperties
+import cn.chriswood.anthill.infrastructure.doc.support.ValidationGroupOperationCustomizer
+import cn.hutool.core.bean.BeanUtil
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import org.slf4j.LoggerFactory
 import org.springdoc.core.customizers.OpenApiBuilderCustomizer
 import org.springdoc.core.customizers.OpenApiCustomizer
+import org.springdoc.core.customizers.OperationCustomizer
 import org.springdoc.core.customizers.ServerBaseUrlCustomizer
 import org.springdoc.core.properties.SpringDocConfigProperties
 import org.springdoc.core.providers.JavadocProvider
@@ -120,6 +125,29 @@ class SpringdocConfig(
             }
             val newPaths = HackPaths()
             oldPaths.forEach { k: String, v: PathItem? ->
+                if (swaggerProperties.enableValidationGroup == true) {
+                    val options = v?.readOperations()
+                    if (!options.isNullOrEmpty()) {
+                        options.forEach { op ->
+                            log.info("operationId {}", op.operationId)
+                            val constraints =
+                                op.extensions[ValidationGroupOperationCustomizer.CUSTOM_SCHEMA_CONSTRAINTS]
+                            log.info("customSchemaConstraints {}", constraints)
+                            constraints?.let { c ->
+                                val customSchemaConstraints = c as CustomSchemaConstraints
+                                if (op.operationId != customSchemaConstraints.operationId) return@let
+                                customSchemaConstraints.schemas.forEach { s ->
+                                    openApi.components.schemas[s.originSchemaName]?.let { originSchema ->
+                                        val newSchema = Schema<Any>()
+                                        BeanUtil.copyProperties(originSchema, newSchema)
+                                        newSchema.required = s.required
+                                        openApi.components.schemas[s.newSchemaName] = newSchema
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 newPaths.addPathItem(
                     finalContextPath + k,
                     v
@@ -127,6 +155,16 @@ class SpringdocConfig(
             }
             openApi.paths = newPaths
         }
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+        prefix = "anthill.swagger",
+        name = ["enable-validation-group"],
+        havingValue = "true",
+    )
+    fun validationGroupOperationCustomizer(): OperationCustomizer {
+        return ValidationGroupOperationCustomizer()
     }
 
 
