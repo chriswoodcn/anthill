@@ -12,24 +12,23 @@ import org.springframework.cache.transaction.TransactionAwareCacheDecorator
 import org.springframework.util.StringUtils
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 /**
  * 修改 RedissonSpringCacheManager 源码 重写 cacheName 处理方法 支持多参数
  */
 class SpringCacheManager : CacheManager {
 
-    var dynamic = true
+    private var dynamic = true
 
-    var allowNullValues = true
+    private var allowNullValues = true
 
-    var transactionAware = true
+    private var transactionAware = true
 
-    private var configMap: Map<String, CacheConfig> = ConcurrentHashMap()
+    private var configMap: MutableMap<String, CacheConfig> = ConcurrentHashMap<String, CacheConfig>()
 
-    var instanceMap: ConcurrentMap<String, Cache> = ConcurrentHashMap()
+    private var instanceMap: MutableMap<String, Cache> = ConcurrentHashMap<String, Cache>()
 
-    fun setConfigMap(config: Map<String, CacheConfig>) {
+    fun setConfigMap(config: MutableMap<String, CacheConfig>) {
         configMap = config
     }
 
@@ -54,7 +53,7 @@ class SpringCacheManager : CacheManager {
         var config = configMap[mainName]
         if (config == null) {
             config = createDefaultConfig()
-            configMap.plus(mainName to config)
+            configMap[mainName] = config
         }
 
         if (array.size > 1) {

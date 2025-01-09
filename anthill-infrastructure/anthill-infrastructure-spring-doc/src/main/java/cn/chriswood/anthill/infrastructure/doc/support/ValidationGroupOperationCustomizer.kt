@@ -129,7 +129,7 @@ class ValidationGroupOperationCustomizer : OperationCustomizer {
                 ?.schema
         } else {
             //否则 schema在parameters中
-            operation.parameters.find {
+            operation.parameters?.find {
                 it.schema.`$ref`
                     .endsWith("/${originSchemaName}")
             }?.schema
