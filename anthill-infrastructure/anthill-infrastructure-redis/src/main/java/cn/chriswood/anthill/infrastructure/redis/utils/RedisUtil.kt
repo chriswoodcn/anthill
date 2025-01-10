@@ -200,7 +200,7 @@ object RedisUtil {
      * @param key 缓存键值
      * @return 缓存键值对应的数据
      */
-    fun <T> getCacheObject(key: String): T {
+    fun <T> getCacheObject(key: String): T? {
         val finalKey = KeyResolver(key)
         val rBucket: RBucket<T> = Client.getBucket(finalKey)
         return rBucket.get()

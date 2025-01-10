@@ -1,18 +1,25 @@
 package cn.chriswood.anthill.infrastructure.core.utils
 
 import java.lang.reflect.Field
+import kotlin.reflect.KProperty1
 
 object BeanUtil {
     /**
      * 使用java反射 配合noArgs和 allOpen插件可以copy data class
      */
-    inline fun <reified T : Any> copyBean(source: Any): T {
+    inline fun <reified T : Any> copyBean(source: Any, vararg ignores: KProperty1<T, *>): T {
         val kClass = T::class
         val declaredConstructor = kClass.java.getDeclaredConstructor()
         declaredConstructor.isAccessible = true
         val instance = kClass.objectInstance ?: declaredConstructor.newInstance()
         val sourceFields = getAllFields(source::class.java)
-        val targetFields = getAllFields(instance::class.java)
+        val targetFields = if (ignores.isNotEmpty()) {
+            getAllFields(T::class.java).filter {
+                !ignores.map { ignore -> ignore.name }.contains(it.name)
+            }
+        } else {
+            getAllFields(T::class.java)
+        }
         val targetInvokes: MutableMap<String, Field> = mutableMapOf()
         targetFields.forEach {
             it.isAccessible = true
