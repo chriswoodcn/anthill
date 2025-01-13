@@ -41,7 +41,7 @@ class SaTokenDaoImpl : SaTokenDao {
         RedisUtil.expireDuration(key, Duration.ofSeconds(timeout))
     }
 
-    override fun getObject(key: String): Any {
+    override fun getObject(key: String): Any? {
         return RedisUtil.getCacheObject(key)
     }
 

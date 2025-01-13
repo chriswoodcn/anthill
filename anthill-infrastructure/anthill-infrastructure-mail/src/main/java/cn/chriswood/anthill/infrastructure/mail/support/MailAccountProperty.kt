@@ -1,10 +1,10 @@
 package cn.chriswood.anthill.infrastructure.mail.support
 
 data class MailAccountProperty(
+    val key: String,
     /**
      * SMTP服务器域名
      */
-
     val host: String,
 
     /**
@@ -60,5 +60,7 @@ data class MailAccountProperty(
      */
     val connectionTimeout: Long = 0,
 
-    val limitCount: Int = 0,
+    val limitDayCount: Int = 0,
+
+    val limitHourCount: Int = 0,
 )

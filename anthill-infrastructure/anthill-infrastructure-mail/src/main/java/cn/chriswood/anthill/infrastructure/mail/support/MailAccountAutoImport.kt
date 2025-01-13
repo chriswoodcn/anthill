@@ -1,12 +1,10 @@
 package cn.chriswood.anthill.infrastructure.mail.support
 
-import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.hutool.core.util.StrUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
-import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -19,7 +17,7 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val MAIL_ACCPUNT_PREFIX = "anthill.mail.account"
+    private val MAIL_ACCOUNT_PREFIX = "anthill.mail"
 
     private val BEAN_NAME = "%sMailAccount"
 
@@ -37,24 +35,20 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
     override fun registerBeanDefinitions(importingClassMetadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
         log.debug(">>>>>>>>>> init MailAccount >>>>>>>>>>")
         val binder = Binder.get(environment)
-        val detectMailAccountListStr = environment?.getProperty(
-            MAIL_ACCPUNT_PREFIX
-        )
-        if (StringUtil.isNotBlank(detectMailAccountListStr)) {
-            val accountPropertiesList =
-                binder.bindOrCreate(MAIL_ACCPUNT_PREFIX, Bindable.listOf(MailAccountProperty::class.java))
-            if (!accountPropertiesList.isNullOrEmpty()) {
-                accountPropertiesList.forEach {
-                    injectMailAccountBean(it, registry)
-                }
+        val mailPropertiesBinder = binder.bind(MAIL_ACCOUNT_PREFIX, MailProperties::class.java)
+        if (mailPropertiesBinder.isBound) {
+            mailPropertiesBinder.get().accounts?.forEach {
+                injectMailAccountBeanByKey(it.key, it, registry)
             }
-        } else {
-            log.debug(">>>>>>>>>> detect not exist MailAccount >>>>>>>>>>")
         }
     }
 
-    private fun injectMailAccountBean(it: MailAccountProperty?, registry: BeanDefinitionRegistry) {
-        if (it == null || it.user.isEmpty()) return
+    private fun injectMailAccountBeanByKey(
+        key: String,
+        it: MailAccountProperty,
+        registry: BeanDefinitionRegistry
+    ) {
+        if (it.user.isEmpty()) return
         val mailAccountBeanDefinition = BeanDefinitionBuilder
             .genericBeanDefinition(EnhanceMailAccount::class.java) {
                 val account = MailAccount()
@@ -69,12 +63,17 @@ class MailAccountAutoImport : ImportBeanDefinitionRegistrar, EnvironmentAware, A
                 account.setSslEnable(it.sslEnable)
                 account.setTimeout(it.timeout)
                 account.setConnectionTimeout(it.connectionTimeout)
-                val enhanceMailAccount = EnhanceMailAccount(account)
-                if (it.limitCount > 0) enhanceMailAccount.limitCount = it.limitCount
+                val enhanceMailAccount = EnhanceMailAccount(key, account)
+                if (it.limitDayCount > 0) {
+                    enhanceMailAccount.limitDayCount = it.limitDayCount
+                }
+                if (it.limitHourCount > 0) {
+                    enhanceMailAccount.limitHourCount = it.limitHourCount
+                }
                 enhanceMailAccount
             }.setScope(BeanDefinition.SCOPE_PROTOTYPE).getBeanDefinition()
         val subPre = StrUtil.subPre(it.from, it.from.indexOf('@') + 1)
-        log.debug(">>>>>>>>>> registry EnhanceMailAccount  ${it.user} >>>>>>>>>>")
+        log.debug(">>>>>>>>>> registry EnhanceMailAccount $key ${it.user} >>>>>>>>>>")
         registry.registerBeanDefinition(
             String.format(BEAN_NAME, subPre),
             mailAccountBeanDefinition

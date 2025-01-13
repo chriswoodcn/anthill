@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 /**
  * MailPool
@@ -23,7 +27,7 @@ object MailPool {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val mailAccounts: MutableMap<String, EnhanceMailAccount> = mutableMapOf()
+    private val mailAccounts: ConcurrentMap<String, MutableList<EnhanceMailAccount>> = ConcurrentHashMap()
 
     private var hasFetchBeans = false
 
@@ -34,51 +38,57 @@ object MailPool {
     }
 
     private fun init() {
-        val beansOfType = SpringUtil.getBeansOfType(EnhanceMailAccount::class.java)
-        addMailAccounts(beansOfType.values)
-        hasFetchBeans = true
-        log.debug(">>>>>>>>>> MailPool fetch enhanceMailAccount size:${mailAccounts.size}>>>>>>>>>>")
-    }
-
-    fun addMailAccount(account: EnhanceMailAccount) {
-        mailAccounts[account.mailAccount.from] = account
-    }
-
-    fun addMailAccounts(accounts: Collection<EnhanceMailAccount>) {
-        accounts.forEach {
-            mailAccounts[it.mailAccount.from] = it
+        val beans = SpringUtil.getBeansOfType(EnhanceMailAccount::class.java)
+        beans.forEach {
+            addMailAccount(it.value.key, it.value)
         }
+        hasFetchBeans = true
+        mailAccounts.forEach { (k, v) ->
+            log.debug(">>>>>>>>>> MailPool fetch enhanceMailAccount key = $k , size = ${v.size} >>>>>>>>>>")
+        }
+
     }
 
-    fun getAvailableMailAccount(key: String?): MailPool {
+    fun addMailAccount(key: String, account: EnhanceMailAccount) {
+        var list = mailAccounts[key]
+        if (null == list) {
+            mailAccounts[key] = mutableListOf()
+            list = mailAccounts[key]
+        }
+        list!!.add(account)
+    }
+
+    fun addMailAccounts(key: String, accounts: Collection<EnhanceMailAccount>) {
+        var list = mailAccounts[key]
+        if (null == list) {
+            mailAccounts[key] = mutableListOf()
+            list = mailAccounts[key]
+        }
+        list!!.addAll(accounts)
+    }
+
+    fun getAvailableMailAccount(key: String?, default: String): MailPool {
         if (!hasFetchBeans && mailAccounts.isEmpty()) {
             init()
         }
-        log.debug(
-            "[MailPool] [getOneAvailableMailAccount] mailAccounts.size: {}, mailAccounts.keys: {}",
-            mailAccounts.size,
-            mailAccounts.keys
-        )
         if (mailAccounts.isEmpty()) {
-            throw MailException("mail account pool is empty")
+            throw MailException("Mail Pool is empty")
         }
-        if (!key.isNullOrBlank()) {
-            val account = mailAccounts[key]
-            if (account != null) {
-                this.availableEnhanceMailAccount.set(account)
-                return this
+        val k = key ?: default
+
+        val account = mailAccounts[k]
+        if (!account.isNullOrEmpty()) {
+            account.filter {
+                it.dayCount < it.limitDayCount && it.hourCount < it.limitHourCount
+            }.sortedBy { it.hourCount }.sortedBy { it.dayCount }
+            if (account.isEmpty()) {
+                throw MailException("No Available Mail Account")
             }
+            this.availableEnhanceMailAccount.set(account[0])
+            return this
+        } else {
+            throw MailException("Mail Accounts is empty")
         }
-        val filtered = mailAccounts.values.filter {
-            !(it.sendCount >= it.limitCount && it.limitCount != -1)
-        }
-        val sorted = filtered.sortedBy { it.sendCount }
-        if (sorted.isEmpty()) {
-            throw MailException("no available mail account")
-        }
-        log.debug("[MailPool] [getOneAvailableMailAccount] use account: ${sorted[0].mailAccount.user}")
-        this.availableEnhanceMailAccount.set(sorted[0])
-        return this
     }
 
     fun sendText(to: String, subject: String, content: String, vararg files: File?): Boolean {
@@ -163,16 +173,28 @@ object MailPool {
         try {
             res = mail.send()
             //发送成功 计数加1
-            enhanceMailAccount.sendCount += 1
+            enhanceMailAccount.dayCount += 1
+            enhanceMailAccount.hourCount += 1
         } catch (e: Exception) {
-            log.error("[MailPool] [sendAll] error: {}", e.message)
+            log.error("[MailPool] [doSend] error: {}", e.message)
         } finally {
-            // 如果现在比较上次发送日期已经过去了 重置sendCount为1
-            val lastSendDate = enhanceMailAccount.lastSendTime
-            val nowDate = LocalDate.now()
-            enhanceMailAccount.lastSendTime = nowDate
-            if (nowDate.isAfter(lastSendDate)) {
-                enhanceMailAccount.sendCount = 1
+            if (enhanceMailAccount.limitDayCount != Int.MAX_VALUE) {
+                // 如果现在比较上次发送日期已经过去了 重置dayCount为1
+                val lastSendDate = enhanceMailAccount.lastSendDate
+                val nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern(Constants.PATTERN_YYYY_MM_DD))
+                enhanceMailAccount.lastSendDate = nowDate
+                if (nowDate != lastSendDate) {
+                    enhanceMailAccount.dayCount = 1
+                }
+            }
+            if (enhanceMailAccount.limitHourCount != Int.MAX_VALUE) {
+                val lastSendHour = enhanceMailAccount.lastSendHour
+                val nowDateTime =
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.PATTERN_YYYY_MM_DD_HH))
+                enhanceMailAccount.lastSendHour = nowDateTime
+                if (lastSendHour != nowDateTime) {
+                    enhanceMailAccount.hourCount = 1
+                }
             }
             //可用邮箱账号重置
             availableEnhanceMailAccount.set(null)

@@ -7,24 +7,25 @@ anthill:
     type: single
   mail:
     account:
-      - host: hwsmtp.exmail.qq.com
-        port: 465
-        user: project-dev@taotaozn.com
-        pass: TAOtao0519@
-        auth: true
-        from: project-dev@taotaozn.com
-        ssl-enable: true
-        starttls-enable: true
-        limit-count: 200
-      - host: smtp.gmail.com
-        port: 465
-        user: taochenzn@gmail.com
-        pass: uhvjsorhtnqmpish
-        auth: true
-        from: taochenzn@gmail.com
-        ssl-enable: true
-        starttls-enable: true
-        limit-count: 100
+      -1:
+        - host: hwsmtp.exmail.qq.com
+          port: 465
+          user: project-dev@taotaozn.com
+          pass: TAOtao0519@
+          auth: true
+          from: project-dev@taotaozn.com
+          ssl-enable: true
+          starttls-enable: true
+          limit-count: 200
+        - host: smtp.gmail.com
+          port: 465
+          user: taochenzn@gmail.com
+          pass: uhvjsorhtnqmpish
+          auth: true
+          from: taochenzn@gmail.com
+          ssl-enable: true
+          starttls-enable: true
+          limit-count: 100
   aliyun-oss-sts:
     enabled: true
     oss:
@@ -53,7 +54,7 @@ anthill:
       #        slave:
       #          driver: com.mysql.cj.jdbc.Driver
       #          url: jdbc:mysql://8.209.74.127:3306/scootor_mt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B2
-      #          username: root
+    #          username: root
     #          password: TAOtao88888888
     #          query: SELECT 1 FROM DUAL
     multi:
