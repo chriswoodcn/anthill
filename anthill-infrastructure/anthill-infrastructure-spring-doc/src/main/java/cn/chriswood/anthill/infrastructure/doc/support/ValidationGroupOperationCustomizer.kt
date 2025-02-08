@@ -1,7 +1,6 @@
 package cn.chriswood.anthill.infrastructure.doc.support
 
 import cn.chriswood.anthill.infrastructure.core.logger
-import cn.hutool.json.JSONUtil
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.media.Schema
 import jakarta.validation.constraints.NotBlank
@@ -29,19 +28,19 @@ class ValidationGroupOperationCustomizer : OperationCustomizer {
         const val CUSTOM_SCHEMA_CONSTRAINTS = "CustomSchemaConstraints"
     }
 
-    private val log = logger<ValidationGroupOperationCustomizer>()
+    private val log = logger()
     override fun customize(operation: Operation, handlerMethod: HandlerMethod): Operation {
         val parameters = handlerMethod.methodParameters
         val customSchemaConstraints = CustomSchemaConstraints(operation.operationId)
+
         parameters.forEach { parameter ->
-            log.info(JSONUtil.toJsonPrettyStr(parameter))
-            log.info(parameter.executable.name)
-            log.info(parameter.parameterType.name)
             //首先必需是自定义类型才需要修改schema
             if (isCustomType(parameter.parameterType)) {
                 //需要有Validated注解
                 if (parameter.hasParameterAnnotation(Validated::class.java)) {
-                    log.info("hasParameterAnnotation Validated")
+                    log.debug("hasParameterAnnotation Validated")
+                    log.debug(parameter.executable.name)
+                    log.debug(parameter.parameterType.name)
                     val validated = parameter.getParameterAnnotation(Validated::class.java)
                     //拿到该接口 该参数的分组信息
                     val groups = validated?.value?.map { it.java.simpleName } ?: emptyList()
@@ -85,6 +84,7 @@ class ValidationGroupOperationCustomizer : OperationCustomizer {
             operation.extensions = mutableMapOf()
         }
         //customSchemaConstraints附加到operation上
+        log.debug("set CUSTOM_SCHEMA_CONSTRAINTS {}", customSchemaConstraints)
         operation.extensions[CUSTOM_SCHEMA_CONSTRAINTS] = customSchemaConstraints
         return operation
     }

@@ -70,6 +70,7 @@ anthill:
     contact:
       name: chriswoodcn
       email: chriswoodcn@aliyun.com
+    enable-validation-group: true
 
 mybatis-flex:
   datasource:
