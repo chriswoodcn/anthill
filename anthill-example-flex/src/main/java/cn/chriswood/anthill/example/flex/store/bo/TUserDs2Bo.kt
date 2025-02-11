@@ -5,12 +5,10 @@ import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import com.mybatisflex.annotation.Column
 import com.mybatisflex.annotation.Id
 import com.mybatisflex.annotation.KeyType
-import com.mybatisflex.annotation.Table
 import java.time.LocalDateTime
 
 @NoArgs
-@Table("t_user", dataSource = "ds2")
-data class TUserDs2Dto(
+data class TUserDs2Bo(
     @Id(keyType = KeyType.Auto)
     var userId: Long = 0L,
 
