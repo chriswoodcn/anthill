@@ -1,14 +1,11 @@
 package cn.chriswood.anthill.infrastructure.web.auth.support
 
 import cn.chriswood.anthill.infrastructure.core.enums.UserType
-import cn.dev33.satoken.context.SaHolder
 import cn.dev33.satoken.exception.NotLoginException
 import cn.dev33.satoken.stp.SaLoginModel
 import cn.dev33.satoken.stp.StpLogic
-import cn.dev33.satoken.stp.StpUtil
 import cn.hutool.core.util.ObjectUtil
 import java.io.Serializable
-import java.util.function.Supplier
 
 object AuthHelper {
     const val LOGIN_USER_KEY = "loginUser"
@@ -30,9 +27,6 @@ object AuthHelper {
      * @param saLoginModel     配置参数
      */
     fun <T> login(stp: StpLogic, authUser: AuthUser<T>, saLoginModel: SaLoginModel) {
-        // 缓存数据到上下文持有类
-        val storage = SaHolder.getStorage()
-        storage[LOGIN_USER_KEY] = authUser
         val model = ObjectUtil.defaultIfNull(saLoginModel, SaLoginModel())
         //satoken真实登录方法
         stp.login(
@@ -40,8 +34,8 @@ object AuthHelper {
             model
                 .setExtra(USER_KEY, authUser.userId)
         )
-        // 缓存到会话对象
-        stp.tokenSession[LOGIN_USER_KEY] = authUser
+        // 缓存到会话对象 在 SaSession 存储的数据在一次会话范围内有效，会话结束后数据自动清除。必须登录后才能使用 SaSession 对象。
+        stp.session[LOGIN_USER_KEY] = authUser
     }
 
     fun logout(stp: StpLogic) {
@@ -61,27 +55,11 @@ object AuthHelper {
     }
 
     private fun getStoreUser(stp: StpLogic): Any? {
-        return getStorageIfAbsentSet(
-            LOGIN_USER_KEY,
-            Supplier getStorageIfAbsentSet@{
-                val session = stp.tokenSession
-                if (ObjectUtil.isNull(session)) {
-                    return@getStorageIfAbsentSet null
-                }
-                session[LOGIN_USER_KEY]
-            })
+        return getStorageIfAbsentSet(stp)
     }
 
     private fun getStoreUser(stp: StpLogic, loginId: String): Any? {
-        return getStorageIfAbsentSet(
-            LOGIN_USER_KEY,
-            Supplier getStorageIfAbsentSet@{
-                val session = stp.getSessionByLoginId(loginId)
-                if (ObjectUtil.isNull(session)) {
-                    return@getStorageIfAbsentSet null
-                }
-                session[LOGIN_USER_KEY]
-            })
+        return getStorageIfAbsentSet(stp, loginId)
     }
 
     fun <T> getTypedAuthUser(stp: StpLogic): AuthUser<T> {
@@ -125,7 +103,7 @@ object AuthHelper {
     }
 
     fun getExtra(stp: StpLogic, key: String): Any? {
-        return getStorageIfAbsentSet(key) {
+        return getStorageIfAbsentSet(stp) {
             stp.getExtra(
                 key
             )
@@ -147,34 +125,32 @@ object AuthHelper {
 
     fun <T> refreshUser(stp: StpLogic, data: AuthUser<T>) {
         if (isLogin(stp)) {
-            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
-            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
+            stp.session[LOGIN_USER_KEY] = data
         }
     }
 
     fun <T> refreshUser(stp: StpLogic, loginId: Any, data: AuthUser<T>) {
         val myLoginId = stp.loginId
         if (myLoginId == loginId) {
-            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
-            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
+            stp.session[LOGIN_USER_KEY] = data
         }
         if (isLogin(stp, loginId)) {
-            StpUtil.switchTo(loginId)
-            SaHolder.getStorage().set(LOGIN_USER_KEY, data)
-            StpUtil.getTokenSession()[LOGIN_USER_KEY] = data
-            StpUtil.switchTo(myLoginId)
+            val session = stp.getSessionByLoginId(loginId)
+            session[LOGIN_USER_KEY] = data
         }
     }
 
-    private fun getStorageIfAbsentSet(key: String, handle: Supplier<Any?>): Any? {
+    private fun getStorageIfAbsentSet(stp: StpLogic): Any? {
         return try {
-            var obj = SaHolder.getStorage()[key]
-            if (ObjectUtil.isNull(obj)) {
-                obj = handle.get()
-                if (ObjectUtil.isNotNull(obj))
-                    SaHolder.getStorage()[key] = obj
-            }
-            obj
+            stp.session[LOGIN_USER_KEY]
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun getStorageIfAbsentSet(stp: StpLogic, loginId: Any): Any? {
+        return try {
+            stp.getSessionByLoginId(loginId)[LOGIN_USER_KEY]
         } catch (e: Exception) {
             null
         }
