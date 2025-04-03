@@ -1,13 +1,11 @@
 package cn.chriswood.anthill.infrastructure.web.utils
 
-import cn.chriswood.anthill.infrastructure.core.enums.DeviceType
-import cn.chriswood.anthill.infrastructure.core.enums.EndpointType
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.*
 
-object HttpRequestUtil {
+object HttpRequestUtil : HttpRequestUtilInterface {
     const val LanguageTag = "language"
     const val DefaultLang = "en"
     const val DeviceTag = "device"
@@ -17,7 +15,7 @@ object HttpRequestUtil {
         return (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
     }
 
-    fun getLang(): String {
+    override fun getLang(): String {
         val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), LanguageTag) ?: return DefaultLang
         if (headerIgnoreCase.indexOf('_') > -1) {
             return headerIgnoreCase.split('_')[0]
@@ -33,7 +31,7 @@ object HttpRequestUtil {
         return headerIgnoreCase
     }
 
-    fun getLocale(): Locale {
+    override fun getLocale(): Locale {
         return Locale(getLang())
     }
 
@@ -41,22 +39,14 @@ object HttpRequestUtil {
         return Locale(getLang(request))
     }
 
-    fun getDevice(): String {
+    override fun getDevice(): String {
         val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), DeviceTag)
         return headerIgnoreCase ?: DefaultTag
     }
 
-    fun getDeviceEnum(): DeviceType {
-        return DeviceType.getEnumByCode(getDevice())
-    }
-
-    fun getEndpoint(): String {
+    override fun getEndpoint(): String {
         val headerIgnoreCase = getHeaderIgnoreCase(getRequest(), EndpointTag)
         return headerIgnoreCase ?: DefaultTag
-    }
-
-    fun getEndpointEnum(): EndpointType {
-        return EndpointType.getEnumByCode(getEndpoint())
     }
 
     fun getHeaderIgnoreCase(request: HttpServletRequest, nameIgnoreCase: String?): String? {
