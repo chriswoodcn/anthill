@@ -19,7 +19,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor
 
 @AutoConfiguration
 @AutoConfigureAfter(AuthConfig::class)
-@ConditionalOnProperty(value = ["websocket.enabled"], havingValue = "true")
+@ConditionalOnProperty(value = ["anthill.websocket.enabled"], havingValue = "true")
 @EnableConfigurationProperties(WebSocketProperties::class)
 @EnableWebSocket
 class WebSocketConfig {
