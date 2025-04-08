@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 @EnableConfigurationProperties(MongoConfigProperties::class)
 @ConditionalOnExpression(
     "#{'true'.equals(environment.getProperty('anthill.mongo.enabled')) " +
-        "&& 'dynamic'.equals(environment.getProperty('anthill.mongo.enabled'))}"
+        "&& 'dynamic'.equals(environment.getProperty('anthill.mongo.type'))}"
 )
 class DynamicMongoConfig(
     private val mongoConfigProperties: MongoConfigProperties

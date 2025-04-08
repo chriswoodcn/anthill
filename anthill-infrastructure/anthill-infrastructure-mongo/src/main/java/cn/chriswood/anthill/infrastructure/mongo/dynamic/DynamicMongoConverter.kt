@@ -33,6 +33,14 @@ class DynamicMongoConverter(
         ?: throw IllegalStateException("No converter found")
     }
 
+    fun getConverter(): MongoConverter {
+        if (converters.isEmpty() && !initialized) {
+            init()
+        }
+        return converters[DynamicMongoContextHolder.getDatabase()] ?: converters[factory.defaultDataSource]
+        ?: throw IllegalStateException("No converter found")
+    }
+
     fun addConverter(name: String, converter: MappingMongoConverter) {
         converters[name] = converter
     }

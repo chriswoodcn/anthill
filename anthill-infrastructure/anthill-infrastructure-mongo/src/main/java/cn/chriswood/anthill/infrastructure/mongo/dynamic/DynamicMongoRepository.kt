@@ -1,28 +1,35 @@
 package cn.chriswood.anthill.infrastructure.mongo.dynamic
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation
 import org.springframework.data.mongodb.repository.support.SimpleMongoRepository
 import org.springframework.data.repository.query.FluentQuery
+import java.lang.reflect.ParameterizedType
 import java.util.*
 import java.util.function.Function
+
 
 /**
  * DynamicMongoTemplate
  * 动态数据源的repositoryBaseClass
  */
-class DynamicMongoRepository<T, ID>(
+open class DynamicMongoRepository<T, ID>(
     private val entityInformation: MongoEntityInformation<T, ID>,
-    private val mongoTemplates: MutableMap<String, MongoTemplate>,
+    @Qualifier("dynamicMongoTemplate")
+    private val dynamicMongoTemplate: DynamicMongoTemplate,
 ) : MongoRepository<T, ID> {
 
     private var delegate: SimpleMongoRepository<T, ID> =
-        SimpleMongoRepository(entityInformation, mongoTemplates[DynamicMongoContextHolder.getDatabase()]!!)
+        SimpleMongoRepository(
+            entityInformation,
+            dynamicMongoTemplate.getTemplate()
+        )
 
     override fun <S : T> save(entity: S & Any): S & Any {
         return delegate.save(entity)
@@ -117,5 +124,16 @@ class DynamicMongoRepository<T, ID>(
 
     override fun <S : T> findAll(example: Example<S>, pageable: Pageable): Page<S> {
         return delegate.findAll(example, pageable)
+    }
+
+    open fun <R> aggregate(aggregation: Aggregation, outputType: Class<R>): List<R> {
+        return dynamicMongoTemplate.getTemplate()
+            .aggregate(aggregation, getEntityClass(), outputType)
+            .mappedResults
+    }
+
+    private fun getEntityClass(): Class<T> {
+        @Suppress("UNCHECKED_CAST")
+        return (javaClass.getGenericSuperclass() as ParameterizedType).actualTypeArguments[0] as Class<T>
     }
 }

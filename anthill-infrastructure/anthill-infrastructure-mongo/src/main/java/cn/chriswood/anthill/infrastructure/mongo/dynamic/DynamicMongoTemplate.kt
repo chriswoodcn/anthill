@@ -30,6 +30,14 @@ class DynamicMongoTemplate(
         ?: throw IllegalStateException("No Template found")
     }
 
+    fun getTemplate(): MongoTemplate {
+        if (templates.isEmpty() && !initialized) {
+            init()
+        }
+        return templates[DynamicMongoContextHolder.getDatabase()] ?: templates[factory.defaultDataSource]
+        ?: throw IllegalStateException("No Template found")
+    }
+
     fun addTemplate(name: String, template: MongoTemplate) {
         templates[name] = template
     }

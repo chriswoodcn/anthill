@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 @EnableConfigurationProperties(MongoConfigProperties::class)
 @ConditionalOnExpression(
     "#{'true'.equals(environment.getProperty('anthill.mongo.enabled')) " +
-        "&& 'single'.equals(environment.getProperty('anthill.mongo.enabled'))}"
+        "&& 'single'.equals(environment.getProperty('anthill.mongo.type'))}"
 )
 class SingleMongoConfig(
     private val mongoConfigProperties: MongoConfigProperties
