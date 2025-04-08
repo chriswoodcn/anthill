@@ -1,32 +1,27 @@
-package cn.chriswood.anthill.infrastructure.mongo.support
+package cn.chriswood.anthill.infrastructure.mongo.dynamic
 
+import cn.chriswood.anthill.infrastructure.mongo.support.Constants
 import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 
 class DynamicMongoDatabaseFactory(
-    val factories: MutableMap<String, MongoDatabaseFactory>
+    private val factories: MutableMap<String, MongoDatabaseFactory>
 ) : AbstractMongoClientConfiguration() {
-
+    private final val storeFactories = mutableMapOf<String, MongoDatabaseFactory>()
     val defaultDataSource = Constants.PRIMARY
-    val transactionDataSource = ThreadLocal<String>()
 
-    fun setTransactionDataSource(dataSourceName: String?) {
-        transactionDataSource.set(dataSourceName)
+    init {
+        storeFactories.putAll(factories)
     }
 
-    fun clearTransactionDataSource() {
-        transactionDataSource.remove()
-    }
 
     override fun mongoDbFactory(): MongoDatabaseFactory {
         // 事务期间优先使用事务绑定的数据源
-        var dataSourceName = transactionDataSource.get()
 
-        if (dataSourceName == null) {
-            dataSourceName = DynamicMongoContextHolder.getDatabase() ?: defaultDataSource
-        }
+        val dataSourceName = DynamicMongoContextHolder.getDatabase() ?: defaultDataSource
 
-        return factories[dataSourceName]
+
+        return storeFactories[dataSourceName]
             ?: throw IllegalStateException("No MongoDatabaseFactory configured for: $dataSourceName")
     }
 
@@ -35,12 +30,15 @@ class DynamicMongoDatabaseFactory(
     }
 
     fun getMongoDatabaseFactory(name: String): MongoDatabaseFactory {
-        return factories[name]
+        return storeFactories[name]
             ?: throw IllegalStateException("No MongoDatabaseFactory configured for: $name")
     }
 
     fun getDataSourceNames(): List<String> {
-        return factories.keys.toList()
+        return storeFactories.keys.toList()
     }
 
+    fun addFactory(name: String, factory: MongoDatabaseFactory) {
+        storeFactories[name] = factory
+    }
 }

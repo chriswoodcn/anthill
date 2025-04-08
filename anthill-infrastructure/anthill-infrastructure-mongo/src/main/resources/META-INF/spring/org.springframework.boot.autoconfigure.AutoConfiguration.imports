@@ -1,1 +1,4 @@
-cn.chriswood.anthill.infrastructure.mongo.MongoConfig
+cn.chriswood.anthill.infrastructure.mongo.BaseMongoConfig
+cn.chriswood.anthill.infrastructure.mongo.SingleMongoConfig
+cn.chriswood.anthill.infrastructure.mongo.DynamicMongoConfig
+cn.chriswood.anthill.infrastructure.mongo.MongoTransactionConfig

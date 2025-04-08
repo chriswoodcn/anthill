@@ -1,11 +1,9 @@
-package cn.chriswood.anthill.infrastructure.mongo.support
+package cn.chriswood.anthill.infrastructure.mongo.dynamic
 
 import org.springframework.data.mongodb.MongoTransactionManager
 import org.springframework.transaction.TransactionDefinition
 
-class DynamicMongoTransactionManager(
-    private val databaseFactory: DynamicMongoDatabaseFactory
-) : MongoTransactionManager() {
+class DynamicMongoTransactionManager : MongoTransactionManager() {
 
     override fun doBegin(transaction: Any, definition: TransactionDefinition) {
         // 在事务开始前检查数据源
@@ -13,12 +11,12 @@ class DynamicMongoTransactionManager(
             ?: throw IllegalStateException("No data source specified for transaction")
 
         // 设置事务线程使用固定数据源
-        databaseFactory.setTransactionDataSource(dataSourceName)
+        DynamicMongoContextHolder.setTransaction(dataSourceName)
 
         try {
             super.doBegin(transaction, definition)
         } catch (e: Exception) {
-            databaseFactory.clearTransactionDataSource()
+            DynamicMongoContextHolder.clearTransaction()
             throw e
         }
     }
@@ -27,7 +25,7 @@ class DynamicMongoTransactionManager(
         try {
             super.doCleanupAfterCompletion(transaction)
         } finally {
-            databaseFactory.clearTransactionDataSource()
+            DynamicMongoContextHolder.clearTransaction()
         }
     }
 }

@@ -4,7 +4,6 @@ enum class MongoDbTypeEnum(
     var code: String
 ) {
     SINGLE(Constants.SINGLE),
-    Multi(Constants.MULTI),
     Dynamic(Constants.DYNAMIC);
 
     companion object {

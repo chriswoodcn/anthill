@@ -1,14 +1,13 @@
 package cn.chriswood.anthill.infrastructure.mongo
 
-import cn.chriswood.anthill.infrastructure.mongo.support.DynamicMongoDatabaseFactory
-import cn.chriswood.anthill.infrastructure.mongo.support.DynamicMongoTransactionManager
+import cn.chriswood.anthill.infrastructure.mongo.dynamic.DynamicMongoDatabaseFactory
+import cn.chriswood.anthill.infrastructure.mongo.dynamic.DynamicMongoTransactionManager
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.MongoTransactionManager
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 
 @AutoConfiguration
 @ConditionalOnProperty(
@@ -33,10 +32,7 @@ class MongoTransactionConfig {
      */
     @Bean
     @ConditionalOnBean(DynamicMongoDatabaseFactory::class)
-    fun mongoDynamicTransactionManager(
-        factory: DynamicMongoDatabaseFactory,
-        converter: MappingMongoConverter,
-    ): MongoTransactionManager {
-        return DynamicMongoTransactionManager(factory)
+    fun mongoDynamicTransactionManager(): MongoTransactionManager {
+        return DynamicMongoTransactionManager()
     }
 }
