@@ -54,6 +54,10 @@ class WebInvokeTimeInterceptor : WebRequestInterceptor {
         }
     }
 
+    override fun postHandle(request: WebRequest, model: ModelMap?) {
+
+    }
+
     /**
      * 判断是否是需要过滤的请求
      *
@@ -69,10 +73,6 @@ class WebInvokeTimeInterceptor : WebRequestInterceptor {
         return filters.any {
             requestURI.startsWith(it)
         }
-    }
-
-    override fun postHandle(request: WebRequest, model: ModelMap?) {
-
     }
 
     override fun afterCompletion(request: WebRequest, ex: Exception?) {

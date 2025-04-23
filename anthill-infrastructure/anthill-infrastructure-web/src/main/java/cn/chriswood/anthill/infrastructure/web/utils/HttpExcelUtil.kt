@@ -126,12 +126,12 @@ object HttpExcelUtil {
      * 导出的数据源,分批写,减少内存开销
      */
     class DataSource<T>(
-        var pageNum: Int,
-        val pageSize: Int,
+        var pageNum: Long,
+        val pageSize: Long,
         val total: Long,
         val head: List<List<String>>?,
         val writeHandlers: List<WriteHandler>?,
-        val fetchData: (Int, Int) -> List<T>?,
+        val fetchData: (Long, Long) -> List<T>?,
     ) {
         private var finishSize: Long = 0
         private var finished: Boolean = false

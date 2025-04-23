@@ -4,6 +4,7 @@ import cn.chriswood.anthill.infrastructure.json.support.TranslationSerializerMod
 import cn.chriswood.anthill.infrastructure.json.utils.JacksonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
@@ -17,6 +18,7 @@ object JacksonConfigurationUtil {
     object DefaultJacksonConfigurationsApplier : ApplyJacksonConfigurations {
         override fun apply(builder: Jackson2ObjectMapperBuilder) {
             builder.serializers()
+            builder.featuresToEnable(MapperFeature.USE_ANNOTATIONS)
             builder.serializationInclusion(JsonInclude.Include.ALWAYS)
             builder.failOnUnknownProperties(false)
             builder.failOnEmptyBeans(false)
@@ -44,7 +46,10 @@ object JacksonConfigurationUtil {
     fun jackson2ObjectMapperBuilderCustomizer(applier: ApplyJacksonConfigurations?): Jackson2ObjectMapperBuilderCustomizer {
         return Jackson2ObjectMapperBuilderCustomizer { builder: Jackson2ObjectMapperBuilder ->
             //builder配置
-            builder.modules(JacksonUtil.buildJavaTimeModule(), JacksonUtil.buildBigNumberModule())
+            builder.modules(
+                JacksonUtil.buildJavaTimeModule(),
+                JacksonUtil.buildBigNumberModule()
+            )
             applier?.apply(builder) ?: DefaultJacksonConfigurationsApplier.apply(builder)
         }
     }
