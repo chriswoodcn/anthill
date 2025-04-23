@@ -129,7 +129,7 @@ open class SingleMongoRepository<T, ID>(
             .mappedResults
     }
 
-    private fun getEntityClass(): Class<T> {
+    open fun getEntityClass(): Class<T> {
         @Suppress("UNCHECKED_CAST")
         return (javaClass.getGenericSuperclass() as ParameterizedType).actualTypeArguments[0] as Class<T>
     }
