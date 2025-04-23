@@ -13,7 +13,7 @@ class GenKeySnowflakeGenerator : IKeyGenerator {
             val split = filtered[0].split(".")
             workId = split[3].toLong()
         }
-        val snowflake = IdUtil.getSnowflake(workId)
-        return snowflake.nextId()
+        val snowflake = IdUtil.getSnowflake(workId % 32)
+        return snowflake.nextIdStr()
     }
 }
