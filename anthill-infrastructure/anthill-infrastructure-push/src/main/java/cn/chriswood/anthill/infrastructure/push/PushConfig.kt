@@ -1,7 +1,7 @@
-package cn.chriswood.anthill.infrastructure.mail
+package cn.chriswood.anthill.infrastructure.push
 
-import cn.chriswood.anthill.infrastructure.mail.support.MailAccountAutoImport
-import cn.chriswood.anthill.infrastructure.mail.support.MailProperties
+import cn.chriswood.anthill.infrastructure.push.support.PushProperties
+import cn.chriswood.anthill.infrastructure.push.support.PushTemplateAutoImport
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Import
 
 @AutoConfiguration
 @ConditionalOnProperty(
-    prefix = "anthill.mail",
+    prefix = "anthill.push",
     name = ["enabled"],
     havingValue = "true"
 )
-@EnableConfigurationProperties(MailProperties::class)
-@Import(MailAccountAutoImport::class)
-class MailConfig
+@EnableConfigurationProperties(PushProperties::class)
+@Import(PushTemplateAutoImport::class)
+class PushConfig

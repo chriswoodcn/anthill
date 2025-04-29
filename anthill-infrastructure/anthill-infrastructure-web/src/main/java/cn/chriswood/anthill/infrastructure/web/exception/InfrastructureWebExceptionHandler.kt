@@ -46,7 +46,7 @@ class InfrastructureWebExceptionHandler {
     fun handleBaseException(e: BaseException, request: HttpServletRequest): R<Void> {
         val requestURI = request.requestURI
         log.error("BaseException >>> Module[{}], RequestURI[{}], MESSAGE[{}]", e.module, requestURI, e.message)
-        return R.fail(HttpStatus.FAIL, e.message)
+        return R.fail(e.code, e.message)
     }
 
     @ExceptionHandler(InfrastructureException::class)
@@ -58,7 +58,7 @@ class InfrastructureWebExceptionHandler {
             requestURI,
             e.message
         )
-        return R.fail(HttpStatus.FAIL, e.message)
+        return R.fail(e.code, e.message)
     }
 
     @ExceptionHandler(BindException::class)

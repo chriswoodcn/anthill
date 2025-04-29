@@ -58,6 +58,13 @@ object MailPool {
         list!!.add(account)
     }
 
+    fun removeMailAccount(key: String, user: String) {
+        val list = mailAccounts[key]
+        if (!list.isNullOrEmpty()) {
+            list.removeIf { it.mailAccount.user == user }
+        }
+    }
+
     fun addMailAccounts(key: String, accounts: Collection<EnhanceMailAccount>) {
         var list = mailAccounts[key]
         if (null == list) {
@@ -65,6 +72,15 @@ object MailPool {
             list = mailAccounts[key]
         }
         list!!.addAll(accounts)
+    }
+
+    fun removeMailAccounts(key: String, users: Collection<String>) {
+        val list = mailAccounts[key]
+        if (!list.isNullOrEmpty()) {
+            users.forEach { user ->
+                list.removeIf { it.mailAccount.user == user }
+            }
+        }
     }
 
     fun getAvailableMailAccount(key: String?, default: String): MailPool {
@@ -78,13 +94,13 @@ object MailPool {
 
         val account = mailAccounts[k]
         if (!account.isNullOrEmpty()) {
-            account.filter {
+            val filter = account.filter {
                 it.dayCount < it.limitDayCount && it.hourCount < it.limitHourCount
             }.sortedBy { it.hourCount }.sortedBy { it.dayCount }
-            if (account.isEmpty()) {
+            if (filter.isEmpty()) {
                 throw MailException("No Available Mail Account")
             }
-            this.availableEnhanceMailAccount.set(account[0])
+            this.availableEnhanceMailAccount.set(filter[0])
             return this
         } else {
             throw MailException("Mail Accounts is empty")

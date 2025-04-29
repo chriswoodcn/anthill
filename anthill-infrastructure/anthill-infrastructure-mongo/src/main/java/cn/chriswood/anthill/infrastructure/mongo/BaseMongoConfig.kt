@@ -1,6 +1,9 @@
 package cn.chriswood.anthill.infrastructure.mongo
 
-import cn.chriswood.anthill.infrastructure.mongo.convert.*
+import cn.chriswood.anthill.infrastructure.mongo.convert.BigDecimalToDecimal128Convert
+import cn.chriswood.anthill.infrastructure.mongo.convert.BsonTimestampToLocalDateTimeConvert
+import cn.chriswood.anthill.infrastructure.mongo.convert.Decimal128ToBigDecimalConvert
+import cn.chriswood.anthill.infrastructure.mongo.convert.LocalDateTimeToBsonTimestampConvert
 import cn.chriswood.anthill.infrastructure.mongo.support.MongoConfigProperties
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
@@ -24,9 +27,7 @@ class BaseMongoConfig {
                     LocalDateTimeToBsonTimestampConvert(),
                     BsonTimestampToLocalDateTimeConvert(),
                     BigDecimalToDecimal128Convert(),
-                    Decimal128ToBigDecimalConvert(),
-                    LongToBsonTimestampConvert(),
-                    BsonTimestampToLongConvert()
+                    Decimal128ToBigDecimalConvert()
                 )
             )
         }
