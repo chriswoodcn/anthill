@@ -3,6 +3,7 @@ package cn.chriswood.anthill.infrastructure.web.annotation.rateLimit
 import cn.chriswood.anthill.infrastructure.core.utils.ServletUtil
 import cn.chriswood.anthill.infrastructure.core.utils.StringUtil
 import cn.chriswood.anthill.infrastructure.redis.utils.RedisUtil
+import cn.chriswood.anthill.infrastructure.web.annotation.support.AspectUtil
 import cn.chriswood.anthill.infrastructure.web.annotation.support.CacheKeys
 import cn.chriswood.anthill.infrastructure.web.exception.InfrastructureWebExceptionEnum
 import org.aspectj.lang.JoinPoint
@@ -59,11 +60,16 @@ class RateLimitAspect {
             }
             val number: Long = RedisUtil.rateLimit(combineKey, rateType, count, time)
             if (number == -1L) {
-                InfrastructureWebExceptionEnum.RATE_LIMIT.eject()
+                val exception = InfrastructureWebExceptionEnum.RATE_LIMIT
+                exception.dialect = rateLimit.dialect
+                val timeStr = AspectUtil.formatMillis(time * 1000L)
+                exception.eject(timeStr)
             }
             log.info("限制令牌 => {}, 剩余令牌 => {}, 缓存key => '{}'", count, number, combineKey)
         } catch (e: Exception) {
-            InfrastructureWebExceptionEnum.RATE_LIMIT.eject()
+            InfrastructureWebExceptionEnum.FUNC_ERROR.eject(
+                "RateLimitAspect", "doBefore", e.message
+            )
         }
     }
 
@@ -84,7 +90,7 @@ class RateLimitAspect {
                     "RateLimitAspect", "getCombineKey", "限流key解析异常"
                 )
             }
-            for (i in parameterNames!!.indices) {
+            for (i in parameterNames.indices) {
                 context.setVariable(parameterNames[i], args[i])
             }
             // 解析返回给key

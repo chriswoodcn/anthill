@@ -12,6 +12,7 @@ import cn.dev33.satoken.SaManager
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.ObjectUtil
 import cn.hutool.crypto.SecureUtil
+import org.apache.commons.lang3.time.DurationFormatUtils
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.Aspect
@@ -47,7 +48,10 @@ class RepeatLimitAspect {
         if (RedisUtil.setObjectIfAbsent(cacheRepeatKey, "", Duration.ofSeconds(interval))) {
             KEY_CACHE.set(cacheRepeatKey)
         } else {
-            InfrastructureWebExceptionEnum.REPEAT_SUBMIT.eject(interval)
+            val exception = InfrastructureWebExceptionEnum.REPEAT_SUBMIT
+            exception.dialect = repeatSubmit.dialect
+            val timeStr = AspectUtil.formatMillis(interval)
+            exception.eject(timeStr)
         }
     }
 

@@ -23,6 +23,9 @@ class WebInvokeTimeInterceptor : WebRequestInterceptor {
             log.trace("isRepeatedlyRequestWrapper {}", isRepeatedlyRequestWrapper)
             r0.setAttribute("anthill_web_invoke_start_time", System.currentTimeMillis())
             var jsonParam: Any? = null
+            log.debug("request head {}", request.getHeader("token"))
+            log.debug("request comId {}", request.getHeader("comid"))
+            log.debug("request appId {}", request.getHeader("appid"))
             if (isRepeatedlyRequestWrapper) {
                 log.trace("RepeatedlyRequestWrapper {}", r0)
                 jsonParam =

@@ -46,7 +46,7 @@ class WebAuthExceptionHandler {
         log.error("SaTokenException >>> RequestURI[{}], MESSAGE[{}]", requestURI, e.message)
         var dialectName = "$module.message"
         if (e.code in messageDialectMap.keys) {
-            dialectName = messageDialectMap[e.code]!!
+            dialectName = messageDialectMap[e.code] ?: "$module.message"
         }
         return R.fail(
             HttpStatus.UNAUTHORIZED,

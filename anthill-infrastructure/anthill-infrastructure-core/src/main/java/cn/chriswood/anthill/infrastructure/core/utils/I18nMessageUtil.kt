@@ -17,6 +17,7 @@ object I18nMessageUtil {
     fun message(key: String, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {
+            log.debug("key {}", key)
             messageSource.getMessage(key, args, LocaleContextHolder.getLocale())
         } catch (e: Exception) {
             log.error("I18nMessageUtil message invoke error: {}", e.message)
@@ -27,6 +28,7 @@ object I18nMessageUtil {
     fun messageByLocale(locale: Locale, key: String, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {
+            log.debug("locale {} key {}", locale, key)
             messageSource.getMessage(key, args, locale)
         } catch (e: Exception) {
             log.error("I18nMessageUtil messageByLocale invoke error: {}", e.message)
@@ -37,6 +39,7 @@ object I18nMessageUtil {
     fun messageByLang(lang: String, key: String, vararg args: Any?): String? {
         val messageSource: MessageSource = SpringUtil.getBean(MessageSource::class.java)
         return try {
+            log.debug("lang {} key {}", lang, key)
             messageSource.getMessage(key, args, Locale(lang))
         } catch (e: Exception) {
             log.error("I18nMessageUtil messageByLang invoke error: {}", e.message)
@@ -56,7 +59,9 @@ object I18nMessageUtil {
             return messageByLang(lang, key, *args)
         }
         val stringMap = map[lang] ?: map[DEFAULT_LANGUAGE]!!
+        log.debug("stringMap {}", stringMap)
         val stringFormat = stringMap[key] ?: return null
+        log.debug("stringFormat {}", stringFormat)
         return MessageFormat.format(stringFormat, *args)
     }
 }

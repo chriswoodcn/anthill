@@ -17,6 +17,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import kotlin.reflect.KClass
 
 
 object HttpExcelUtil {
@@ -26,16 +27,17 @@ object HttpExcelUtil {
     /**
      * 导出excel
      */
-    inline fun <reified T : Any> export(
+    fun <T : Any> export(
         response: HttpServletResponse,
         fileName: String? = null,
         dataSource: DataSource<T>,
+        dataClass: KClass<T>
     ): Boolean {
 
         response.contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"
         // 这里URLEncoder.encode可以防止中文乱码
         val finalFileName: String = URLEncoder.encode(
-            "${fileName ?: T::class.java.simpleName}-${System.currentTimeMillis()}.xlsx", StandardCharsets.UTF_8
+            "${fileName ?: dataClass.java.simpleName}-${System.currentTimeMillis()}.xlsx", StandardCharsets.UTF_8
         ).replace("\\+", "%20")
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition,download-filename")
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''$finalFileName")
@@ -43,7 +45,8 @@ object HttpExcelUtil {
 
         return writeToStream(
             response.outputStream,
-            dataSource
+            dataSource,
+            dataClass
         ) {
             log.error("HttpExcelUtil export error >>> {}", it.message)
         }
@@ -53,13 +56,15 @@ object HttpExcelUtil {
     /**
      * 导入excel
      */
-    inline fun <reified T : Any> import(
+    fun <T : Any> import(
         file: MultipartFile,
-        noinline readList: (list: List<T?>?) -> Unit
+        readList: (list: List<T?>?) -> Unit,
+        dataClass: KClass<T>
     ): Boolean {
-        return readFromStream<T>(
+        return readFromStream(
             file.inputStream,
-            readList
+            readList,
+            dataClass
         ) {
             log.error("HttpExcelUtil import error >>> {}", it.message)
         }
@@ -108,13 +113,14 @@ object HttpExcelUtil {
 
     }
 
-    inline fun <reified T : Any> readFromStream(
+    fun <T : Any> readFromStream(
         inputStream: InputStream,
-        noinline readList: (list: List<T?>?) -> Unit,
-        noinline fail: ((Exception) -> Unit)?,
+        readList: (list: List<T?>?) -> Unit,
+        dataClass: KClass<T>,
+        fail: ((Exception) -> Unit)?,
     ): Boolean {
         return try {
-            EasyExcel.read(inputStream, T::class.java, UploadDataListener<T>(BATCH_SIZE, readList)).doReadAll()
+            EasyExcel.read(inputStream, dataClass.java, UploadDataListener<T>(BATCH_SIZE, readList)).doReadAll()
             true
         } catch (e: Exception) {
             if (fail != null) fail(e)
@@ -159,9 +165,10 @@ object HttpExcelUtil {
         }
     }
 
-    inline fun <reified T : Any> writeToStream(
+    fun <T : Any> writeToStream(
         outputStream: OutputStream,
         dataSource: DataSource<T>,
+        dataClass: KClass<T>,
         fail: ((Exception) -> Unit)
     ): Boolean {
         var excelWriter: ExcelWriter? = null
@@ -175,9 +182,9 @@ object HttpExcelUtil {
                 }
             }
             if (!dataSource.head.isNullOrEmpty()) {
-                writerBuilder.head(T::class.java).head(dataSource.head)
+                writerBuilder.head(dataClass.java).head(dataSource.head)
             } else {
-                writerBuilder.head(T::class.java)
+                writerBuilder.head(dataClass.java)
             }
             excelWriter = writerBuilder.build()
 

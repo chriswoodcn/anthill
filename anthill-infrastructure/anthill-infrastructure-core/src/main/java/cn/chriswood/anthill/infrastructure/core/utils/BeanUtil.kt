@@ -1,6 +1,7 @@
 package cn.chriswood.anthill.infrastructure.core.utils
 
 import cn.chriswood.anthill.infrastructure.core.annotation.Copy
+import cn.hutool.core.bean.BeanUtil
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
@@ -108,5 +109,13 @@ object BeanUtil {
         return clazz.declaredMemberProperties
             .filterIsInstance<KMutableProperty1<out Any, *>>()
             .toList()
+    }
+
+    fun <T : Any> copyBean(source: Any, target: Class<T>, vararg ignores: String): T {
+        return BeanUtil.copyProperties(source, target, *ignores)
+    }
+
+    fun <T : Any> copyBean(source: Any, target: KClass<T>, vararg ignores: KProperty1<T, *>): T {
+        return BeanUtil.copyProperties(source, target.java, *(ignores.map { it.name }).toTypedArray())
     }
 }

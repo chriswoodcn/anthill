@@ -74,7 +74,7 @@ class DemoController {
             genI18nExcelHead<TUserDs1Data>(),
             null
         ) { pageNum, pageSize ->
-            val page = TUserDs1Storage.page<TUserDs1Bo, TUserDs1Dto>(pageNum, pageSize, TUserDs1Bo())
+            val page = TUserDs1Storage.page<TUserDs1Bo, TUserDs1Dto>(pageNum.toInt(), pageSize.toInt(), TUserDs1Bo())
             if (page.records.size > 0) {
                 page.records.map(TUserDs1Storage::convert2Data)
             } else {
@@ -82,7 +82,7 @@ class DemoController {
             }
         }
         HttpExcelUtil.export(
-            response, "TUserDs1Data", ds
+            response, "TUserDs1Data", ds, TUserDs1Data::class
         ).let {
             if (!it) {
                 println("HttpExcelUtil export fail")

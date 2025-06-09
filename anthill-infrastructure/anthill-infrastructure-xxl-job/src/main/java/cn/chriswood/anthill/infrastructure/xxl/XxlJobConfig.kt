@@ -21,22 +21,14 @@ class XxlJobConfig(
     fun xxlJobExecutor(): XxlJobSpringExecutor {
         log.info(">>>>>>>>>>> xxl-job config init >>>>>>>>>>>")
         val xxlJobSpringExecutor = XxlJobSpringExecutor().apply {
-            this.setAdminAddresses(
-                xxlJobProperties.adminAddresses ?: throw IllegalArgumentException("xxl-job adminAddresses is null")
-            )
-            this.setAccessToken(
-                xxlJobProperties.accessToken ?: throw IllegalArgumentException("xxl-job accessToken is null")
-            )
-            this.setAppname(
-                xxlJobProperties.executor?.appname ?: throw IllegalArgumentException("xxl-job appname is null")
-            )
-            this.setAddress(
-                xxlJobProperties.executor?.address ?: throw IllegalArgumentException("xxl-job address is null")
-            )
+            this.setAdminAddresses(xxlJobProperties.adminAddresses)
+            this.setAccessToken(xxlJobProperties.accessToken)
+            this.setAppname(xxlJobProperties.executor?.appname)
+            this.setAddress(xxlJobProperties.executor?.address)
             this.setIp(xxlJobProperties.executor?.ip)
-            this.setPort(xxlJobProperties.executor?.port ?: 0)
+            this.setPort(xxlJobProperties.executor?.port ?: 9101)
             this.setLogPath(xxlJobProperties.executor?.logPath)
-            this.setLogRetentionDays(xxlJobProperties.executor?.logRetentionDays ?: 0)
+            this.setLogRetentionDays(xxlJobProperties.executor?.logRetentionDays ?: 3)
         }
         return xxlJobSpringExecutor
     }
